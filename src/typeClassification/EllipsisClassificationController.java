@@ -1,14 +1,8 @@
 package typeClassification;
 
 import edu.stanford.nlp.trees.*;
-import edu.stanford.nlp.ling.HasWord;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
-
 
 /**
  * @author Nicole Williams
@@ -25,15 +19,4 @@ public class EllipsisClassificationController {
         return EllipsisType.NONE;
     }
 
-    //returns list of features
-    private List<Feature> genFeatures(){
-
-        List<Feature> featureList = new ArrayList<Feature>();
-
-        //Sentence length
-
-
-        //TODO: Implementation
-        return null;
-    }
 }

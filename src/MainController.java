@@ -1,6 +1,7 @@
 import edu.stanford.nlp.ling.HasWord;
 import edu.stanford.nlp.process.DocumentPreprocessor;
 import edu.stanford.nlp.trees.*;
+import typeClassification.FeatureGenerator;
 
 import java.util.Collection;
 import java.util.List;
@@ -25,7 +26,7 @@ public class MainController {
 
                 System.out.println(sentence + " " + sentence.size());
                 parse.pennPrint();
-                System.out.println(parse.yield());
+                System.out.println(parse.yieldWords());
                 System.out.println(typedDependencies);
             }
         }
