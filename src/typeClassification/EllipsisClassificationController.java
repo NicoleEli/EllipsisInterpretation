@@ -1,5 +1,12 @@
 package typeClassification;
 
+import edu.stanford.nlp.trees.*;
+import edu.stanford.nlp.ling.HasWord;
+
+import java.util.Collection;
+import java.util.List;
+
+
 /**
  * @author Nicole Williams
  *         28/10/13
@@ -10,9 +17,13 @@ public class EllipsisClassificationController {
 
     BinaryEllipsisClassifier[] binaryClassifiers;
 
-    //TODO: decide on input type to this controller - does the main controller do parsing or does this?
-    public EllipsisType classify(){
+    public EllipsisType findEllipsisType(List<HasWord> sentence, Tree parse, Collection typedDependencies){
         //TODO: Implementation
         return EllipsisType.NONE;
+    }
+
+    private List<Feature> genFeatures(){
+        //TODO: Implementation
+        return null;
     }
 }
