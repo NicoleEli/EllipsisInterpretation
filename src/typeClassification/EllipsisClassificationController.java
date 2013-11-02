@@ -17,6 +17,7 @@ public class EllipsisClassificationController {
 
     BinaryEllipsisClassifier[] binaryClassifiers;
 
+    //TODO: Are there redundancies in these arguments?
     public EllipsisType findEllipsisType(List<HasWord> sentence, Tree parse, Collection typedDependencies){
         //TODO: Implementation
         return EllipsisType.NONE;
