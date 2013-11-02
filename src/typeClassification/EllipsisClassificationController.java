@@ -6,6 +6,7 @@ import edu.stanford.nlp.ling.HasWord;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 
 
@@ -24,11 +25,10 @@ public class EllipsisClassificationController {
         return EllipsisType.NONE;
     }
 
-    //returns map from string identifying the feature to the feature
-    //TODO: is the name necessary?
-    private Map<String,Feature> genFeatures(){
+    //returns list of features
+    private List<Feature> genFeatures(){
 
-        Map<String, Feature> featureMap = new HashMap<String, Feature>();
+        List<Feature> featureList = new ArrayList<Feature>();
 
         //Sentence length
 
