@@ -4,7 +4,9 @@ import edu.stanford.nlp.trees.*;
 import edu.stanford.nlp.ling.HasWord;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -17,13 +19,20 @@ public class EllipsisClassificationController {
 
     BinaryEllipsisClassifier[] binaryClassifiers;
 
-    //TODO: Are there redundancies in these arguments?
-    public EllipsisType findEllipsisType(List<HasWord> sentence, Tree parse, Collection typedDependencies){
+    public EllipsisType findEllipsisType(Tree parse, Collection typedDependencies){
         //TODO: Implementation
         return EllipsisType.NONE;
     }
 
-    private List<Feature> genFeatures(){
+    //returns map from string identifying the feature to the feature
+    //TODO: is the name necessary?
+    private Map<String,Feature> genFeatures(){
+
+        Map<String, Feature> featureMap = new HashMap<String, Feature>();
+
+        //Sentence length
+
+
         //TODO: Implementation
         return null;
     }

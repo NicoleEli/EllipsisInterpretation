@@ -23,8 +23,9 @@ public class MainController {
                 Tree parse = parser.getParse(sentence);
                 Collection typedDependencies = parser.getDependencies(parse);
 
+                System.out.println(sentence + " " + sentence.size());
                 parse.pennPrint();
-                System.out.println();
+                System.out.println(parse.yield());
                 System.out.println(typedDependencies);
             }
         }
