@@ -1,4 +1,9 @@
+import edu.stanford.nlp.ling.HasWord;
 import edu.stanford.nlp.parser.lexparser.LexicalizedParser;
+import edu.stanford.nlp.process.DocumentPreprocessor;
+import edu.stanford.nlp.trees.*;
+
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -7,14 +12,18 @@ import edu.stanford.nlp.parser.lexparser.LexicalizedParser;
  */
 public class MainController {
 
-    LexicalizedParser lexParser = LexicalizedParser.loadModel("edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz");
 
     public static void main(String[] args){
+        if (args.length > 0){
+            String filename = args[0];
 
-    }
+            ParsingController parser = new ParsingController();
 
-    private static void sendToParser(String[] args){
-
+            for (List<HasWord> sentence : new DocumentPreprocessor(filename)) {
+                Tree parse = parser.getParse(sentence);
+                GrammaticalStructure gStruct = parser.getGrammaticalStructure(parse);
+            }
+        }
     }
 
 }
