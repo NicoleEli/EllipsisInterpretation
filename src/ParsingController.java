@@ -2,6 +2,7 @@ import edu.stanford.nlp.ling.HasWord;
 import edu.stanford.nlp.parser.lexparser.LexicalizedParser;
 import edu.stanford.nlp.trees.*;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -21,8 +22,10 @@ public class ParsingController {
         return parse;
     }
 
-    public static GrammaticalStructure getGrammaticalStructure(Tree parse){
-        return null;
+    public Collection getDependencies(Tree parse){
+        GrammaticalStructure gStruct = grammaticalStructureFactory.newGrammaticalStructure(parse);
+        Collection typedDependencies = gStruct.typedDependenciesCCprocessed();
+        return typedDependencies;
     }
 
 }

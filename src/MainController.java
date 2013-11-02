@@ -1,8 +1,8 @@
 import edu.stanford.nlp.ling.HasWord;
-import edu.stanford.nlp.parser.lexparser.LexicalizedParser;
 import edu.stanford.nlp.process.DocumentPreprocessor;
 import edu.stanford.nlp.trees.*;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -21,7 +21,11 @@ public class MainController {
 
             for (List<HasWord> sentence : new DocumentPreprocessor(filename)) {
                 Tree parse = parser.getParse(sentence);
-                GrammaticalStructure gStruct = parser.getGrammaticalStructure(parse);
+                Collection typedDependencies = parser.getDependencies(parse);
+
+                parse.pennPrint();
+                System.out.println();
+                System.out.println(typedDependencies);
             }
         }
     }
