@@ -29,6 +29,9 @@ public class FeatureGenerator {
         //POS Counts
         getPOSCounts(tagWords);
 
+        //Exists conjunction?
+        featureList.add(new Feature("conjunction",existsConjunction(tagWords)));
+
         //TODO: Implementation
         return null;
     }
@@ -78,6 +81,15 @@ public class FeatureGenerator {
      */
     private void getPOSPairCounts(List<TaggedWord> tagWords){
 
+    }
+
+    private int existsConjunction(List<TaggedWord> tagWords){
+        for(TaggedWord tw : tagWords){
+            if(tw.tag() == "CC" || tw.tag() == "IN"){
+                return 1;
+            }
+        }
+        return 0;
     }
 
     public void printFeatures(){
