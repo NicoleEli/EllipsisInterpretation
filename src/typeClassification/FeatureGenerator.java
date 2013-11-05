@@ -27,7 +27,7 @@ public class FeatureGenerator {
         featureList.add(new Feature("sentence length", getSentenceLength(words)));
 
         //POS Counts
-        getSingleWordFeatures(tagWords);
+        getPOSCounts(tagWords);
 
         //TODO: Implementation
         return null;
@@ -51,12 +51,11 @@ public class FeatureGenerator {
     }
 
     /**
-     * Generates single-word features for the given sentence.
+     * Generates features for number of each kind of POS tag.
      *
      * @param tagWords     Words making up given sentence.
      */
-    private void getSingleWordFeatures(List<TaggedWord> tagWords){
-        //Count of types of word
+    private void getPOSCounts(List<TaggedWord> tagWords){
         Map<String, Integer> tagCounts = new HashMap<String, Integer>();
         for (TaggedWord tw : tagWords){
             String key = tw.tag();
@@ -69,7 +68,6 @@ public class FeatureGenerator {
         for(String tag : tagCounts.keySet()){
             featureList.add(new Feature(tag+"-count", tagCounts.get(tag)));
         }
-
     }
 
     /**
