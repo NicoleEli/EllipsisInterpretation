@@ -52,8 +52,9 @@ public class FeatureGenerator {
 
     /**
      * Generates features for number of each kind of POS tag.
+     * (Note POS tags include punctuation tags.)
      *
-     * @param tagWords     Words making up given sentence.
+     * @param tagWords     Words & associated POS tags for given sentence.
      */
     private void getPOSCounts(List<TaggedWord> tagWords){
         Map<String, Integer> tagCounts = new HashMap<String, Integer>();
@@ -71,11 +72,11 @@ public class FeatureGenerator {
     }
 
     /**
-     * Generates two-word features for the given sentence.
+     * Generates features for pairs of neighbouring POS tags.
      *
-     * @param words     Words making up given sentence.
+     * @param tagWords     Words & associated POS tags for up given sentence.
      */
-    private void getWordPairFeatures(List<Word> words){
+    private void getPOSPairCounts(List<TaggedWord> tagWords){
 
     }
 
