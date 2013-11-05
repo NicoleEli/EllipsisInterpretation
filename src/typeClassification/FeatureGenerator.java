@@ -1,12 +1,10 @@
 package typeClassification;
 
+import edu.stanford.nlp.ling.TaggedWord;
 import edu.stanford.nlp.ling.Word;
 import edu.stanford.nlp.trees.Tree;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,20 +15,19 @@ import java.util.List;
 public class FeatureGenerator {
 
     List<Feature> featureList = new ArrayList<Feature>();
-    String[] punctuation = {".",",","\'","\"","-","/","\\","(",")"};
+    String[] punctuation = {".",",","\'","\"","-","/","\\","(",")","!","?"};
 
     //returns list of features
     public List<Feature> genFeatures(Tree parse, Collection typedDependencies){
 
         List<Word> words = parse.yieldWords();
+        List<TaggedWord> tagWords = parse.taggedYield();
 
         //Sentence length
         featureList.add(new Feature("sentence length", getSentenceLength(words)));
 
-        System.out.println("## Features: ##");
-        for (Feature f : featureList){
-            System.out.println(f.getName() + ", " + f.getValue());
-        }
+        //POS Counts
+        getSingleWordFeatures(tagWords);
 
         //TODO: Implementation
         return null;
@@ -56,9 +53,22 @@ public class FeatureGenerator {
     /**
      * Generates single-word features for the given sentence.
      *
-     * @param words     Words making up given sentence.
+     * @param tagWords     Words making up given sentence.
      */
-    private void getSingleWordFeatures(List<Word> words){
+    private void getSingleWordFeatures(List<TaggedWord> tagWords){
+        //Count of types of word
+        Map<String, Integer> tagCounts = new HashMap<String, Integer>();
+        for (TaggedWord tw : tagWords){
+            String key = tw.tag();
+            if (tagCounts.containsKey(key)){
+                tagCounts.put(key,tagCounts.get(key)+1);
+            } else {
+                tagCounts.put(key, 1);
+            }
+        }
+        for(String tag : tagCounts.keySet()){
+            featureList.add(new Feature(tag+"-count", tagCounts.get(tag)));
+        }
 
     }
 
@@ -70,5 +80,12 @@ public class FeatureGenerator {
     private void getWordPairFeatures(List<Word> words){
 
     }
+
+    public void printFeatures(){
+        for(Feature f : featureList){
+            System.out.println(f.getName()+" : "+f.getValue());
+        }
+    }
+
 
 }

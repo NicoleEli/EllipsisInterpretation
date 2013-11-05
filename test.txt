@@ -1,1 +1,1 @@
-This is a test sentence. This, too, is a sentence for testing.
+John loves his wife and Bill does too. This is a test sentence. This, too, is a sentence for testing.

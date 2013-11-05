@@ -25,9 +25,12 @@ public class MainController {
                 Collection typedDependencies = parser.getDependencies(parse);
 
                 System.out.println(sentence + " " + sentence.size());
-                parse.pennPrint();
-                System.out.println(parse.yieldWords());
-                System.out.println(typedDependencies);
+
+                FeatureGenerator fGen = new FeatureGenerator();
+                fGen.genFeatures(parse,typedDependencies);
+
+                System.out.println("## Features: ##");
+                fGen.printFeatures();
             }
         }
     }
