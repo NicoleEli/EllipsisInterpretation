@@ -19,6 +19,7 @@ public class MainController {
             String filename = args[0];
 
             ParsingController parser = new ParsingController();
+            FeatureGenerator fGen = new FeatureGenerator();
 
             for (List<HasWord> sentence : new DocumentPreprocessor(filename)) {
                 Tree parse = parser.getParse(sentence);
@@ -26,11 +27,11 @@ public class MainController {
 
                 System.out.println(sentence + " " + sentence.size());
 
-                FeatureGenerator fGen = new FeatureGenerator();
                 fGen.genFeatures(parse,typedDependencies);
 
                 System.out.println("## Features: ##");
                 fGen.printFeatures();
+                fGen.reset();
             }
         }
     }

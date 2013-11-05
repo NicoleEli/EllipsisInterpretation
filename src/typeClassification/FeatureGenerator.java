@@ -15,7 +15,7 @@ import java.util.*;
 public class FeatureGenerator {
 
     List<Feature> featureList = new ArrayList<Feature>();
-    String[] punctuation = {".",",","\'","\"","-","/","\\","(",")","!","?"};
+    String[] punctuation = {".",",","'","\"","-","/","\\","(",")","!","?"};
 
     //returns list of features
     public List<Feature> genFeatures(Tree parse, Collection typedDependencies){
@@ -120,6 +120,10 @@ public class FeatureGenerator {
         for(Feature f : featureList){
             System.out.println(f.getName()+" : "+f.getValue());
         }
+    }
+
+    public void reset(){
+        featureList = new ArrayList<Feature>();
     }
 
 
