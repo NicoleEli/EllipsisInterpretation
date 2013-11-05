@@ -26,8 +26,11 @@ public class FeatureGenerator {
         //Sentence length
         featureList.add(new Feature("sentence length", getSentenceLength(words)));
 
-        //POS Counts
+        //POS counts
         getPOSCounts(tagWords);
+
+        //POS pair counts
+        getPOSPairCounts(tagWords);
 
         //Exists conjunction?
         featureList.add(new Feature("conjunction",existsConjunction(tagWords)));
@@ -80,12 +83,33 @@ public class FeatureGenerator {
      * @param tagWords     Words & associated POS tags for up given sentence.
      */
     private void getPOSPairCounts(List<TaggedWord> tagWords){
+        Map<String, Integer> tagCounts = new HashMap<String,Integer>();
+        tagWords.add(0,new TaggedWord("","START"));     //special start-of-sentence marker
+
+        for(int i=0; i < tagWords.size()-1; i++){
+            String pair = tagWords.get(i).tag() + "," + tagWords.get(i+1).tag() + "-count";
+            if (tagCounts.containsKey(pair)){
+                tagCounts.put(pair, tagCounts.get(pair)+1);
+            } else {
+                tagCounts.put(pair,1);
+            }
+        }
+        for(String key : tagCounts.keySet()){
+            featureList.add(new Feature(key, tagCounts.get(key)));
+        }
 
     }
 
+    /**
+     * Determines whether the given sentence contains a conjunction.
+     *
+     * @param tagWords      Words & associated POS tags for up given sentence.
+     * @return              1 if there is a conjunction, 0 otherwise
+     */
+    //TODO: Differentiate between prep & sub-conj ("IN")
     private int existsConjunction(List<TaggedWord> tagWords){
         for(TaggedWord tw : tagWords){
-            if(tw.tag() == "CC" || tw.tag() == "IN"){
+            if(tw.tag().equals("CC") || tw.tag().equals("IN")){
                 return 1;
             }
         }
