@@ -15,13 +15,15 @@ import java.util.*;
 public class FeatureGenerator {
 
     List<Feature> featureList = new ArrayList<Feature>();
-    String[] punctuation = {".",",","'","\"","-","/","\\","(",")","!","?"};
+    String[] punctuationArray = {".",",","'","\"","-","/","\\","(",")","!","?"};
+    List<String> punctuation = Arrays.asList(punctuationArray);
 
     //returns list of features
     public List<Feature> genFeatures(Tree parse, Collection typedDependencies){
 
         List<Word> words = parse.yieldWords();
         List<TaggedWord> tagWords = parse.taggedYield();
+        tagWords.add(0,new TaggedWord("","START"));     //special start-of-sentence marker
 
         //Sentence length
         featureList.add(new Feature("sentence length", getSentenceLength(words)));
@@ -34,6 +36,9 @@ public class FeatureGenerator {
 
         //Exists conjunction?
         featureList.add(new Feature("conjunction",existsConjunction(tagWords)));
+
+        //WP-final?
+        featureList.add(new Feature("WPfinal", isWPFinal(tagWords)));
 
         //TODO: Implementation
         return null;
@@ -48,7 +53,7 @@ public class FeatureGenerator {
     private int getSentenceLength(List<Word> words){
         int size = words.size();
         for (Word w : words){
-            boolean isPunctuation = Arrays.asList(punctuation).contains(w.value().trim());
+            boolean isPunctuation = punctuation.contains(w.value().trim());
             if (isPunctuation){
                 size -= 1;
             }
@@ -84,7 +89,6 @@ public class FeatureGenerator {
      */
     private void getPOSPairCounts(List<TaggedWord> tagWords){
         Map<String, Integer> tagCounts = new HashMap<String,Integer>();
-        tagWords.add(0,new TaggedWord("","START"));     //special start-of-sentence marker
 
         for(int i=0; i < tagWords.size()-1; i++){
             String pair = tagWords.get(i).tag() + "," + tagWords.get(i+1).tag() + "-count";
@@ -114,6 +118,32 @@ public class FeatureGenerator {
             }
         }
         return 0;
+    }
+
+    private int existsNegFinalVP(Tree parse){
+
+        return 0;
+    }
+
+    /**
+     * Is the last word of the sentence a Wh-pronoun?
+     *
+     * @param tagWords      Words & associated POS tags for up given sentence.
+     * @return              1 if true, 0 otherwise
+     */
+    private int isWPFinal(List<TaggedWord> tagWords){
+        int finalIndex = tagWords.size() - 1;
+        TaggedWord finalWord = tagWords.get(finalIndex);
+        while (punctuation.contains(finalWord.tag())){
+            tagWords.remove(finalIndex);
+            finalIndex = tagWords.size() - 1;
+            finalWord = tagWords.get(finalIndex);
+        }
+        if (finalWord.tag().equals("WP")){
+            return 1;
+        } else {
+        return 0;
+        }
     }
 
     public void printFeatures(){
