@@ -14,6 +14,7 @@ import java.util.*;
  */
 public class FeatureGenerator {
 
+    public static final String START_MARKER = "START";
     List<Feature> featureList = new ArrayList<Feature>();
     String[] punctuationArray = {".",",","'","\"","-","/","\\","(",")","!","?"};
     List<String> punctuation = Arrays.asList(punctuationArray);
@@ -23,7 +24,7 @@ public class FeatureGenerator {
 
         List<Word> words = parse.yieldWords();
         List<TaggedWord> tagWords = parse.taggedYield();
-        tagWords.add(0,new TaggedWord("","START"));     //special start-of-sentence marker
+        tagWords.add(0,new TaggedWord("", START_MARKER));     //special start-of-sentence marker
 
         //Sentence length
         featureList.add(new Feature("sentence length", getSentenceLength(words)));
@@ -71,6 +72,7 @@ public class FeatureGenerator {
         Map<String, Integer> tagCounts = new HashMap<String, Integer>();
         for (TaggedWord tw : tagWords){
             String key = tw.tag();
+            if(!key.equals(START_MARKER));
             if (tagCounts.containsKey(key)){
                 tagCounts.put(key,tagCounts.get(key)+1);
             } else {
@@ -121,7 +123,7 @@ public class FeatureGenerator {
     }
 
     private int existsNegFinalVP(Tree parse){
-
+        //TODO: Implementation
         return 0;
     }
 
@@ -142,8 +144,20 @@ public class FeatureGenerator {
         if (finalWord.tag().equals("WP")){
             return 1;
         } else {
-        return 0;
+            return 0;
         }
+    }
+
+    /**
+     * Do phrases like "does so", "does too", "doesn't" occur in the given sentence?
+     *
+     * @param words
+     * @param tagWords
+     * @return
+     */
+    private int existsDoesPhrase(List<Word> words, List<TaggedWord> tagWords){
+        //TODO: Implementation
+        return 0;
     }
 
     public void printFeatures(){
