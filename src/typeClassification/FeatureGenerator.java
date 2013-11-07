@@ -160,6 +160,18 @@ public class FeatureGenerator {
         return 0;
     }
 
+    /**
+     * Return a list of elements which encode POS in the given sentence augmented with
+     * information from their ancestors in the parse tree.
+     *
+     * @param parse         parse tree of given sentence
+     * @return              list of augmented POS tags
+     */
+    private List<String> getAugmentedPOS(Tree parse){
+        //TODO: Implementation
+        return null;
+    }
+
     public void printFeatures(){
         for(Feature f : featureList){
             System.out.println(f.getName()+" : "+f.getValue());
