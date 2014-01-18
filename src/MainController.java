@@ -1,3 +1,4 @@
+import dataExtraction.NSUExtractor;
 import edu.stanford.nlp.ling.HasWord;
 import edu.stanford.nlp.process.DocumentPreprocessor;
 import edu.stanford.nlp.trees.*;
@@ -15,6 +16,11 @@ public class MainController {
 
 
     public static void main(String[] args){
+
+        NSUExtractor nsue = new NSUExtractor();
+        nsue.extractNSUs();
+
+        /*
         if (args.length > 0){
             String filename = args[0];
 
@@ -34,6 +40,7 @@ public class MainController {
                 fGen.reset();
             }
         }
+        */
     }
 
 }

@@ -167,7 +167,8 @@ public class FeatureGenerator {
      * @param parse         parse tree of given sentence
      * @return              list of augmented POS tags
      */
-    private List<String> getAugmentedPOS(Tree parse){
+    private List<List<String>> getAugmentedPOS(Tree parse){
+
         //TODO: Implementation
         return null;
     }
