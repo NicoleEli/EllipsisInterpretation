@@ -7,7 +7,8 @@ import java.nio.file.*;
 import java.nio.charset.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created with IntelliJ IDEA.
@@ -23,10 +24,14 @@ public class NSUExtractor {
 
     Path nsurf = Paths.get("C:\\DataFiles\\Programming\\4th Year Project - Ellipsis Interpretation\\NSU-RF");
     String textsDir = "C:\\BNC-world\\Texts\\";
-    Path writeFile = Paths.get("C:\\DataFiles\\Programming\\4th Year Project - Ellipsis Interpretation\\NSUs.txt");
+    Path extractedNSUFile = Paths.get("C:\\DataFiles\\Programming\\4th Year Project - Ellipsis Interpretation\\NSUs.txt");
+    Path noTagNSUFile = Paths.get("C:\\DataFiles\\Programming\\4th Year Project - Ellipsis Interpretation\\NSUs (no POS).txt");
 
     List<SentenceReference> sentenceRefs = new ArrayList<SentenceReference>();
 
+    /**
+     * Extract sentences containing NSUs (as listed in M. Purver's corpus) and their antecedents to a separate file
+     */
     public void extractNSUs(){
 
         try {
@@ -54,7 +59,7 @@ public class NSUExtractor {
 
         try{
             //open NSUs.txt for writing
-            BufferedWriter writer = Files.newBufferedWriter(writeFile, charset);
+            BufferedWriter writer = Files.newBufferedWriter(extractedNSUFile, charset);
 
             for (SentenceReference sRef : sentenceRefs){
                 //texts are stored in e.g. G\G0\G0A
@@ -91,6 +96,55 @@ public class NSUExtractor {
             System.err.format("IOException: %s%n", x);
         }
 
+
+    }
+
+    /**
+     * Remove POS tags from the extracted NSU file  (s, w, c, ptr, u tags)
+     */
+    public void removePOSTags(){
+
+        try {
+            BufferedReader reader = Files.newBufferedReader(extractedNSUFile, charset);
+            BufferedWriter writer = Files.newBufferedWriter(noTagNSUFile, charset);
+
+            String line;
+
+            //tags - carry POS and structure info in BNC, unnecessary for input to my program
+            Pattern sTag = Pattern.compile("<s n=\"[0-9]+\">");
+            Pattern wTag = Pattern.compile("<w [A-Z0-9\\-]+>");
+            Pattern cTag = Pattern.compile("<c PUN>");
+            Pattern pTag = Pattern.compile("<ptr target=[A-Z0-9]+>");
+            Pattern uTag = Pattern.compile("</u>");
+
+            while ((line = reader.readLine()) != null){
+
+                // Remove all occurrences of tags
+                Matcher matcherS = sTag.matcher(line);
+                String noSline = matcherS.replaceAll("");
+
+                Matcher matcherW = wTag.matcher(noSline);
+                String noSWline = matcherW.replaceAll("");
+
+                Matcher matcherC = cTag.matcher(noSWline);
+                String noSWCline = matcherC.replaceAll("");
+
+                Matcher matcherP = pTag.matcher(noSWCline);
+                String noSWCPline = matcherP.replaceAll("");
+
+                Matcher matcherU = uTag.matcher(noSWCPline);
+                String finalLine = matcherU.replaceAll("");
+
+                writer.append(finalLine);
+                writer.newLine();
+            }
+
+            reader.close();
+            writer.close();
+
+        } catch (IOException x){
+            System.err.format("IOException: %s%n", x);
+        }
 
     }
 }
