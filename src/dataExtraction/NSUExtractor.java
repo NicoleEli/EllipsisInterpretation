@@ -78,11 +78,10 @@ public class NSUExtractor {
                 //write NSUs and their antecedents to NSUs.txt
                 while ((line = reader.readLine()) != null){
                     if (line.startsWith(beginAnt)){
-                        writer.append("antecedent -- "+line+" -- "+sRef.nsuCategory);
-                        writer.newLine();
+                        writer.append(line+" ");
                     }
                     if (line.startsWith(beginNSU)){
-                        writer.append("NSU -- "+line+" -- "+sRef.nsuCategory);
+                        writer.append(line+" -- "+sRef.nsuCategory);
                         writer.newLine();
                         writer.newLine();
                     }

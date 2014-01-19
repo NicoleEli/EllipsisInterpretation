@@ -18,6 +18,7 @@ public class MainController {
     public static void main(String[] args){
 
         NSUExtractor nsue = new NSUExtractor();
+        nsue.extractNSUs();
         nsue.removePOSTags();
 
         /*
