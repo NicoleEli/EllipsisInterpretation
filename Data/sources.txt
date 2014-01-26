@@ -1,0 +1,3 @@
+NSU and NPE corpora extracted from the British National Corpus
+NSU corpus with thanks to M. Purver (KCL) for providing sentence IDs of NSUs and their antecedents
+NPE corpus by a combination of queries using BNCweb (as hosted by the OERC) and manual filtering
