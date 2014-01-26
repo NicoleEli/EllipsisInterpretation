@@ -1,3 +1,5 @@
+#Ben Below 2014
+
 file = open("page1.txt","r")
 outfile = open("wanted.txt","r+")
 stringlist = []
