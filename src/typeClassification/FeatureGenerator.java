@@ -41,7 +41,7 @@ public class FeatureGenerator {
         //WP-final?
         featureList.add(new Feature("WPfinal", isWPFinal(tagWords)));
 
-        //TODO: Implementation
+        //TODO: Implementation, more features
         return null;
     }
 
