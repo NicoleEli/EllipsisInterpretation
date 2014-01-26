@@ -4,6 +4,10 @@ import edu.stanford.nlp.ling.TaggedWord;
 import edu.stanford.nlp.ling.Word;
 import edu.stanford.nlp.trees.Tree;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 
 /**
@@ -18,6 +22,23 @@ public class FeatureGenerator {
     List<Feature> featureList = new ArrayList<Feature>();
     String[] punctuationArray = {".",",","'","\"","-","/","\\","(",")","!","?"};
     List<String> punctuation = Arrays.asList(punctuationArray);
+
+    public List<Feature> initialiseFeatures(){
+
+        try{
+            BufferedReader reader = Files.newBufferedReader(Paths.get("C:\Users\Nikki\IdeaProjects\EllipsisInterpretation\Data\PTBtags.txt"), "UTF-8");
+
+            String line;
+            while ((line = reader.readLine()) != null){
+                featureList.add(new Feature(line.trim(), 0));
+            }
+
+            reader.close();
+        } catch (IOException e){
+            System.err.format("IOException: %s%n", e);
+        }
+
+    }
 
     //returns list of features
     public List<Feature> genFeatures(Tree parse, Collection typedDependencies){
@@ -42,7 +63,7 @@ public class FeatureGenerator {
         featureList.add(new Feature("WPfinal", isWPFinal(tagWords)));
 
         //TODO: Implementation, more features
-        return null;
+        return featureList;
     }
 
     /**
@@ -93,7 +114,7 @@ public class FeatureGenerator {
         Map<String, Integer> tagCounts = new HashMap<String,Integer>();
 
         for(int i=0; i < tagWords.size()-1; i++){
-            String pair = tagWords.get(i).tag() + "," + tagWords.get(i+1).tag() + "-count";
+            String pair = tagWords.get(i).tag() + "/" + tagWords.get(i+1).tag() + "-count";
             if (tagCounts.containsKey(pair)){
                 tagCounts.put(pair, tagCounts.get(pair)+1);
             } else {

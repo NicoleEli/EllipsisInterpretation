@@ -1,3 +1,5 @@
+package controllers;
+
 import dataExtraction.DatasetBuilder;
 import typeClassification.FeatureGenerator;
 
@@ -12,8 +14,10 @@ public class MainController {
 
     public static void main(String[] args) {
 
+        ParsingController parser = new ParsingController();
+
         DatasetBuilder datasetBuilder = new DatasetBuilder(new FeatureGenerator() {
-        }, "C:\\Users\\Nikki\\IdeaProjects\\EllipsisInterpretation\\Data\\final\\NPE-P).txt", "C:\\Users\\Nikki\\IdeaProjects\\EllipsisInterpretation\\Data\\final\\attribute-testing.csv");
+        }, "C:\\Users\\Nikki\\IdeaProjects\\EllipsisInterpretation\\Data\\final\\NPE-P.txt", "C:\\Users\\Nikki\\IdeaProjects\\EllipsisInterpretation\\Data\\final\\attribute-testing.csv", parser);
 
         datasetBuilder.buildDataset();
 
