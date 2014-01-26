@@ -1,22 +1,23 @@
-import dataExtraction.NSUExtractor;
-import edu.stanford.nlp.ling.HasWord;
-import edu.stanford.nlp.process.DocumentPreprocessor;
-import edu.stanford.nlp.trees.*;
+import dataExtraction.DatasetBuilder;
 import typeClassification.FeatureGenerator;
-
-import java.util.Collection;
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
+ *
  * @author Nicole Williams
- * Date: 17/10/13
+ *         Date: 17/10/13
  */
 public class MainController {
 
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
 
+        DatasetBuilder datasetBuilder = new DatasetBuilder(new FeatureGenerator() {
+        }, "C:\\Users\\Nikki\\IdeaProjects\\EllipsisInterpretation\\Data\\final\\NPE-P).txt", "C:\\Users\\Nikki\\IdeaProjects\\EllipsisInterpretation\\Data\\final\\attribute-testing.csv");
+
+        datasetBuilder.buildDataset();
+
+        /*
         if (args.length > 0){
             String filename = args[0];
 
@@ -36,6 +37,7 @@ public class MainController {
                 fGen.reset();
             }
         }
+        */
     }
 
 }
