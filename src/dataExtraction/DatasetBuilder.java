@@ -16,6 +16,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -49,6 +50,7 @@ public class DatasetBuilder {
             BufferedWriter writer = Files.newBufferedWriter(datasetFile, charset);
 
             boolean gotFeatureNames = false;
+            featureGenerator.initialiseFeatures();
 
             String line;
             while ((line = reader.readLine()) != null) {
@@ -60,20 +62,15 @@ public class DatasetBuilder {
                 Tree parse = parser.getParse(raw);
                 Collection typedDependencies = parser.getDependencies(parse);
 
-                List<Feature> features = featureGenerator.genFeatures(parse,typedDependencies);
-                System.out.println(features.size());
+                Map<String,Integer> features = featureGenerator.genFeatures(parse,typedDependencies);
 
                 /*
                 If this is the first sentence, output the attribute/feature names
                  */
                 if (!gotFeatureNames){
-                    String names = "class";
-                    for (int i = 0; i < features.size(); i++){
-                        names = names + features.get(i).getName();
-
-                        if (i != features.size()){
-                            names = names + ", ";
-                        }
+                    String names = "class, ";
+                    for (String featureName : features.keySet()){
+                        names = names + featureName + ", ";
                     }
                     writer.append(names);
                     writer.newLine();
@@ -82,15 +79,10 @@ public class DatasetBuilder {
                     gotFeatureNames = true;
                 }
 
-                String values = classification;
-                for (int i = 0; i < features.size(); i++){
-                    values = values + features.get(i).getValue();
-
-                    if (i != features.size()){
-                        values = values + ", ";
-                    }
+                String values = classification+", ";
+                for (String featureName : features.keySet()){
+                    values = values + features.get(featureName) + ", ";
                 }
-                System.out.println(values);
                 writer.append(values);
                 writer.newLine();
 

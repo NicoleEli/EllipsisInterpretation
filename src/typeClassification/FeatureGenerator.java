@@ -6,6 +6,7 @@ import edu.stanford.nlp.trees.Tree;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
@@ -19,36 +20,36 @@ import java.util.*;
 public class FeatureGenerator {
 
     public static final String START_MARKER = "START";
-    List<Feature> featureList = new ArrayList<Feature>();
-    String[] punctuationArray = {".",",","'","\"","-","/","\\","(",")","!","?"};
+    Map<String, Integer> featureList = new LinkedHashMap<String, Integer>();
+    String[] punctuationArray = {".", ",", "'", "\"", "-", "/", "\\", "(", ")", "!", "?", ":", ";"};
     List<String> punctuation = Arrays.asList(punctuationArray);
 
-    public List<Feature> initialiseFeatures(){
-
-        try{
-            BufferedReader reader = Files.newBufferedReader(Paths.get("C:\Users\Nikki\IdeaProjects\EllipsisInterpretation\Data\PTBtags.txt"), "UTF-8");
+    public Map<String, Integer> initialiseFeatures() {
+        try {
+            BufferedReader reader = Files.newBufferedReader(Paths.get("C:\\DataFiles\\Programming\\4th Year Project - Ellipsis Interpretation\\PTBtags.txt"),
+                    Charset.forName("UTF-8"));
 
             String line;
-            while ((line = reader.readLine()) != null){
-                featureList.add(new Feature(line.trim(), 0));
+            while ((line = reader.readLine()) != null) {
+                featureList.put(line.trim(), 0);
             }
 
             reader.close();
-        } catch (IOException e){
+        } catch (IOException e) {
             System.err.format("IOException: %s%n", e);
         }
-
+        return featureList;
     }
 
-    //returns list of features
-    public List<Feature> genFeatures(Tree parse, Collection typedDependencies){
+    //returns list of features, populated with correct values
+    public Map<String, Integer> genFeatures(Tree parse, Collection typedDependencies) {
 
         List<Word> words = parse.yieldWords();
         List<TaggedWord> tagWords = parse.taggedYield();
-        tagWords.add(0,new TaggedWord("", START_MARKER));     //special start-of-sentence marker
+        tagWords.add(0, new TaggedWord("", START_MARKER));     //special start-of-sentence marker
 
         //Sentence length
-        featureList.add(new Feature("sentence length", getSentenceLength(words)));
+        getSentenceLength(words);
 
         //POS counts
         getPOSCounts(tagWords);
@@ -57,10 +58,10 @@ public class FeatureGenerator {
         getPOSPairCounts(tagWords);
 
         //Exists conjunction?
-        featureList.add(new Feature("conjunction",existsConjunction(tagWords)));
+        existsConjunction(tagWords);
 
         //WP-final?
-        featureList.add(new Feature("WPfinal", isWPFinal(tagWords)));
+        isWPFinal(tagWords);
 
         //TODO: Implementation, more features
         return featureList;
@@ -69,60 +70,69 @@ public class FeatureGenerator {
     /**
      * Returns the length of the sentence represented by the given parse tree.
      *
-     * @param words     The words making up the given sentence.
-     * @return          The sentence length.
+     * @param words The words making up the given sentence.
+     * @return The sentence length.
      */
-    private int getSentenceLength(List<Word> words){
+    private void getSentenceLength(List<Word> words) {
         int size = words.size();
-        for (Word w : words){
+        for (Word w : words) {
             boolean isPunctuation = punctuation.contains(w.value().trim());
-            if (isPunctuation){
+            if (isPunctuation) {
                 size -= 1;
             }
         }
-        return size;
+        featureList.put("sentence length", size);
     }
 
     /**
      * Generates features for number of each kind of POS tag.
      * (Note POS tags include punctuation tags.)
      *
-     * @param tagWords     Words & associated POS tags for given sentence.
+     * @param tagWords Words & associated POS tags for given sentence.
      */
-    private void getPOSCounts(List<TaggedWord> tagWords){
+    private void getPOSCounts(List<TaggedWord> tagWords) {
         Map<String, Integer> tagCounts = new HashMap<String, Integer>();
-        for (TaggedWord tw : tagWords){
+        for (TaggedWord tw : tagWords) {
             String key = tw.tag();
-            if(!key.equals(START_MARKER));
-            if (tagCounts.containsKey(key)){
-                tagCounts.put(key,tagCounts.get(key)+1);
-            } else {
-                tagCounts.put(key, 1);
+            if (!key.equals(START_MARKER)) {
+                if (tagCounts.containsKey(key)) {
+                    tagCounts.put(key, tagCounts.get(key) + 1);
+                } else {
+                    tagCounts.put(key, 1);
+                }
             }
         }
-        for(String tag : tagCounts.keySet()){
-            featureList.add(new Feature(tag+"-count", tagCounts.get(tag)));
+        for (String tag : tagCounts.keySet()) {
+            if (featureList.containsKey(tag)) {
+                featureList.put(tag, tagCounts.get(tag));
+            } else {
+                System.out.println("tried to add different key " + tag);
+            }
         }
     }
 
     /**
      * Generates features for pairs of neighbouring POS tags.
      *
-     * @param tagWords     Words & associated POS tags for up given sentence.
+     * @param tagWords Words & associated POS tags for up given sentence.
      */
-    private void getPOSPairCounts(List<TaggedWord> tagWords){
-        Map<String, Integer> tagCounts = new HashMap<String,Integer>();
+    private void getPOSPairCounts(List<TaggedWord> tagWords) {
+        Map<String, Integer> tagCounts = new HashMap<String, Integer>();
 
-        for(int i=0; i < tagWords.size()-1; i++){
-            String pair = tagWords.get(i).tag() + "/" + tagWords.get(i+1).tag() + "-count";
-            if (tagCounts.containsKey(pair)){
-                tagCounts.put(pair, tagCounts.get(pair)+1);
+        for (int i = 0; i < tagWords.size() - 1; i++) {
+            String pair = tagWords.get(i).tag() + "/" + tagWords.get(i + 1).tag();
+            if (tagCounts.containsKey(pair)) {
+                tagCounts.put(pair, tagCounts.get(pair) + 1);
             } else {
-                tagCounts.put(pair,1);
+                tagCounts.put(pair, 1);
             }
         }
-        for(String key : tagCounts.keySet()){
-            featureList.add(new Feature(key, tagCounts.get(key)));
+        for (String key : tagCounts.keySet()) {
+            if (featureList.containsKey(key)) {
+                featureList.put(key, tagCounts.get(key));
+            } else {
+                System.out.println("tried to add different key " + key);
+            }
         }
 
     }
@@ -130,42 +140,39 @@ public class FeatureGenerator {
     /**
      * Determines whether the given sentence contains a conjunction.
      *
-     * @param tagWords      Words & associated POS tags for up given sentence.
-     * @return              1 if there is a conjunction, 0 otherwise
+     * @param tagWords Words & associated POS tags for up given sentence.
+     * @return 1 if there is a conjunction, 0 otherwise
      */
     //TODO: Differentiate between prep & sub-conj ("IN")
-    private int existsConjunction(List<TaggedWord> tagWords){
-        for(TaggedWord tw : tagWords){
-            if(tw.tag().equals("CC") || tw.tag().equals("IN")){
-                return 1;
+    private void existsConjunction(List<TaggedWord> tagWords) {
+        for (TaggedWord tw : tagWords) {
+            if (tw.tag().equals("CC") || tw.tag().equals("IN")) {
+                featureList.put("exists conjunction", 1);
             }
         }
-        return 0;
     }
 
-    private int existsNegFinalVP(Tree parse){
+    private void existsNegFinalVP(Tree parse) {
         //TODO: Implementation
-        return 0;
     }
 
     /**
      * Is the last word of the sentence a Wh-pronoun?
      *
-     * @param tagWords      Words & associated POS tags for up given sentence.
-     * @return              1 if true, 0 otherwise
+     * @param tagWords Words & associated POS tags for up given sentence.
+     * @return 1 if true, 0 otherwise
      */
-    private int isWPFinal(List<TaggedWord> tagWords){
+    private void isWPFinal(List<TaggedWord> tagWords) {
         int finalIndex = tagWords.size() - 1;
         TaggedWord finalWord = tagWords.get(finalIndex);
-        while (punctuation.contains(finalWord.tag())){
+        while (punctuation.contains(finalWord.tag())) {
             tagWords.remove(finalIndex);
             finalIndex = tagWords.size() - 1;
             finalWord = tagWords.get(finalIndex);
         }
-        if (finalWord.tag().equals("WP")){
-            return 1;
+        if (finalWord.tag().equals("WP")) {
+            featureList.put("WP-final", 1);
         } else {
-            return 0;
         }
     }
 
@@ -176,32 +183,32 @@ public class FeatureGenerator {
      * @param tagWords
      * @return
      */
-    private int existsDoesPhrase(List<Word> words, List<TaggedWord> tagWords){
+    private void existsDoesPhrase(List<Word> words, List<TaggedWord> tagWords) {
         //TODO: Implementation
-        return 0;
     }
 
     /**
      * Return a list of elements which encode POS in the given sentence augmented with
      * information from their ancestors in the parse tree.
      *
-     * @param parse         parse tree of given sentence
-     * @return              list of augmented POS tags
+     * @param parse parse tree of given sentence
+     * @return list of augmented POS tags
      */
-    private List<List<String>> getAugmentedPOS(Tree parse){
+    private void getAugmentedPOS(Tree parse) {
 
         //TODO: Implementation
-        return null;
     }
 
-    public void printFeatures(){
-        for(Feature f : featureList){
-            System.out.println(f.getName()+" : "+f.getValue());
+    public void printFeatures() {
+        for (String feature : featureList.keySet()) {
+            System.out.println(feature + " : " + featureList.get(feature));
         }
     }
 
-    public void reset(){
-        featureList = new ArrayList<Feature>();
+    public void reset() {
+        for (String key : featureList.keySet()) {
+            featureList.put(key, 0);
+        }
     }
 
 
