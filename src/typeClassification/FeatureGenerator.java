@@ -54,8 +54,9 @@ public class FeatureGenerator {
         getPOSPairCounts(tagWords);                 //POS pair counts
         existsConjunction(tagWords);                //Is there a conjunction?
         existsDoesPhrase(words);                    //Is there a "does too", "does so", "doesn't" or similar phrase?
-        isWPFinal(tagWords);                        //Is there a WP-final VP?
-        existsNegFinalVP(parse);
+        isWPFinal(tagWords);                        //Is the sentence wh-pronoun-final?
+        existsNegFinalVP(parse);                    //Is there a neg-final VP?
+        getAugmentedPOS(parse);                     //POS tags plus ancestor information
 
         //TODO: Implementation, more features
         return featureList;
@@ -164,7 +165,6 @@ public class FeatureGenerator {
                 verbPhrases.add(current);
             }
         }
-
         boolean hadNegative = false;
         for (Tree vp : verbPhrases){
             List<Word> vpWords = vp.yieldWords();
@@ -175,11 +175,9 @@ public class FeatureGenerator {
                 }
             }
         }
-
         if (hadNegative) {
             featureList.put("exists neg-final VP", 1);
         }
-
     }
 
     /**
@@ -231,6 +229,14 @@ public class FeatureGenerator {
     private void getAugmentedPOS(Tree parse) {
 
         //TODO: Implementation
+
+        List<Tree> leaves = parse.getLeaves();
+
+        for (Tree l : leaves){
+            Tree parent = l.parent(parse);
+            String posTag = parent.label().value().trim();
+            System.out.println(posTag);
+        }
     }
 
     public void printFeatures() {
