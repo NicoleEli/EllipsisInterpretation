@@ -48,20 +48,14 @@ public class FeatureGenerator {
         List<TaggedWord> tagWords = parse.taggedYield();
         tagWords.add(0, new TaggedWord("", START_MARKER));     //special start-of-sentence marker
 
-        //Sentence length
-        getSentenceLength(words);
-
-        //POS counts
-        getPOSCounts(tagWords);
-
-        //POS pair counts
-        getPOSPairCounts(tagWords);
-
-        //Exists conjunction?
-        existsConjunction(tagWords);
-
-        //WP-final?
-        isWPFinal(tagWords);
+        //Populating feature vector
+        getSentenceLength(words);                   //Sentence length
+        getPOSCounts(tagWords);                     //POS counts
+        getPOSPairCounts(tagWords);                 //POS pair counts
+        existsConjunction(tagWords);                //Is there a conjunction?
+        existsDoesPhrase(words);                    //Is there a "does too", "does so", "doesn't" or similar phrase?
+        isWPFinal(tagWords);                        //Is there a WP-final VP?
+        existsNegFinalVP(parse);
 
         //TODO: Implementation, more features
         return featureList;
@@ -152,8 +146,40 @@ public class FeatureGenerator {
         }
     }
 
+    /**
+     * Is there a VP in the sentence which ends in a negative?
+     *
+     * @param parse     Parse tree of the sentence
+     */
     private void existsNegFinalVP(Tree parse) {
-        //TODO: Implementation
+        String[] negatives = {"not", "n't", "no"};
+        List<Tree> verbPhrases = new ArrayList<Tree>();
+        Iterator<Tree> iterator = parse.iterator();
+
+        Tree current;
+        while (iterator.hasNext()){
+            current = iterator.next();
+            String currentLabel = current.label().value().trim();
+            if (currentLabel.equals("VP")){
+                verbPhrases.add(current);
+            }
+        }
+
+        boolean hadNegative = false;
+        for (Tree vp : verbPhrases){
+            List<Word> vpWords = vp.yieldWords();
+            Word lastWord = vpWords.get(vpWords.size()-1);
+            for (String n : negatives){
+                if (lastWord.word().trim().equals(n)){
+                    hadNegative = true;
+                }
+            }
+        }
+
+        if (hadNegative) {
+            featureList.put("exists neg-final VP", 1);
+        }
+
     }
 
     /**
@@ -179,12 +205,20 @@ public class FeatureGenerator {
     /**
      * Do phrases like "does so", "does too", "doesn't" occur in the given sentence?
      *
-     * @param words
-     * @param tagWords
+     *
+     * @param words     Words of parsed sentence
      * @return
      */
-    private void existsDoesPhrase(List<Word> words, List<TaggedWord> tagWords) {
-        //TODO: Implementation
+    private void existsDoesPhrase(List<Word> words) {
+        for (Word w : words){
+            String word = w.word().trim().toLowerCase();
+            if (word.equals("does") || word.equals("do")){
+                String nextWord = words.get(words.indexOf(w)+1).word().trim().toLowerCase();
+                if (nextWord.equals("too") || nextWord.equals("so") || nextWord.equals("n't")){
+                    featureList.put("exists does phrase", 1);
+                }
+            }
+        }
     }
 
     /**
