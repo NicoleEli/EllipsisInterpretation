@@ -17,7 +17,7 @@ public class MainController {
         ParsingController parser = new ParsingController();
 
         DatasetBuilder datasetBuilder = new DatasetBuilder(new FeatureGenerator() {
-        }, "C:\\Users\\Nikki\\IdeaProjects\\EllipsisInterpretation\\Data\\final\\NPE-P.txt", "C:\\Users\\Nikki\\IdeaProjects\\EllipsisInterpretation\\Data\\final\\attribute-testing.csv", parser);
+        }, "C:\\Users\\Nikki\\IdeaProjects\\EllipsisInterpretation\\Data\\final\\raw-all.txt", "C:\\Users\\Nikki\\IdeaProjects\\EllipsisInterpretation\\Data\\final\\attribute-testing.csv", parser);
 
         datasetBuilder.buildDataset();
 

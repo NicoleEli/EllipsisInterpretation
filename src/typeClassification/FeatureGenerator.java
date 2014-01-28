@@ -56,7 +56,7 @@ public class FeatureGenerator {
         existsDoesPhrase(words);                    //Is there a "does too", "does so", "doesn't" or similar phrase?
         isWPFinal(tagWords);                        //Is the sentence wh-pronoun-final?
         existsNegFinalVP(parse);                    //Is there a neg-final VP?
-        getAugmentedPOS(parse);                     //POS tags plus ancestor information
+        //getAugmentedPOS(parse);                     //POS tags plus ancestor information
 
         //TODO: Implementation, more features
         return featureList;
@@ -235,7 +235,9 @@ public class FeatureGenerator {
         for (Tree l : leaves){
             Tree parent = l.parent(parse);
             String posTag = parent.label().value().trim();
-            System.out.println(posTag);
+            Tree grandparent = parent.parent(parse);
+            String grandparentLabel = grandparent.label().value().trim();
+            System.out.println(posTag+"/"+grandparentLabel);
         }
     }
 

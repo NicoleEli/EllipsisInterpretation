@@ -53,9 +53,10 @@ public class DatasetBuilder {
             featureGenerator.initialiseFeatures();
 
             String line;
+            int numRead = 0;
             while ((line = reader.readLine()) != null) {
 
-                String[] lineSplit = line.split(" -- ");
+                String[] lineSplit = line.split(" :: ");
                 String raw = lineSplit[0];              //elliptical example
                 String classification = lineSplit[1];            //classification of example e.g. NPE
 
@@ -87,6 +88,8 @@ public class DatasetBuilder {
                 writer.newLine();
 
                 featureGenerator.reset();
+                numRead++;
+                System.out.println(numRead);
 
             }
 
