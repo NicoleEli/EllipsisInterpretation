@@ -1,6 +1,7 @@
 package typeClassification;
 
 import weka.core.FastVector;
+import weka.core.Instance;
 import weka.core.Instances;
 
 /**
@@ -9,8 +10,13 @@ import weka.core.Instances;
  *
  * Classification is handled by a series of binary classifiers, i.e. VPE/not-VPE, gapping/not-gapping etc.
  */
-public interface BinaryEllipsisClassifier {
+public abstract class BinaryEllipsisClassifier {
 
-    public boolean classify(FastVector featureVector);
+    public abstract boolean classify(FastVector featureVector);
+
+    protected Instance makeInstance(FastVector featureVector){
+        //TODO: method body
+        return null;
+    }
 
 }

@@ -3,6 +3,7 @@ package typeClassification;
 import weka.classifiers.Classifier;
 import weka.classifiers.bayes.BayesianLogisticRegression;
 import weka.core.FastVector;
+import weka.core.Instance;
 import weka.core.Instances;
 
 /**
@@ -27,13 +28,25 @@ public class NPEClassifier implements BinaryEllipsisClassifier {
         String datasetName = "NPEclassification";
         dataset = new Instances(datasetName,attributes,100);
         dataset.setClassIndex(0);       //class attribute will be first in the feature vector
-
     }
 
     @Override
     public boolean classify(FastVector featureVector) {
         return false;  //TODO
     }
+
+    /**
+     * Update dataset with a new piece of training data.
+     *
+     * @param featureVector         vector of feature values
+     */
+    public void updateTrainingData(FastVector featureVector){
+        Instance instance = makeInstance(featureVector);
+
+        instance.setClassValue((String) featureVector.elementAt(0)); //TODO: need to do this??
+    }
+
+
 
 
 }
