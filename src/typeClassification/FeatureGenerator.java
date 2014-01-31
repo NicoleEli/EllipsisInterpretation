@@ -49,14 +49,14 @@ public class FeatureGenerator {
         tagWords.add(0, new TaggedWord("", START_MARKER));     //special start-of-sentence marker
 
         //Populating feature vector
-        getSentenceLength(words);                   //Sentence length
-        getPOSCounts(tagWords);                     //POS counts
-        getPOSPairCounts(tagWords);                 //POS pair counts
-        existsConjunction(tagWords);                //Is there a conjunction?
-        existsDoesPhrase(words);                    //Is there a "does too", "does so", "doesn't" or similar phrase?
-        isWPFinal(tagWords);                        //Is the sentence wh-pronoun-final?
-        existsNegFinalVP(parse);                    //Is there a neg-final VP?
-        //getAugmentedPOS(parse);                     //POS tags plus ancestor information
+        //getSentenceLength(words);                   //Sentence length
+        //getPOSCounts(tagWords);                     //POS counts
+        //getPOSPairCounts(tagWords);                 //POS pair counts
+        //existsConjunction(tagWords);                //Is there a conjunction?
+        //existsDoesPhrase(words);                    //Is there a "does too", "does so", "doesn't" or similar phrase?
+        //isWPFinal(tagWords);                        //Is the sentence wh-pronoun-final?
+        //existsNegFinalVP(parse);                    //Is there a neg-final VP?
+        getAugmentedPOS(parse);                     //POS tags plus ancestor information
 
         //TODO: Implementation, more features
         return featureList;
