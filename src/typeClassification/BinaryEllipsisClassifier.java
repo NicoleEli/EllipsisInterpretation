@@ -1,5 +1,8 @@
 package typeClassification;
 
+import weka.core.FastVector;
+import weka.core.Instances;
+
 /**
  * @author Nicole Williams
  *         28/10/13
@@ -8,6 +11,6 @@ package typeClassification;
  */
 public interface BinaryEllipsisClassifier {
 
-    public boolean classify(int[] featureVector);
+    public boolean classify(FastVector featureVector);
 
 }
