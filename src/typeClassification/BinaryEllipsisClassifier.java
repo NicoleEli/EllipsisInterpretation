@@ -2,6 +2,7 @@ package typeClassification;
 
 import weka.classifiers.Classifier;
 import weka.classifiers.bayes.BayesianLogisticRegression;
+import weka.core.Attribute;
 import weka.core.FastVector;
 import weka.core.Instance;
 import weka.core.Instances;
@@ -13,6 +14,7 @@ import weka.core.Instances;
  * Classification is handled by a series of binary classifiers, i.e. VPE/not-VPE, gapping/not-gapping etc.
  */
 public abstract class BinaryEllipsisClassifier {
+
 
     /** Dataset of training data for this classifier */
     protected Instances dataset;
@@ -31,14 +33,34 @@ public abstract class BinaryEllipsisClassifier {
         dataset.setClassIndex(0);       //class attribute will be first in the feature vector
     }
 
-    public boolean classify(FastVector featureVector) {
-        return false;  //TODO: method body; see also in updateData
+    public boolean classify(FastVector featureVector) throws Exception {
+
+        if (dataset.numInstances() == 0){
+            throw new Exception("No classifier available");
+        }
+
+        if (!datasetUpToDate){
+            wekaClassifier.buildClassifier(dataset);
+            datasetUpToDate = true;
+        }
+
+        Instance testInstance = makeInstance(featureVector);
+
+        double predicted = wekaClassifier.classifyInstance(testInstance);
+
+        System.out.println("Classified as: " + predicted);
+        return false;  //TODO: return statement
     }
 
-    protected Instance makeInstance(FastVector featureVector){
-        Instance instance = new Instance(featureVector.size());
-        //TODO: method body
-        return null;
+    protected Instance makeInstance(FastVector featureValues){
+        int numAtts = dataset.numAttributes();
+        Instance instance = new Instance(numAtts);
+
+        for (int i=0; i<numAtts; i++){
+            instance.setValue(i, (String) featureValues.elementAt(i)); //TODO: change from FastVector to make this not String??
+        }
+        instance.setDataset(dataset);
+        return instance;
     }
 
     /**
@@ -50,6 +72,6 @@ public abstract class BinaryEllipsisClassifier {
         Instance instance = makeInstance(featureVector);
         instance.setClassValue((String) featureVector.elementAt(0)); //TODO: need to do this??
         dataset.add(instance);
-        datasetUpToDate = false;    //TODO: in classify method, check this value and rebuild classifier if false
+        datasetUpToDate = false;
     }
 }
