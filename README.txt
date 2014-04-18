@@ -29,4 +29,4 @@ Read LICENSE for full license details.
 ###################################
 
 Nicole Williams, GitHub user CadiT
-nicole.cadi[at]gmail.com
+nicole.eli.williams[at]gmail.com
