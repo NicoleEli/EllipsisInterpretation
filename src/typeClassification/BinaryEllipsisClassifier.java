@@ -21,6 +21,8 @@ public abstract class BinaryEllipsisClassifier {
     protected boolean datasetUpToDate = true;
     /** Plug in WEKA classifier of appropriate kind. */
     private Classifier wekaClassifier = new BayesianLogisticRegression();
+    /** Vector of possible classes */
+    private FastVector classes;
 
     /**
      * Instantiate a new binary classifier
@@ -28,9 +30,10 @@ public abstract class BinaryEllipsisClassifier {
      * @param attributes        vector of feature (attribute) names
      * @param datasetName       name of classification performed by this instance
      */
-    public BinaryEllipsisClassifier(FastVector attributes, String datasetName){
+    public BinaryEllipsisClassifier(FastVector attributes, String datasetName, FastVector classes){
         dataset = new Instances(datasetName,attributes,100);
         dataset.setClassIndex(0);       //class attribute will be first in the feature vector
+        this.classes = classes;
     }
 
     public boolean classify(FastVector featureVector) throws Exception {
@@ -47,9 +50,10 @@ public abstract class BinaryEllipsisClassifier {
         Instance testInstance = makeInstance(featureVector);
 
         double predicted = wekaClassifier.classifyInstance(testInstance);
+        String classification = (String) classes.elementAt((int) predicted);
 
-        System.out.println("Classified as: " + predicted);
-        return false;  //TODO: return statement
+        System.out.println("Classified as: " + predicted + " " + classification);
+        return false;  //TODO: return statement - use vector of classes and double from classifyInstance
     }
 
     protected Instance makeInstance(FastVector featureValues){
