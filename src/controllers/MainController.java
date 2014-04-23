@@ -13,17 +13,36 @@ public class MainController {
 
 
     public static final String FEATURE_NAMES_PATH = "C:\\Users\\Nikki\\IdeaProjects\\EllipsisInterpretation\\Data\\featureNames.txt";
-    public static final String RAW_DATA_PATH = "C:\\Users\\Nikki\\IdeaProjects\\EllipsisInterpretation\\Data\\final\\raw-all.txt";
-    public static final String PROCESSED_DATA_PATH = "C:\\Users\\Nikki\\IdeaProjects\\EllipsisInterpretation\\Data\\final\\attribute-testing.csv";
+
+    public static final String NPE_RAW_PATH = "C:\\Users\\Nikki\\IdeaProjects\\EllipsisInterpretation\\Data\\final\\NPE-all.txt";
+    public static final String NPE_PROCESSED_PATH = "C:\\Users\\Nikki\\IdeaProjects\\EllipsisInterpretation\\Data\\final\\vectors-NPE.csv";
+    public static final String VPE_RAW_PATH = "C:\\Users\\Nikki\\IdeaProjects\\EllipsisInterpretation\\Data\\final\\VPE.txt";
+    public static final String VPE_PROCESSED_PATH = "C:\\Users\\Nikki\\IdeaProjects\\EllipsisInterpretation\\Data\\final\\vectors-VPE.csv";
+    public static final String NSU_RAW_PATH = "C:\\Users\\Nikki\\IdeaProjects\\EllipsisInterpretation\\Data\\final\\NSUs.txt";
+    public static final String NSU_PROCESSED_PATH = "C:\\Users\\Nikki\\IdeaProjects\\EllipsisInterpretation\\Data\\final\\vectors-NSU.csv";
+
+    public static boolean datasetsToBeBuilt = true;
 
     public static void main(String[] args) {
 
         ParsingController parser = new ParsingController();
 
-        DatasetBuilder datasetBuilder = new DatasetBuilder(new FeatureGenerator(FEATURE_NAMES_PATH) {
-        }, RAW_DATA_PATH, PROCESSED_DATA_PATH, parser);
+        //Build datasets for each kind of ellipsis
+        if (datasetsToBeBuilt) {
+            DatasetBuilder npeDatasetBuilder = new DatasetBuilder(new FeatureGenerator(FEATURE_NAMES_PATH) {
+            }, NPE_RAW_PATH, NPE_PROCESSED_PATH, parser);
+            DatasetBuilder vpeDatasetBuilder = new DatasetBuilder(new FeatureGenerator(FEATURE_NAMES_PATH) {
+            }, VPE_RAW_PATH, VPE_PROCESSED_PATH, parser);
+            DatasetBuilder nsuDatasetBuilder = new DatasetBuilder(new FeatureGenerator(FEATURE_NAMES_PATH) {
+            }, NSU_RAW_PATH, NSU_PROCESSED_PATH, parser);
 
-        datasetBuilder.buildDataset();
+            npeDatasetBuilder.buildDataset();
+            System.out.println("Build NPE dataset.");
+            vpeDatasetBuilder.buildDataset();
+            System.out.println("Build VPE dataset.");
+            nsuDatasetBuilder.buildDataset();
+            System.out.println("Build NSU dataset.");
+        }
 
         /*
         if (args.length > 0){

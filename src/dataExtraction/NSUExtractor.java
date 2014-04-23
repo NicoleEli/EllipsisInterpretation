@@ -25,7 +25,7 @@ public class NSUExtractor {
     Path nsurf = Paths.get("C:\\DataFiles\\Programming\\4th Year Project - Ellipsis Interpretation\\NSU-RF");
     String textsDir = "C:\\BNC-world\\Texts\\";
     Path extractedNSUFile = Paths.get("C:\\DataFiles\\Programming\\4th Year Project - Ellipsis Interpretation\\NSUs.txt");
-    Path noTagNSUFile = Paths.get("C:\\DataFiles\\Programming\\4th Year Project - Ellipsis Interpretation\\NSUs (no POS).txt");
+    Path noTagNSUFile = Paths.get("C:\\DataFiles\\Programming\\4th Year Project - Ellipsis Interpretation\\NSUs.txt");
 
     List<SentenceReference> sentenceRefs = new ArrayList<SentenceReference>();
 
