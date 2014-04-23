@@ -26,8 +26,11 @@ public class FeatureGenerator {
 
     public Map<String, Integer> initialiseFeatures() {
         try {
-            BufferedReader reader = Files.newBufferedReader(Paths.get("C:\\DataFiles\\Programming\\4th Year Project - Ellipsis Interpretation\\PTBtags.txt"),
+
+            BufferedReader reader = Files.newBufferedReader(Paths.get("C:\\Users\\Nikki\\IdeaProjects\\EllipsisInterpretation\\Data\\featureNames.txt"),
                     Charset.forName("UTF-8"));
+            //BufferedReader reader = Files.newBufferedReader(Paths.get("C:\\DataFiles\\Programming\\4th Year Project - Ellipsis Interpretation\\PTBtags.txt"),
+            //        Charset.forName("UTF-8"));
 
             String line;
             while ((line = reader.readLine()) != null) {
@@ -227,8 +230,7 @@ public class FeatureGenerator {
      * @return list of augmented POS tags
      */
     private void getAugmentedPOS(Tree parse) {
-
-        //TODO: Implementation
+        Map<String, Integer> augTagCounts = new HashMap<String, Integer>();
 
         List<Tree> leaves = parse.getLeaves();
 
@@ -237,7 +239,22 @@ public class FeatureGenerator {
             String posTag = parent.label().value().trim();
             Tree grandparent = parent.parent(parse);
             String grandparentLabel = grandparent.label().value().trim();
-            System.out.println(posTag+"/"+grandparentLabel);
+            String featureLabel = "Aug-" + posTag+"/"+grandparentLabel;
+
+            if (augTagCounts.containsKey(featureLabel)){
+                augTagCounts.put(featureLabel,augTagCounts.get(featureLabel)+1);
+            } else {
+                augTagCounts.put(featureLabel,1);
+            }
+
+        }
+
+        for (String augTag : augTagCounts.keySet()) {
+            if (featureList.containsKey(augTag)) {
+                featureList.put(augTag, augTagCounts.get(augTag));
+            } else {
+                System.out.println("tried to add different key " + augTag);
+            }
         }
     }
 
