@@ -1,6 +1,7 @@
 package typeClassification;
 
 import edu.stanford.nlp.trees.*;
+import weka.core.Attribute;
 import weka.core.FastVector;
 
 import java.io.BufferedReader;
@@ -25,13 +26,14 @@ public class EllipsisClassificationController {
     List<BinaryEllipsisClassifier> binaryClassifiers = new ArrayList<BinaryEllipsisClassifier>();
 
     FastVector attributes;
+    FastVector classValues;
 
     /**
      * Initialise some number of binary classifiers, given paths to the .csv files containing training data
      */
     public void initialiseClassifiers(List<String> datasetPaths, List<String> datasetNames, Set<String> featureNames){
 
-        attributes = generateAttributes(featureNames);
+        generateAttributes(featureNames);
 
         for (int i = 0; i < datasetPaths.size(); i++){
             makeNewClassifier(datasetPaths.get(i), datasetNames.get(i));
@@ -46,11 +48,7 @@ public class EllipsisClassificationController {
 
     private void makeNewClassifier(String datasetPath, String datasetName){
 
-        FastVector classValues = new FastVector();
-        classValues.addElement("true");
-        classValues.addElement("false");
-
-        BinaryEllipsisClassifier classifier = new BinaryEllipsisClassifier(attributes, datasetName, classValues);
+        BinaryEllipsisClassifier classifier = new BinaryEllipsisClassifier(attributes, datasetName);
 
         try{
             BufferedReader reader = Files.newBufferedReader(Paths.get(datasetPath), charset);
@@ -69,9 +67,15 @@ public class EllipsisClassificationController {
         binaryClassifiers.add(classifier);
     }
 
-    private FastVector generateAttributes(Set<String> featureNames){
-        //TODO: turn names of features into numeric WEKA attributes
-        return null;
+    private void generateAttributes(Set<String> featureNames){
+
+        for (String s : featureNames){
+            if(s.equals("class")){
+                attributes.addElement(new Attribute("class",classValues));
+            } else {
+                attributes.addElement(new Attribute(s));
+            }
+        }
     }
 
     /**

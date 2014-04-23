@@ -22,7 +22,7 @@ public class BinaryEllipsisClassifier {
     /** Plug in WEKA classifier of appropriate kind. */
     private Classifier wekaClassifier = new BayesianLogisticRegression();
     /** Vector of possible classes */
-    private FastVector classes;
+    private FastVector classValues;
 
     /**
      * Instantiate a new binary classifier
@@ -30,10 +30,20 @@ public class BinaryEllipsisClassifier {
      * @param attributes        vector of feature (attribute) names
      * @param datasetName       name of classification performed by this instance
      */
-    public BinaryEllipsisClassifier(FastVector attributes, String datasetName, FastVector classes){
+    public BinaryEllipsisClassifier(FastVector attributes, String datasetName){
+        //binary classifier has two classes, true and false
+        this.classValues = new FastVector();
+        classValues.addElement("true");
+        classValues.addElement("false");
+
+        //add class attribute to feature attributes passed down
+        Attribute classAtt = new Attribute("class",classValues);
+        attributes.addElement(classAtt);
+
+        //new dataset, class attribute being the one we just defined
         dataset = new Instances(datasetName,attributes,100);
-        dataset.setClassIndex(0);       //class attribute will be first in the feature vector
-        this.classes = classes;
+        dataset.setClass(classAtt);
+
     }
 
     public boolean classify(FastVector featureVector) throws Exception {
@@ -50,7 +60,7 @@ public class BinaryEllipsisClassifier {
         Instance testInstance = makeInstance(featureVector);
 
         double predicted = wekaClassifier.classifyInstance(testInstance);
-        String classification = (String) classes.elementAt((int) predicted);
+        String classification = (String) classValues.elementAt((int) predicted);
 
         System.out.println("Classified as: " + predicted + " " + classification);
         return false;  //TODO: return statement - use vector of classes and double from classifyInstance
