@@ -89,7 +89,7 @@ public class DatasetBuilder {
 
                 featureGenerator.reset();
                 numRead++;
-                System.out.println(numRead);
+                System.out.println("DatasetBuilder has read in data item "+numRead);
 
             }
 

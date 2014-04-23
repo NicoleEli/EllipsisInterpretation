@@ -19,18 +19,22 @@ import java.util.*;
  */
 public class FeatureGenerator {
 
+    String featureNameFile;
+
     public static final String START_MARKER = "START";
     Map<String, Integer> featureList = new LinkedHashMap<String, Integer>();
     String[] punctuationArray = {".", ",", "'", "\"", "-", "/", "\\", "(", ")", "!", "?", ":", ";"};
     List<String> punctuation = Arrays.asList(punctuationArray);
 
+    public FeatureGenerator(String featureNameFile){
+        this.featureNameFile = featureNameFile;
+    }
+
     public Map<String, Integer> initialiseFeatures() {
         try {
 
-            BufferedReader reader = Files.newBufferedReader(Paths.get("C:\\Users\\Nikki\\IdeaProjects\\EllipsisInterpretation\\Data\\featureNames.txt"),
+            BufferedReader reader = Files.newBufferedReader(Paths.get(featureNameFile),
                     Charset.forName("UTF-8"));
-            //BufferedReader reader = Files.newBufferedReader(Paths.get("C:\\DataFiles\\Programming\\4th Year Project - Ellipsis Interpretation\\PTBtags.txt"),
-            //        Charset.forName("UTF-8"));
 
             String line;
             while ((line = reader.readLine()) != null) {
@@ -52,16 +56,15 @@ public class FeatureGenerator {
         tagWords.add(0, new TaggedWord("", START_MARKER));     //special start-of-sentence marker
 
         //Populating feature vector
-        //getSentenceLength(words);                   //Sentence length
-        //getPOSCounts(tagWords);                     //POS counts
-        //getPOSPairCounts(tagWords);                 //POS pair counts
-        //existsConjunction(tagWords);                //Is there a conjunction?
-        //existsDoesPhrase(words);                    //Is there a "does too", "does so", "doesn't" or similar phrase?
-        //isWPFinal(tagWords);                        //Is the sentence wh-pronoun-final?
-        //existsNegFinalVP(parse);                    //Is there a neg-final VP?
-        getAugmentedPOS(parse);                     //POS tags plus ancestor information
+        getSentenceLength(words);                   //Sentence length
+        getPOSCounts(tagWords);                     //POS counts
+        getPOSPairCounts(tagWords);                 //POS pair counts
+        existsConjunction(tagWords);                //Is there a conjunction?
+        existsDoesPhrase(words);                    //Is there a "does too", "does so", "doesn't" or similar phrase?
+        isWPFinal(tagWords);                        //Is the sentence wh-pronoun-final?
+        existsNegFinalVP(parse);                    //Is there a neg-final VP?
+        getAugmentedPOS(parse);                     //counts of POS tags plus ancestor information
 
-        //TODO: Implementation, more features
         return featureList;
     }
 

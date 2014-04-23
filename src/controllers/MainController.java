@@ -12,12 +12,16 @@ import typeClassification.FeatureGenerator;
 public class MainController {
 
 
+    public static final String FEATURE_NAMES_PATH = "C:\\Users\\Nikki\\IdeaProjects\\EllipsisInterpretation\\Data\\featureNames.txt";
+    public static final String RAW_DATA_PATH = "C:\\Users\\Nikki\\IdeaProjects\\EllipsisInterpretation\\Data\\final\\raw-all.txt";
+    public static final String PROCESSED_DATA_PATH = "C:\\Users\\Nikki\\IdeaProjects\\EllipsisInterpretation\\Data\\final\\attribute-testing.csv";
+
     public static void main(String[] args) {
 
         ParsingController parser = new ParsingController();
 
-        DatasetBuilder datasetBuilder = new DatasetBuilder(new FeatureGenerator() {
-        }, "C:\\Users\\Nikki\\IdeaProjects\\EllipsisInterpretation\\Data\\final\\raw-all.txt", "C:\\Users\\Nikki\\IdeaProjects\\EllipsisInterpretation\\Data\\final\\attribute-testing.csv", parser);
+        DatasetBuilder datasetBuilder = new DatasetBuilder(new FeatureGenerator(FEATURE_NAMES_PATH) {
+        }, RAW_DATA_PATH, PROCESSED_DATA_PATH, parser);
 
         datasetBuilder.buildDataset();
 
