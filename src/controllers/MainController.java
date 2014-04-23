@@ -19,11 +19,11 @@ public class MainController {
 
     public static final String FEATURE_NAMES_PATH = "C:\\Users\\Nikki\\IdeaProjects\\EllipsisInterpretation\\Data\\featureNames.txt";
 
-    public static final String NPE_RAW_PATH = "C:\\Users\\Nikki\\IdeaProjects\\EllipsisInterpretation\\Data\\final\\NPE-all.txt";
+    public static final String NPE_RAW_PATH = "C:\\Users\\Nikki\\IdeaProjects\\EllipsisInterpretation\\Data\\final\\binary-NPE.txt";
     public static final String NPE_PROCESSED_PATH = "C:\\Users\\Nikki\\IdeaProjects\\EllipsisInterpretation\\Data\\final\\vectors-NPE.csv";
-    public static final String VPE_RAW_PATH = "C:\\Users\\Nikki\\IdeaProjects\\EllipsisInterpretation\\Data\\final\\VPE.txt";
+    public static final String VPE_RAW_PATH = "C:\\Users\\Nikki\\IdeaProjects\\EllipsisInterpretation\\Data\\final\\binary-VPE.txt";
     public static final String VPE_PROCESSED_PATH = "C:\\Users\\Nikki\\IdeaProjects\\EllipsisInterpretation\\Data\\final\\vectors-VPE.csv";
-    public static final String NSU_RAW_PATH = "C:\\Users\\Nikki\\IdeaProjects\\EllipsisInterpretation\\Data\\final\\NSUs.txt";
+    public static final String NSU_RAW_PATH = "C:\\Users\\Nikki\\IdeaProjects\\EllipsisInterpretation\\Data\\final\\binary-NSU.txt";
     public static final String NSU_PROCESSED_PATH = "C:\\Users\\Nikki\\IdeaProjects\\EllipsisInterpretation\\Data\\final\\vectors-NSU.csv";
 
     //Booleans for turning on and off bits of functionality - largely for development/debugging use.
@@ -59,7 +59,12 @@ public class MainController {
             datasetPaths.add(VPE_PROCESSED_PATH);
             datasetPaths.add(NSU_PROCESSED_PATH);
 
-            classificationController.initialiseClassifiers(datasetPaths);
+            List<String> datasetNames = new ArrayList<String>();
+            datasetNames.add("NPE");
+            datasetNames.add("VPE");
+            datasetNames.add("NSU");
+
+            classificationController.initialiseClassifiers(datasetPaths, datasetNames, featureNames);
 
         }
 
