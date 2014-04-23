@@ -13,7 +13,7 @@ import weka.core.Instances;
  *
  * Classification is handled by a series of binary classifiers, i.e. VPE/not-VPE, gapping/not-gapping etc.
  */
-public abstract class BinaryEllipsisClassifier {
+public class BinaryEllipsisClassifier {
 
 
     /** Dataset of training data for this classifier */
