@@ -31,7 +31,7 @@ public class EllipsisClassificationController {
      */
     public void initialiseClassifiers(List<String> datasetPaths, List<String> datasetNames, Set<String> featureNames){
 
-        generateAttributes(featureNames);
+        attributes = generateAttributes(featureNames);
 
         for (int i = 0; i < datasetPaths.size(); i++){
             makeNewClassifier(datasetPaths.get(i), datasetNames.get(i));
@@ -69,13 +69,22 @@ public class EllipsisClassificationController {
         binaryClassifiers.add(classifier);
     }
 
-    private void generateAttributes(Set<String> featureNames){
+    private FastVector generateAttributes(Set<String> featureNames){
         //TODO: turn names of features into numeric WEKA attributes
-
+        return null;
     }
 
+    /**
+     * Convert one line of a .csv file into a FastVector of feature/attribute values
+     */
     private FastVector convert(String line){
         FastVector data = new FastVector();
+        String[] dataStrings = line.split(", ");
+
+        for (String s : dataStrings){
+            data.addElement(s);
+        }
+
 
         return data;
     }
