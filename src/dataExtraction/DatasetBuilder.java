@@ -68,8 +68,8 @@ public class DatasetBuilder {
             while ((line = reader.readLine()) != null) {
 
                 String[] lineSplit = line.split(" :: ");
-                String raw = lineSplit[0];              //elliptical example
-                String classification = lineSplit[1];            //classification of example e.g. NPE
+                String raw = lineSplit[0];                       //data item
+                String classification = lineSplit[1];            //data item classification e.g. NPE
 
                 Tree parse = parser.getParse(raw);
                 Collection typedDependencies = parser.getDependencies(parse);

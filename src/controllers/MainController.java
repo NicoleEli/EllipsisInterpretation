@@ -6,6 +6,7 @@ import typeClassification.FeatureGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created with IntelliJ IDEA.
@@ -33,6 +34,7 @@ public class MainController {
 
         ParsingController parser = new ParsingController();
         FeatureGenerator featureGenerator = new FeatureGenerator(FEATURE_NAMES_PATH);
+        Set<String> featureNames = featureGenerator.getFeatureNames();
 
         //Build datasets for each kind of ellipsis
         if (datasetsToBeBuilt) {
