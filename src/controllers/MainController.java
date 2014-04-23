@@ -32,15 +32,13 @@ public class MainController {
     public static void main(String[] args) {
 
         ParsingController parser = new ParsingController();
+        FeatureGenerator featureGenerator = new FeatureGenerator(FEATURE_NAMES_PATH);
 
         //Build datasets for each kind of ellipsis
         if (datasetsToBeBuilt) {
-            DatasetBuilder npeDatasetBuilder = new DatasetBuilder(new FeatureGenerator(FEATURE_NAMES_PATH) {
-            }, NPE_RAW_PATH, NPE_PROCESSED_PATH, parser);
-            DatasetBuilder vpeDatasetBuilder = new DatasetBuilder(new FeatureGenerator(FEATURE_NAMES_PATH) {
-            }, VPE_RAW_PATH, VPE_PROCESSED_PATH, parser);
-            DatasetBuilder nsuDatasetBuilder = new DatasetBuilder(new FeatureGenerator(FEATURE_NAMES_PATH) {
-            }, NSU_RAW_PATH, NSU_PROCESSED_PATH, parser);
+            DatasetBuilder npeDatasetBuilder = new DatasetBuilder(featureGenerator, NPE_RAW_PATH, NPE_PROCESSED_PATH, parser);
+            DatasetBuilder vpeDatasetBuilder = new DatasetBuilder(featureGenerator, VPE_RAW_PATH, VPE_PROCESSED_PATH, parser);
+            DatasetBuilder nsuDatasetBuilder = new DatasetBuilder(featureGenerator, NSU_RAW_PATH, NSU_PROCESSED_PATH, parser);
 
             npeDatasetBuilder.buildDataset();
             System.out.println("Build NPE dataset.");
@@ -52,7 +50,7 @@ public class MainController {
 
         EllipsisClassificationController classificationController = new EllipsisClassificationController();
 
-        if (doClassification){
+        if (doClassification) {
 
             List<String> datasetPaths = new ArrayList<String>();
             datasetPaths.add(NPE_PROCESSED_PATH);

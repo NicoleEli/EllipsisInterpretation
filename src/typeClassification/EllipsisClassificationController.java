@@ -15,7 +15,9 @@ public class EllipsisClassificationController {
 
     List<BinaryEllipsisClassifier> binaryClassifiers;
 
-    //Initialise some number of binary classifiers, given paths to the .csv files containing training data
+    /**
+     * Initialise some number of binary classifiers, given paths to the .csv files containing training data
+     */
     public void initialiseClassifiers(List<String> datasetPaths){
 
         for (String dataset : datasetPaths){
@@ -25,7 +27,7 @@ public class EllipsisClassificationController {
     }
 
     public EllipsisType findEllipsisType(Tree parse, Collection typedDependencies){
-        //TODO: Implementation: given a parse and dependency parse, classify the input
+        //TODO: Given a parse and dependency parse, classify the input. Use confidence values?
         return EllipsisType.NONE;
     }
 

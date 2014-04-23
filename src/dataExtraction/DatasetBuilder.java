@@ -17,6 +17,7 @@ import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created with IntelliJ IDEA.
@@ -52,6 +53,16 @@ public class DatasetBuilder {
             boolean gotFeatureNames = false;
             featureGenerator.initialiseFeatures();
 
+            //Before reading any data, output the attribute/feature names
+            String names = "class, ";
+            Set<String> featureNames = featureGenerator.getFeatureNames();
+            for (String featureName : featureNames){
+                names = names + featureName + ", ";
+            }
+            writer.append(names);
+            writer.newLine();
+            writer.newLine();
+
             String line;
             int numRead = 0;
             while ((line = reader.readLine()) != null) {
@@ -65,23 +76,8 @@ public class DatasetBuilder {
 
                 Map<String,Integer> features = featureGenerator.genFeatures(parse,typedDependencies);
 
-                /*
-                If this is the first sentence, output the attribute/feature names
-                 */
-                if (!gotFeatureNames){
-                    String names = "class, ";
-                    for (String featureName : features.keySet()){
-                        names = names + featureName + ", ";
-                    }
-                    writer.append(names);
-                    writer.newLine();
-                    writer.newLine();
-
-                    gotFeatureNames = true;
-                }
-
                 String values = classification+", ";
-                for (String featureName : features.keySet()){
+                for (String featureName : featureNames){
                     values = values + features.get(featureName) + ", ";
                 }
                 writer.append(values);

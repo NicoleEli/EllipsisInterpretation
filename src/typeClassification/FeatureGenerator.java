@@ -267,6 +267,10 @@ public class FeatureGenerator {
         }
     }
 
+    public Set<String> getFeatureNames(){
+        return featureList.keySet();
+    }
+
     public void reset() {
         for (String key : featureList.keySet()) {
             featureList.put(key, 0);
