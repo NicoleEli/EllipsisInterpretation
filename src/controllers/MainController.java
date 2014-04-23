@@ -1,7 +1,11 @@
 package controllers;
 
 import dataExtraction.DatasetBuilder;
+import typeClassification.EllipsisClassificationController;
 import typeClassification.FeatureGenerator;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -21,7 +25,9 @@ public class MainController {
     public static final String NSU_RAW_PATH = "C:\\Users\\Nikki\\IdeaProjects\\EllipsisInterpretation\\Data\\final\\NSUs.txt";
     public static final String NSU_PROCESSED_PATH = "C:\\Users\\Nikki\\IdeaProjects\\EllipsisInterpretation\\Data\\final\\vectors-NSU.csv";
 
+    //Booleans for turning on and off bits of functionality - largely for development/debugging use.
     public static boolean datasetsToBeBuilt = true;
+    public static boolean doClassification = false;
 
     public static void main(String[] args) {
 
@@ -42,6 +48,19 @@ public class MainController {
             System.out.println("Build VPE dataset.");
             nsuDatasetBuilder.buildDataset();
             System.out.println("Build NSU dataset.");
+        }
+
+        EllipsisClassificationController classificationController = new EllipsisClassificationController();
+
+        if (doClassification){
+
+            List<String> datasetPaths = new ArrayList<String>();
+            datasetPaths.add(NPE_PROCESSED_PATH);
+            datasetPaths.add(VPE_PROCESSED_PATH);
+            datasetPaths.add(NSU_PROCESSED_PATH);
+
+            classificationController.initialiseClassifiers(datasetPaths);
+
         }
 
         /*
