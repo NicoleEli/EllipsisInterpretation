@@ -1,7 +1,6 @@
 package controllers;
 
 import dataExtraction.DatasetBuilder;
-import typeClassification.EllipsisClassificationController;
 import typeClassification.FeatureGenerator;
 
 import java.io.Console;

@@ -1,6 +1,8 @@
-package typeClassification;
+package controllers;
 
 import edu.stanford.nlp.trees.*;
+import typeClassification.BinaryEllipsisClassifier;
+import typeClassification.EllipsisType;
 import weka.core.Attribute;
 import weka.core.FastVector;
 
@@ -58,7 +60,7 @@ public class EllipsisClassificationController {
             int dataItemsRead = 0;
             while ((line = reader.readLine()) != null){
                 FastVector dataItem = convert(line);
-                classifier.makeInstance(dataItem);
+                classifier.updateTrainingData(dataItem);
             }
         } catch (Exception e){
             System.err.format("IOException: %s%n", e);
