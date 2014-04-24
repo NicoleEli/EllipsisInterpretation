@@ -1,10 +1,12 @@
 package controllers;
 
 import dataExtraction.DatasetBuilder;
+import edu.stanford.nlp.trees.Tree;
 import typeClassification.FeatureGenerator;
 
 import java.io.Console;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -28,7 +30,7 @@ public class MainController {
 
     //Booleans for turning on and off bits of functionality - largely for development/debugging use.
     public static boolean buildDatasets = false;
-    public static boolean buildClassifiers = false;
+    public static boolean buildClassifiers = true;
     public static boolean takeInput = true;
 
     public static void main(String[] args) {
@@ -37,6 +39,7 @@ public class MainController {
 
         ParsingController parser = new ParsingController();
         FeatureGenerator featureGenerator = new FeatureGenerator(FEATURE_NAMES_PATH);
+        featureGenerator.initialiseFeatures();
         Set<String> featureNames = featureGenerator.getFeatureNames();
 
         //Build datasets for each kind of ellipsis
@@ -53,27 +56,36 @@ public class MainController {
             System.out.println("Built NSU dataset.");
         }
 
-        EllipsisClassificationController classificationController = new EllipsisClassificationController();
+        EllipsisClassificationController classificationController = new EllipsisClassificationController(featureGenerator);
 
         if (buildClassifiers) {
 
             List<String> datasetPaths = new ArrayList<String>();
             datasetPaths.add(NPE_PROCESSED_PATH);
-            datasetPaths.add(VPE_PROCESSED_PATH);
-            datasetPaths.add(NSU_PROCESSED_PATH);
+            //datasetPaths.add(VPE_PROCESSED_PATH);
+            //datasetPaths.add(NSU_PROCESSED_PATH);
 
             List<String> datasetNames = new ArrayList<String>();
             datasetNames.add("NPE");
-            datasetNames.add("VPE");
-            datasetNames.add("NSU");
+            //datasetNames.add("VPE");
+            //datasetNames.add("NSU");
 
             classificationController.initialiseClassifiers(datasetPaths, datasetNames, featureNames);
+            System.out.println("Initialised classifiers.");
 
         }
 
         if (takeInput){
 
+            String sentence = "This is a test sentence, and so is that.";
 
+            System.out.println(sentence);
+
+            Tree parse = parser.getParse(sentence);
+            Collection typedDependencies = parser.getDependencies(parse);
+            classificationController.findEllipsisType(parse,typedDependencies);
+
+            System.out.println("tried classifying sentence: "+sentence);
 
         }
 

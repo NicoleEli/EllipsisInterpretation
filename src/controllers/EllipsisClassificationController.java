@@ -3,6 +3,7 @@ package controllers;
 import edu.stanford.nlp.trees.*;
 import typeClassification.BinaryEllipsisClassifier;
 import typeClassification.EllipsisType;
+import typeClassification.FeatureGenerator;
 import weka.core.Attribute;
 import weka.core.FastVector;
 
@@ -10,10 +11,7 @@ import java.io.BufferedReader;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author Nicole Williams
@@ -25,10 +23,17 @@ public class EllipsisClassificationController {
 
     Charset charset = Charset.forName("UTF-8");
 
-    List<BinaryEllipsisClassifier> binaryClassifiers = new ArrayList<BinaryEllipsisClassifier>();
+    List<BinaryEllipsisClassifier> binaryClassifiers;
+    FeatureGenerator featureGenerator;
 
     FastVector attributes;
-    FastVector classValues;
+
+    public EllipsisClassificationController(FeatureGenerator featureGenerator){
+        binaryClassifiers = new ArrayList<BinaryEllipsisClassifier>();
+        this.featureGenerator = featureGenerator;
+        attributes = new FastVector();
+    }
+
 
     /**
      * Initialise some number of binary classifiers, given paths to the .csv files containing training data
@@ -44,7 +49,18 @@ public class EllipsisClassificationController {
     }
 
     public EllipsisType findEllipsisType(Tree parse, Collection typedDependencies){
-        //TODO: Given a parse and dependency parse, classify the input. Use confidence values?
+        Map<String, Integer> featureValues = featureGenerator.genFeatures(parse, typedDependencies);
+
+        FastVector convertedFeatures = convert(featureValues);
+
+        List<Boolean> results = new ArrayList<Boolean>();
+        for (BinaryEllipsisClassifier classifier : binaryClassifiers){
+            boolean result = classifier.classify(convertedFeatures);
+            results.add(result);
+        }
+
+        //TODO: interpret results
+
         return EllipsisType.NONE;
     }
 
@@ -57,7 +73,6 @@ public class EllipsisClassificationController {
 
             //Read dataset file and add training data to classifier
             String line = reader.readLine();    //read first line i.e. feature names. TODO: does file even need this line?
-            int dataItemsRead = 0;
             while ((line = reader.readLine()) != null){
                 FastVector dataItem = convert(line);
                 classifier.updateTrainingData(dataItem);
@@ -72,9 +87,7 @@ public class EllipsisClassificationController {
     private void generateAttributes(Set<String> featureNames){
 
         for (String s : featureNames){
-            if(s.equals("class")){
-                attributes.addElement(new Attribute("class",classValues));
-            } else {
+            if(!s.equals("class")) {
                 attributes.addElement(new Attribute(s));
             }
         }
@@ -85,13 +98,21 @@ public class EllipsisClassificationController {
      */
     private FastVector convert(String line){
         FastVector data = new FastVector();
-        String[] dataStrings = line.split(", ");
+        String[] dataStrings = line.split(",");
 
         for (String s : dataStrings){
-            data.addElement(s);
+            data.addElement(s.trim());
         }
 
+        return data;
+    }
 
+    private FastVector convert(Map<String,Integer> features){
+        FastVector data = new FastVector();
+
+        for(String k : features.keySet()){
+            data.addElement(features.get(k));
+        }
         return data;
     }
 }
