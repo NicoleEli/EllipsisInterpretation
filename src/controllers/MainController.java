@@ -29,9 +29,10 @@ public class MainController {
     public static final String NSU_PROCESSED_PATH = "C:\\Users\\Nikki\\IdeaProjects\\EllipsisInterpretation\\Data\\final\\vectors-NSU.csv";
 
     //Booleans for turning on and off bits of functionality - largely for development/debugging use.
-    public static boolean buildDatasets = false;
-    public static boolean buildClassifiers = true;
-    public static boolean takeInput = true;
+    public static boolean buildDatasets = true;
+    public static boolean buildClassifiers = false;
+    public static boolean takeInput = false;
+    public static boolean runCrossVal = false;
 
     public static void main(String[] args) {
 
@@ -50,8 +51,10 @@ public class MainController {
 
             //npeDatasetBuilder.buildDataset();
             //System.out.println("Built NPE dataset.");
+            System.out.println("Building VPE dataset.");
             vpeDatasetBuilder.buildDataset();
             System.out.println("Built VPE dataset.");
+            System.out.println("Building NSU dataset.");
             nsuDatasetBuilder.buildDataset();
             System.out.println("Built NSU dataset.");
         }
@@ -77,7 +80,7 @@ public class MainController {
 
         if (takeInput){
 
-            String sentence = "This is a test sentence, and so is that.";
+            String sentence = "Bill's dogs are brown and Bob's dogs are black.";
 
             System.out.println(sentence);
 
@@ -86,6 +89,10 @@ public class MainController {
             classificationController.findEllipsisType(parse,typedDependencies);
 
             System.out.println("tried classifying sentence: "+sentence);
+
+        }
+
+        if (runCrossVal){
 
         }
 
