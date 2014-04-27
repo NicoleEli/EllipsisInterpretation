@@ -29,7 +29,7 @@ public class MainController {
     public static final String NSU_PROCESSED_PATH = "C:\\Users\\Nikki\\IdeaProjects\\EllipsisInterpretation\\Data\\final\\vectors-NSU.csv";
 
     //Booleans for turning on and off bits of functionality - largely for development/debugging use.
-    public static boolean buildDatasets = true;
+    public static boolean buildDatasets = false;
     public static boolean buildClassifiers = false;
     public static boolean takeInput = false;
     public static boolean runCrossVal = false;
@@ -45,12 +45,13 @@ public class MainController {
 
         //Build datasets for each kind of ellipsis
         if (buildDatasets) {
-            //DatasetBuilder npeDatasetBuilder = new DatasetBuilder(featureGenerator, NPE_RAW_PATH, NPE_PROCESSED_PATH, parser);
+            DatasetBuilder npeDatasetBuilder = new DatasetBuilder(featureGenerator, NPE_RAW_PATH, NPE_PROCESSED_PATH, parser);
             DatasetBuilder vpeDatasetBuilder = new DatasetBuilder(featureGenerator, VPE_RAW_PATH, VPE_PROCESSED_PATH, parser);
             DatasetBuilder nsuDatasetBuilder = new DatasetBuilder(featureGenerator, NSU_RAW_PATH, NSU_PROCESSED_PATH, parser);
 
-            //npeDatasetBuilder.buildDataset();
-            //System.out.println("Built NPE dataset.");
+            System.out.println("Building NPE dataset.");
+            npeDatasetBuilder.buildDataset();
+            System.out.println("Built NPE dataset.");
             System.out.println("Building VPE dataset.");
             vpeDatasetBuilder.buildDataset();
             System.out.println("Built VPE dataset.");
