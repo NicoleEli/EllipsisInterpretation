@@ -24,8 +24,8 @@ public class NSUExtractor {
 
     Path nsurf = Paths.get("C:\\DataFiles\\Programming\\4th Year Project - Ellipsis Interpretation\\NSU-RF");
     String textsDir = "C:\\BNC-world\\Texts\\";
-    Path extractedNSUFile = Paths.get("C:\\DataFiles\\Programming\\4th Year Project - Ellipsis Interpretation\\NSUs.txt");
-    Path noTagNSUFile = Paths.get("C:\\DataFiles\\Programming\\4th Year Project - Ellipsis Interpretation\\NSUs.txt");
+    Path extractedNSUFile = Paths.get("C:\\DataFiles\\Programming\\4th Year Project - Ellipsis Interpretation\\NSUs-notags.txt");
+    Path noTagNSUFile = Paths.get("C:\\DataFiles\\Programming\\4th Year Project - Ellipsis Interpretation\\NSUs-notags.txt");
 
     List<SentenceReference> sentenceRefs = new ArrayList<SentenceReference>();
 
@@ -58,7 +58,7 @@ public class NSUExtractor {
 
 
         try{
-            //open NSUs.txt for writing
+            //open NSUs-notags.txt for writing
             BufferedWriter writer = Files.newBufferedWriter(extractedNSUFile, charset);
 
             for (SentenceReference sRef : sentenceRefs){
@@ -75,7 +75,7 @@ public class NSUExtractor {
                 BufferedReader reader = Files.newBufferedReader(textPath, charset);
                 String line;
 
-                //write NSUs and their antecedents to NSUs.txt
+                //write NSUs and their antecedents to NSUs-notags.txt
                 while ((line = reader.readLine()) != null){
                     if (line.startsWith(beginAnt)){
                         writer.append(line+" ");
