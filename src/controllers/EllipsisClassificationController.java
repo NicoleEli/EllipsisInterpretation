@@ -77,8 +77,10 @@ public class EllipsisClassificationController {
                 FastVector dataItem = convert(line);
                 classifier.updateTrainingData(dataItem);
             }
+
+            reader.close();
         } catch (Exception e){
-            System.err.format("IOException: %s%n", e);
+            System.err.format("Exception: %s%n", e);
         }
 
         binaryClassifiers.add(classifier);
