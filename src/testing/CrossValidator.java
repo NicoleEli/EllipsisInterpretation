@@ -72,11 +72,24 @@ public class CrossValidator {
 
             classificationController.initialiseClassifiers(datasetPaths, datasetNames, featureNames);
 
-            float accuracy = classifyTestData();
+            classifyTestData();
 
             //Reset classification controller for re-use in next round
             classificationController.reset();
         }
+
+        //Work out average precision/recall across n rounds
+        float avgPrecision = 0;
+        float avgRecall = 0;
+        for (int i = 0; i < n; i++){
+            avgPrecision += precision.get(i);
+            avgRecall += recall.get(i);
+        }
+        avgPrecision = avgPrecision / n;
+        avgRecall = avgRecall / n;
+
+        System.out.printf("Average precision over %d rounds: %f%n",n,avgPrecision);
+        System.out.printf("Average recall over %d rounds: %f%n",n,avgRecall);
 
     }
 
@@ -169,11 +182,10 @@ public class CrossValidator {
                     }
                 }
 
-
                 total++;
             }
 
-            //record precision and recall
+            //record precision and recall for this round
             precision.add(((float) truePos)/testPos);
             recall.add(((float) truePos)/conditionPos);
 
