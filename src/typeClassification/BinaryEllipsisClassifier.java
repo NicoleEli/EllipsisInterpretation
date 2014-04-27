@@ -71,7 +71,11 @@ public class BinaryEllipsisClassifier {
 
             System.out.println("Classified as: " + predicted + " " + classification);
 
-            //TODO: return statement
+            if (classification == "true"){
+                return true;
+            } else {
+                return false;
+            }
 
         } catch (Exception e) {
             System.err.format("Exception: %s%n", e);
