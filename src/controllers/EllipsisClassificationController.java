@@ -43,7 +43,10 @@ public class EllipsisClassificationController {
         generateAttributes(featureNames);
 
         for (int i = 0; i < datasetPaths.size(); i++){
-            makeNewClassifier(datasetPaths.get(i), datasetNames.get(i));
+            String name = datasetNames.get(i);
+            System.out.printf("Initialising classifier %s...%n", name);
+            makeNewClassifier(datasetPaths.get(i), name);
+            System.out.printf("Initialised %s.", name);
         }
 
     }
@@ -126,5 +129,6 @@ public class EllipsisClassificationController {
      */
     public void reset(){
         binaryClassifiers = new ArrayList<BinaryEllipsisClassifier>();
+        attributes = new FastVector();
     }
 }

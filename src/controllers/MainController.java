@@ -2,6 +2,7 @@ package controllers;
 
 import dataExtraction.DatasetBuilder;
 import edu.stanford.nlp.trees.Tree;
+import testing.CrossValidator;
 import typeClassification.FeatureGenerator;
 
 import java.io.Console;
@@ -32,7 +33,7 @@ public class MainController {
     public static boolean buildDatasets = false;
     public static boolean buildClassifiers = false;
     public static boolean takeInput = false;
-    public static boolean runCrossVal = false;
+    public static boolean runCrossVal = true;
 
     public static void main(String[] args) {
 
@@ -94,6 +95,12 @@ public class MainController {
         }
 
         if (runCrossVal){
+
+            CrossValidator crossValidator = new CrossValidator(10, featureGenerator, parser);
+
+            crossValidator.validateClassifier("NPE", NPE_PROCESSED_PATH);
+            crossValidator.validateClassifier("VPE", VPE_PROCESSED_PATH);
+            crossValidator.validateClassifier("NSU", NSU_PROCESSED_PATH);
 
         }
 

@@ -42,10 +42,9 @@ public class CrossValidator {
 
     /**
      * @param n                n-fold cross-validation e.g. n=10 for 10-fold crossval
-     * @param name             String to identify classifier being crossval'ed
      * @param featureGenerator feature generator
      */
-    public CrossValidator(int n, String name, FeatureGenerator featureGenerator, ParsingController parser) {
+    public CrossValidator(int n, FeatureGenerator featureGenerator, ParsingController parser) {
         this.n = n;
         classificationController = new SingleClassifierController(featureGenerator);
         featureNames = featureGenerator.getFeatureNames();
@@ -54,17 +53,20 @@ public class CrossValidator {
         datasetPaths.add(TRAIN_PATH);
 
         datasetNames = new ArrayList<String>();
-        baseName = "crossval-%d"+name;
+        datasetNames.add("placeholder");
+
     }
 
     /**
      *
      * @param dataPath      Path to file containing pre-processed data
      */
-    public void validateClassifier(String dataPath) {
+    public void validateClassifier(String name, String dataPath) {
+        System.out.printf("Validating classifier for %s...%n", name);
 
         //Perform n rounds of cross-validation
         for (int round = 0; round < n; round++) {
+            baseName = "crossval-%d-"+name;
             buildDataSets(round, dataPath);
 
             //Customise dataset name for this round
@@ -76,6 +78,8 @@ public class CrossValidator {
 
             //Reset classification controller for re-use in next round
             classificationController.reset();
+
+            System.out.printf("Cross-validation round %d complete.%n", round);
         }
 
         //Work out average precision/recall across n rounds
@@ -88,7 +92,7 @@ public class CrossValidator {
         avgPrecision = avgPrecision / n;
         avgRecall = avgRecall / n;
 
-        System.out.printf("Average precision over %d rounds: %f%n",n,avgPrecision);
+        System.out.printf("Average precision over %d rounds: %f%n", n, avgPrecision);
         System.out.printf("Average recall over %d rounds: %f%n",n,avgRecall);
 
     }
@@ -113,14 +117,10 @@ public class CrossValidator {
             //Send 1/nth of data to test file, rest to training file. Different 1/nth sent to test each round.
             while ((line=reader.readLine()) != null){
 
-                System.out.println("Reading line "+linesRead);
-
                 if ((linesRead % n) == round){
                     testWriter.append(line);
-                    System.out.println("test data");
                 } else {
                     trainWriter.append(line);
-                    System.out.println("training data");
                 }
 
                 linesRead++;
@@ -137,8 +137,14 @@ public class CrossValidator {
 
 
     private void classifyTestData(){
+
+        System.out.printf("Running classifier on test data...%n");
+
         try{
             BufferedReader reader = Files.newBufferedReader(Paths.get(TEST_PATH), charset);
+
+            precision = new ArrayList<Float>();
+            recall = new ArrayList<Float>();
 
             int total = 0;          //total number of data items
             int conditionPos = 0;   //number of data items with true class "true"
