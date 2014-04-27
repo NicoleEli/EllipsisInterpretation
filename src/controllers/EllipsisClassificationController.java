@@ -115,4 +115,11 @@ public class EllipsisClassificationController {
         }
         return data;
     }
+
+    /**
+     * Wipe current classifier list.
+     */
+    public void reset(){
+        binaryClassifiers = new ArrayList<BinaryEllipsisClassifier>();
+    }
 }
