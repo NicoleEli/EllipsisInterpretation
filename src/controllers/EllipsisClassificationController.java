@@ -23,8 +23,8 @@ public class EllipsisClassificationController {
 
     Charset charset = Charset.forName("UTF-8");
 
-    List<BinaryEllipsisClassifier> binaryClassifiers;
-    FeatureGenerator featureGenerator;
+    protected List<BinaryEllipsisClassifier> binaryClassifiers;
+    protected FeatureGenerator featureGenerator;
 
     FastVector attributes;
 
@@ -64,7 +64,7 @@ public class EllipsisClassificationController {
         return EllipsisType.NONE;
     }
 
-    private void makeNewClassifier(String datasetPath, String datasetName){
+    protected void makeNewClassifier(String datasetPath, String datasetName){
 
         BinaryEllipsisClassifier classifier = new BinaryEllipsisClassifier(attributes, datasetName);
 
@@ -86,7 +86,7 @@ public class EllipsisClassificationController {
         binaryClassifiers.add(classifier);
     }
 
-    private void generateAttributes(Set<String> featureNames){
+    protected void generateAttributes(Set<String> featureNames){
 
         for (String s : featureNames){
             if(!s.equals("class")) {
@@ -98,7 +98,7 @@ public class EllipsisClassificationController {
     /**
      * Convert one line of a .csv file into a FastVector of feature/attribute values
      */
-    private FastVector convert(String line){
+    protected FastVector convert(String line){
         FastVector data = new FastVector();
         String[] dataStrings = line.split(",");
 
@@ -109,7 +109,10 @@ public class EllipsisClassificationController {
         return data;
     }
 
-    private FastVector convert(Map<String,Integer> features){
+    /**
+     * Convert a map of feature name / feature value to a Fastvector of feature values
+     */
+    protected FastVector convert(Map<String,Integer> features){
         FastVector data = new FastVector();
 
         for(String k : features.keySet()){
