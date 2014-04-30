@@ -90,7 +90,7 @@ public class MainController {
             Collection typedDependencies = parser.getDependencies(parse);
             classificationController.findEllipsisType(parse,typedDependencies);
 
-            System.out.println("tried classifying sentence: "+sentence);
+            System.out.println("Finished trying to classify sentence: "+sentence);
 
         }
 
@@ -98,9 +98,9 @@ public class MainController {
 
             CrossValidator crossValidator = new CrossValidator(10, featureGenerator, parser);
 
-            crossValidator.validateClassifier("NPE", NPE_PROCESSED_PATH);
-            crossValidator.validateClassifier("VPE", VPE_PROCESSED_PATH);
-            crossValidator.validateClassifier("NSU", NSU_PROCESSED_PATH);
+            crossValidator.validateClassifier("NPE", NPE_PROCESSED_PATH, NPE_RAW_PATH);
+            crossValidator.validateClassifier("VPE", VPE_PROCESSED_PATH, VPE_RAW_PATH);
+            crossValidator.validateClassifier("NSU", NSU_PROCESSED_PATH, NSU_RAW_PATH);
 
         }
 
