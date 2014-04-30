@@ -51,20 +51,41 @@ public class EllipsisClassificationController {
 
     }
 
-    public EllipsisType findEllipsisType(Tree parse, Collection typedDependencies){
+    public String findEllipsisType(Tree parse, Collection typedDependencies){
         Map<String, Integer> featureValues = featureGenerator.genFeatures(parse, typedDependencies);
 
         FastVector convertedFeatures = convert(featureValues);
 
+        return classifyVector(convertedFeatures);
+    }
+
+    /**
+     * Given a vector of features, classify the instance that vector describes
+     * @param convertedFeatures
+     * @return
+     */
+    public String classifyVector(FastVector convertedFeatures) {
         List<Boolean> results = new ArrayList<Boolean>();
         for (BinaryEllipsisClassifier classifier : binaryClassifiers){
             boolean result = classifier.classify(convertedFeatures);
             results.add(result);
+
+            //TODO: distributionForInstance()
         }
 
-        //TODO: interpret results
+        //TODO: decide how to interpret results, decide on return type
 
-        return EllipsisType.NONE;
+        //temporary result interpretation below:
+
+        if(binaryClassifiers.size() == 1){
+            if (results.get(0) == true){
+                return binaryClassifiers.get(0).name;
+            } else {
+                return "none";
+            }
+        } else {
+            return "result not interpreted";        //TODO: do this properly!
+        }
     }
 
     protected void makeNewClassifier(String datasetPath, String datasetName){
@@ -101,7 +122,7 @@ public class EllipsisClassificationController {
     /**
      * Convert one line of a .csv file into a FastVector of feature/attribute values
      */
-    protected FastVector convert(String line){
+    public FastVector convert(String line){
         FastVector data = new FastVector();
         String[] dataStrings = line.split(",");
 
@@ -115,7 +136,7 @@ public class EllipsisClassificationController {
     /**
      * Convert a map of feature name / feature value to a Fastvector of feature values
      */
-    protected FastVector convert(Map<String,Integer> features){
+    public FastVector convert(Map<String,Integer> features){
         FastVector data = new FastVector();
 
         for(String k : features.keySet()){
