@@ -17,6 +17,8 @@ import weka.core.Instances;
 public class BinaryEllipsisClassifier {
 
 
+    public String name;
+
     /**
      * Dataset of training data for this classifier
      */
@@ -30,6 +32,7 @@ public class BinaryEllipsisClassifier {
      * Vector of possible classes
      */
     private FastVector classValues;
+    Attribute classAtt;
 
     /**
      * Instantiate a new binary classifier
@@ -44,12 +47,14 @@ public class BinaryEllipsisClassifier {
         classValues.addElement("false");
 
         //add class attribute to feature attributes passed down
-        Attribute classAtt = new Attribute("class", classValues);
+        classAtt = new Attribute("class", classValues);
         attributes.insertElementAt(classAtt, 0);
 
         //new dataset, class attribute being the one we just defined
         dataset = new Instances(datasetName, attributes, 100);
         dataset.setClass(classAtt);
+
+        this.name = datasetName;
 
     }
 
@@ -88,13 +93,15 @@ public class BinaryEllipsisClassifier {
         Instance instance = new Instance(numAtts);
         instance.setDataset(dataset);
 
+
         //add instance attribute values - att 0 is class is nominal and only present for training data; all others are numeric
         if(isKnownClass){
-            instance.setValue(0, (String) featureValues.elementAt(0));
+            instance.setClassValue((String) featureValues.elementAt(0));
             for (int i = 1; i < numAtts; i++) {
                 instance.setValue(i, Integer.valueOf((String) featureValues.elementAt(i)));
             }
         } else {
+            instance.setClassMissing();
             for (int i = 1; i < numAtts; i++) {
                 instance.setValue(i, (Integer) featureValues.elementAt(i-1));
             }
