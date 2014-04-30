@@ -2,8 +2,8 @@ package testing;
 
 import controllers.EllipsisClassificationController;
 import controllers.ParsingController;
+import edu.stanford.nlp.trees.Tree;
 import typeClassification.FeatureGenerator;
-import weka.core.FastVector;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -11,9 +11,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -26,7 +24,7 @@ public class CrossValidator {
     Charset charset = Charset.forName("UTF-8");
 
     int n;          //n-fold crossval
-    SingleClassifierController classificationController;
+    EllipsisClassificationController classificationController;
 
     final String TRAIN_PATH = "C:\\Users\\Nikki\\IdeaProjects\\EllipsisInterpretation\\Data\\crossval\\training.csv";
     final String TEST_PATH = "C:\\Users\\Nikki\\IdeaProjects\\EllipsisInterpretation\\Data\\crossval\\testing.txt";
@@ -40,13 +38,16 @@ public class CrossValidator {
     List<Float> precision;
     List<Float> recall;
 
+    ParsingController parser;
+    FeatureGenerator featureGenerator;
+
     /**
      * @param n                n-fold cross-validation e.g. n=10 for 10-fold crossval
      * @param featureGenerator feature generator
      */
     public CrossValidator(int n, FeatureGenerator featureGenerator, ParsingController parser) {
         this.n = n;
-        classificationController = new SingleClassifierController(featureGenerator);
+        classificationController = new EllipsisClassificationController(featureGenerator);
         featureNames = featureGenerator.getFeatureNames();
 
         datasetPaths = new ArrayList<String>();
@@ -55,26 +56,30 @@ public class CrossValidator {
         datasetNames = new ArrayList<String>();
         datasetNames.add("placeholder");
 
+        this.parser = parser;
+        this.featureGenerator = featureGenerator;
+
     }
 
     /**
      *
-     * @param dataPath      Path to file containing pre-processed data
+     * @param processedDataPath      Path to file containing pre-processed data
+     * @param rawDataPath
      */
-    public void validateClassifier(String name, String dataPath) {
+    public void validateClassifier(String name, String processedDataPath, String rawDataPath) {
         System.out.printf("Validating classifier for %s...%n", name);
 
         //Perform n rounds of cross-validation
         for (int round = 0; round < n; round++) {
             baseName = "crossval-%d-"+name;
-            buildDataSets(round, dataPath);
+            buildDataSets(round, processedDataPath, rawDataPath);
 
             //Customise dataset name for this round
             datasetNames.set(0,String.format(baseName,round));
 
             classificationController.initialiseClassifiers(datasetPaths, datasetNames, featureNames);
 
-            classifyTestData();
+            classifyTestData(datasetNames.get(0));
 
             //Reset classification controller for re-use in next round
             classificationController.reset();
@@ -100,11 +105,13 @@ public class CrossValidator {
     /**
      * Split data into two datasets with ratio n-1:1 training:test
      * @param round         which round of cross-val are we in? Determines how file is split
-     * @param dataPath      path to dataset file to be split
+     * @param processedDataPath      path to dataset file to be split
+     * @param rawDataPath
      */
-    private void buildDataSets(int round, String dataPath) {
+    private void buildDataSets(int round, String processedDataPath, String rawDataPath) {
         try {
-            BufferedReader reader = Files.newBufferedReader(Paths.get(dataPath), charset);
+            BufferedReader trainReader = Files.newBufferedReader(Paths.get(processedDataPath), charset);
+            BufferedReader testReader = Files.newBufferedReader(Paths.get(rawDataPath), charset);
             BufferedWriter trainWriter = Files.newBufferedWriter(Paths.get(TRAIN_PATH), charset);
             BufferedWriter testWriter = Files.newBufferedWriter(Paths.get(TEST_PATH), charset);
 
@@ -112,21 +119,23 @@ public class CrossValidator {
             trainWriter.write("");
             testWriter.write("");
 
-            String line = reader.readLine();        //read header line
+            String rawLine = testReader.readLine();        //read header line
+            String processedLine = trainReader.readLine();
             int linesRead = 0;
             //Send 1/nth of data to test file, rest to training file. Different 1/nth sent to test each round.
-            while ((line=reader.readLine()) != null){
+            while ((rawLine=testReader.readLine()) != null && (processedLine=trainReader.readLine()) != null){
 
                 if ((linesRead % n) == round){
-                    testWriter.append(line);
+                    testWriter.append(rawLine+"\n");
                 } else {
-                    trainWriter.append(line);
+                    trainWriter.append(processedLine+"\n");
                 }
 
                 linesRead++;
             }
 
-            reader.close();
+            trainReader.close();
+            testReader.close();
             trainWriter.close();
             testWriter.close();
 
@@ -136,7 +145,7 @@ public class CrossValidator {
     }
 
 
-    private void classifyTestData(){
+    private void classifyTestData(String datasetName){
 
         System.out.printf("Running classifier on test data...%n");
 
@@ -155,35 +164,33 @@ public class CrossValidator {
             String line;
             while ((line = reader.readLine()) != null){
 
-                //Detach "true" or "false" class from beginning of line
-                String classification;
-                String classlessLine;
-                if(line.trim().startsWith("t")){
-                    classification = line.substring(0,6).trim();
-                    classlessLine = line.substring(5).trim();
-                } else {
-                    classification = line.substring(0,7).trim();
-                    classlessLine = line.substring(6).trim();
-                }
+                //Detach "true" or "false" class from line
+                String[] splitLine = line.split("::");
+
+                String classification = splitLine[1].trim();
+                String classlessLine = splitLine[0].trim();
+
 
                 //Classify item
-                boolean assignedClass = classificationController.classifyDataItem(classlessLine);
+                Tree parse = parser.getParse(classlessLine);
+                Collection dependencies = parser.getDependencies(parse);
+                String assignedClass = classificationController.findEllipsisType(parse, dependencies);
 
-                boolean trueClass;
+                String trueClass;
                 if(classification.equals("true")){
-                    trueClass = true;
+                    trueClass = datasetName;
                     conditionPos++;
                 } else {
-                    trueClass = false;
+                    trueClass = "none";
                 }
 
-                if (assignedClass == true){
+                if (assignedClass.equals(datasetName)){
                     testPos++;
                 }
 
-                if (assignedClass == trueClass){
+                if (assignedClass.equals(trueClass)){
                     correct++;
-                    if(assignedClass == true){
+                    if(assignedClass.equals(datasetName)){
                         truePos++;
                     }
                 }
