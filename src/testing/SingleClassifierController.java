@@ -2,6 +2,7 @@ package testing;
 
 import controllers.EllipsisClassificationController;
 import edu.stanford.nlp.trees.Tree;
+import typeClassification.BinaryEllipsisClassifier;
 import typeClassification.FeatureGenerator;
 import weka.core.FastVector;
 
@@ -29,7 +30,12 @@ public class SingleClassifierController extends EllipsisClassificationController
 
         FastVector convertedFeatures = convert(featureValues);
 
-        return super.binaryClassifiers.get(0).classify(convertedFeatures);
+        boolean result = false;
+        for (BinaryEllipsisClassifier classifier : binaryClassifiers){
+            result = classifier.classify(convertedFeatures);
+        }
+
+        return result;
 
     }
 
@@ -37,7 +43,12 @@ public class SingleClassifierController extends EllipsisClassificationController
 
         FastVector features = super.convert(line);
 
-        return super.binaryClassifiers.get(0).classify(features);
+        boolean result = false;
+        for (BinaryEllipsisClassifier classifier : binaryClassifiers){
+            result = classifier.classify(features);
+        }
+
+        return result;
 
     }
 
