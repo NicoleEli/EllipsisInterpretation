@@ -29,6 +29,8 @@ public class CrossValidator {
     final String TRAIN_PATH = "C:\\Users\\Nikki\\IdeaProjects\\EllipsisInterpretation\\Data\\crossval\\training.csv";
     final String TEST_PATH = "C:\\Users\\Nikki\\IdeaProjects\\EllipsisInterpretation\\Data\\crossval\\testing.txt";
 
+    final String RESULTS_PATH = "C:\\Users\\Nikki\\IdeaProjects\\EllipsisInterpretation\\Data\\crossval\\results.txt";
+
     List<String> datasetPaths;
     List<String> datasetNames;
     String baseName;
@@ -102,6 +104,15 @@ public class CrossValidator {
 
         System.out.printf("Average precision over %d rounds: %f%n", n, avgPrecision);
         System.out.printf("Average recall over %d rounds: %f%n",n,avgRecall);
+
+        //Save results to file - useful when running multiple cross-validation sessions in sequence
+        try{
+            BufferedWriter resultWriter = Files.newBufferedWriter(Paths.get(RESULTS_PATH), charset);
+            resultWriter.append(String.format("Average precision over %d rounds: %f%nAverage recall over %d rounds: %f%n", n, avgPrecision,n,avgRecall));
+            resultWriter.close();
+        } catch (IOException e){
+            System.err.format("IOException: %s%n", e);
+        }
 
     }
 
