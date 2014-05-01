@@ -69,6 +69,9 @@ public class CrossValidator {
     public void validateClassifier(String name, String processedDataPath, String rawDataPath) {
         System.out.printf("Validating classifier for %s...%n", name);
 
+        precision = new ArrayList<Float>();
+        recall = new ArrayList<Float>();
+
         //Perform n rounds of cross-validation
         for (int round = 0; round < n; round++) {
             baseName = "crossval-%d-"+name;
@@ -84,7 +87,7 @@ public class CrossValidator {
             //Reset classification controller for re-use in next round
             classificationController.reset();
 
-            System.out.printf("Cross-validation round %d complete.%n", round);
+            System.out.printf("Cross-validation round %d complete.%n", round+1);
         }
 
         //Work out average precision/recall across n rounds
@@ -151,9 +154,6 @@ public class CrossValidator {
 
         try{
             BufferedReader reader = Files.newBufferedReader(Paths.get(TEST_PATH), charset);
-
-            precision = new ArrayList<Float>();
-            recall = new ArrayList<Float>();
 
             int total = 0;          //total number of data items
             int conditionPos = 0;   //number of data items with true class "true"
