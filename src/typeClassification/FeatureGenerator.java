@@ -107,7 +107,7 @@ public class FeatureGenerator {
             if (featureList.containsKey(tag)) {
                 featureList.put(tag, tagCounts.get(tag));
             } else {
-                System.out.println("tried to add different key " + tag);
+                //System.out.println("tried to add different key " + tag);
             }
         }
     }
@@ -132,7 +132,7 @@ public class FeatureGenerator {
             if (featureList.containsKey(key)) {
                 featureList.put(key, tagCounts.get(key));
             } else {
-                System.out.println("tried to add different key " + key);
+                //System.out.println("tried to add different key " + key);
             }
         }
 
@@ -256,7 +256,7 @@ public class FeatureGenerator {
             if (featureList.containsKey(augTag)) {
                 featureList.put(augTag, augTagCounts.get(augTag));
             } else {
-                System.out.println("tried to add different key " + augTag);
+                //System.out.println("tried to add different key " + augTag);
             }
         }
     }
