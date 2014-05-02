@@ -7,6 +7,7 @@ import typeClassification.FeatureGenerator;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -107,7 +108,7 @@ public class CrossValidator {
 
         //Save results to file - useful when running multiple cross-validation sessions in sequence
         try{
-            BufferedWriter resultWriter = Files.newBufferedWriter(Paths.get(RESULTS_PATH), charset);
+            BufferedWriter resultWriter = new BufferedWriter(new FileWriter(RESULTS_PATH, true));
             resultWriter.append(String.format("Average precision over %d rounds: %f%nAverage recall over %d rounds: %f%n", n, avgPrecision,n,avgRecall));
             resultWriter.close();
         } catch (IOException e){
