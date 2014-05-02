@@ -46,7 +46,7 @@ public class EllipsisClassificationController {
             String name = datasetNames.get(i);
             System.out.printf("Initialising classifier %s...%n", name);
             makeNewClassifier(datasetPaths.get(i), name);
-            System.out.printf("Initialised %s.", name);
+            System.out.printf("Initialised %s.%n", name);
         }
 
     }
