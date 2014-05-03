@@ -8,6 +8,7 @@ import weka.core.Attribute;
 import weka.core.FastVector;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -96,15 +97,15 @@ public class EllipsisClassificationController {
             BufferedReader reader = Files.newBufferedReader(Paths.get(datasetPath), charset);
 
             //Read dataset file and add training data to classifier
-            String line = reader.readLine();    //read first line i.e. feature names. TODO: does file even need this line?
+            String line;
             while ((line = reader.readLine()) != null){
                 FastVector dataItem = convert(line);
                 classifier.updateTrainingData(dataItem);
             }
 
             reader.close();
-        } catch (Exception e){
-            System.err.format("Exception: %s%n", e);
+        } catch (IOException e){
+            System.err.format("IOException: %s%n", e);
         }
 
         binaryClassifiers.add(classifier);

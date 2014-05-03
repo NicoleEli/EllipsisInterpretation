@@ -59,8 +59,8 @@ public class DatasetBuilder {
             for (String featureName : featureNames){
                 names = names + featureName + ", ";
             }
-            writer.append(names);
-            writer.newLine();
+            //writer.append(names);
+            //writer.newLine();
 
             String line;
             int numRead = 0;
