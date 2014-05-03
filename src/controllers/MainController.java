@@ -2,6 +2,8 @@ package controllers;
 
 import dataExtraction.DatasetBuilder;
 import edu.stanford.nlp.trees.Tree;
+import ellipsisDetection.EllipsisType;
+import ellipsisInterpretation.EllipsisInterpreter;
 import testing.CrossValidator;
 import ellipsisDetection.FeatureGenerator;
 
@@ -36,7 +38,8 @@ public class MainController {
     public static boolean buildDatasets = false;
     public static boolean buildClassifiers = false;
     public static boolean takeInput = false;
-    public static boolean runCrossVal = true;
+    public static boolean runCrossVal = false;
+    public static boolean doInterpretation = true;
 
     public static void main(String[] args) {
 
@@ -110,6 +113,18 @@ public class MainController {
             crossValidator.validateClassifier("VPE", VPE_PROCESSED_PATH, VPE_RAW_PATH);
             crossValidator.validateClassifier("NSU", NSU_PROCESSED_PATH, NSU_RAW_PATH);
 
+        }
+
+        if (doInterpretation){
+            String sentence = "Bill's dogs are brown and Bob's are black.";
+
+            System.out.println(sentence);
+
+            Tree parse = parser.getParse(sentence);
+            Collection typedDependencies = parser.getDependencies(parse);
+
+            EllipsisInterpreter interpreter = new EllipsisInterpreter();
+            interpreter.interpretEllipsis(parse, typedDependencies, EllipsisType.NPE);
         }
 
         /*
