@@ -88,6 +88,29 @@ public class BinaryEllipsisClassifier {
         return false;
     }
 
+    public double[] getDistribution(FastVector featureVector){
+        try {
+            if (dataset.numInstances() == 0) {
+                throw new Exception("No classifier available");
+            }
+
+            if (!datasetUpToDate) {
+                wekaClassifier.buildClassifier(dataset);
+                datasetUpToDate = true;
+            }
+
+            Instance testInstance = makeInstance(featureVector, false);
+
+            double[] distribution = wekaClassifier.distributionForInstance(testInstance);
+
+            return distribution;
+
+        } catch (Exception e) {
+            System.err.format("Exception: %s%n", e);
+        }
+        return null;
+    }
+
     protected Instance makeInstance(FastVector featureValues, boolean isKnownClass) {
         int numAtts = dataset.numAttributes();
         Instance instance = new Instance(numAtts);
