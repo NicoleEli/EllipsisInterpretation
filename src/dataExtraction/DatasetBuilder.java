@@ -61,7 +61,6 @@ public class DatasetBuilder {
             }
             writer.append(names);
             writer.newLine();
-            writer.newLine();
 
             String line;
             int numRead = 0;
