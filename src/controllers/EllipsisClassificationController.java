@@ -2,6 +2,7 @@ package controllers;
 
 import edu.stanford.nlp.trees.*;
 import ellipsisDetection.BinaryEllipsisClassifier;
+import ellipsisDetection.EllipsisType;
 import ellipsisDetection.FeatureGenerator;
 import weka.core.Attribute;
 import weka.core.FastVector;
@@ -62,30 +63,45 @@ public class EllipsisClassificationController {
     /**
      * Given a vector of features, classify the instance that vector describes
      * @param convertedFeatures
-     * @return
+     * @return   TODO: change return type to EllipsisType
      */
     public String classifyVector(FastVector convertedFeatures) {
         List<Boolean> results = new ArrayList<Boolean>();
+        List<double[]> distributions = new ArrayList<double[]>();
         for (BinaryEllipsisClassifier classifier : binaryClassifiers){
             boolean result = classifier.classify(convertedFeatures);
             results.add(result);
-
-            //TODO: distributionForInstance()
+            double[] distribution = classifier.getDistribution(convertedFeatures);
+            distributions.add(distribution);
         }
 
-        //TODO: decide how to interpret results, decide on return type
+        //TODO: decide how to interpret results
 
-        //temporary result interpretation below:
-
+        //temporary result interpretation below:   TODO: this is temporary, to fit with CrossValidator!
         if(binaryClassifiers.size() == 1){
             if (results.get(0) == true){
                 return binaryClassifiers.get(0).name;
             } else {
                 return "none";
             }
-        } else {
-            return "result not interpreted";        //TODO: do this properly!
         }
+
+        //TODO: below code in progress
+        int trueResults = 0;
+        BinaryEllipsisClassifier mostRecentTrueResult = binaryClassifiers.get(0);
+        for (int i = 0; i < results.size(); i++){
+            if (results.get(i) == true){
+                trueResults++;
+                mostRecentTrueResult = binaryClassifiers.get(i);
+            }
+        }
+        if (trueResults == 1){
+            return mostRecentTrueResult.name;
+        } else {
+            //TODO: stuff with distribution
+        }
+
+        return null;
     }
 
     protected void makeNewClassifier(String datasetPath, String datasetName){
