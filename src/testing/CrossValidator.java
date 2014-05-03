@@ -81,7 +81,7 @@ public class CrossValidator {
             buildDataSets(round, processedDataPath, rawDataPath);
 
             //Customise dataset name for this round
-            datasetNames.set(0,String.format(baseName,round));
+            datasetNames.set(0,String.format(baseName,round+1));
 
             classificationController.initialiseClassifiers(datasetPaths, datasetNames, featureNames);
 
@@ -127,15 +127,15 @@ public class CrossValidator {
         try {
             BufferedReader trainReader = Files.newBufferedReader(Paths.get(processedDataPath), charset);
             BufferedReader testReader = Files.newBufferedReader(Paths.get(rawDataPath), charset);
-            BufferedWriter trainWriter = Files.newBufferedWriter(Paths.get(TRAIN_PATH), charset);
-            BufferedWriter testWriter = Files.newBufferedWriter(Paths.get(TEST_PATH), charset);
+            BufferedWriter trainWriter = new BufferedWriter(new FileWriter(TRAIN_PATH, false));
+            BufferedWriter testWriter = new BufferedWriter(new FileWriter(TEST_PATH, false));
 
             //Clear dataset files before beginning
-            trainWriter.write("");
-            testWriter.write("");
+            trainWriter.write(new String());
+            testWriter.write(new String());
 
-            String rawLine = testReader.readLine();        //read header line
-            String processedLine = trainReader.readLine();
+            String rawLine;
+            String processedLine;
             int linesRead = 0;
             //Send 1/nth of data to test file, rest to training file. Different 1/nth sent to test each round.
             while ((rawLine=testReader.readLine()) != null && (processedLine=trainReader.readLine()) != null){
@@ -196,6 +196,8 @@ public class CrossValidator {
                     trueClass = "none";
                 }
 
+                //System.out.println(trueClass + "  " + assignedClass + " " + datasetName + " " + (assignedClass.equals(datasetName)));
+
                 if (assignedClass.equals(datasetName)){
                     testPos++;
                 }
@@ -211,8 +213,28 @@ public class CrossValidator {
             }
 
             //record precision and recall for this round
-            precision.add(((float) truePos)/testPos);
-            recall.add(((float) truePos)/conditionPos);
+
+            float prec;
+            if (testPos == 0){            //if we didn't notice any 'true's
+                if (conditionPos == 0){     //if there were no 'true's to notice anyway
+                    prec = 1;
+                } else {
+                    prec = 0;
+                }
+            } else {
+                prec = ((float) truePos) / testPos;
+            }
+            precision.add(prec);
+
+            float rec;
+            if (conditionPos == 0){       //if there were no 'true's
+                rec = 1;
+            } else {
+                rec = ((float) truePos) / conditionPos;
+            }
+            recall.add(rec);
+
+            System.out.printf("total: %d / conditionPos: %d / testPos: %d / truePos: %d / correct: %d%n",total, conditionPos,testPos, truePos, correct);
 
 
         } catch (IOException e){
