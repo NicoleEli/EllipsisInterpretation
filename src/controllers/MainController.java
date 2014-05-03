@@ -72,13 +72,13 @@ public class MainController {
 
             List<String> datasetPaths = new ArrayList<String>();
             datasetPaths.add(NPE_PROCESSED_PATH);
-            //datasetPaths.add(VPE_PROCESSED_PATH);
-            //datasetPaths.add(NSU_PROCESSED_PATH);
+            datasetPaths.add(VPE_PROCESSED_PATH);
+            datasetPaths.add(NSU_PROCESSED_PATH);
 
             List<String> datasetNames = new ArrayList<String>();
             datasetNames.add("NPE");
-            //datasetNames.add("VPE");
-            //datasetNames.add("NSU");
+            datasetNames.add("VPE");
+            datasetNames.add("NSU");
 
             classificationController.initialiseClassifiers(datasetPaths, datasetNames, featureNames);
             System.out.println("Initialised classifiers.");
@@ -103,12 +103,12 @@ public class MainController {
 
             CrossValidator crossValidator = new CrossValidator(10, featureGenerator, parser);
 
-            crossValidator.validateClassifier("small", DEBUG_PROCESSED_PATH, DEBUG_RAW_PATH);
+            //crossValidator.validateClassifier("small", DEBUG_PROCESSED_PATH, DEBUG_RAW_PATH);
 
 
-            //crossValidator.validateClassifier("NPE", NPE_PROCESSED_PATH, NPE_RAW_PATH);
-            //crossValidator.validateClassifier("VPE", VPE_PROCESSED_PATH, VPE_RAW_PATH);
-            //crossValidator.validateClassifier("NSU", NSU_PROCESSED_PATH, NSU_RAW_PATH);
+            crossValidator.validateClassifier("NPE", NPE_PROCESSED_PATH, NPE_RAW_PATH);
+            crossValidator.validateClassifier("VPE", VPE_PROCESSED_PATH, VPE_RAW_PATH);
+            crossValidator.validateClassifier("NSU", NSU_PROCESSED_PATH, NSU_RAW_PATH);
 
         }
 
