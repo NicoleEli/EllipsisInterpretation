@@ -36,10 +36,10 @@ public class MainController {
 
     //Booleans for turning on and off bits of functionality - largely for development/debugging use.
     public static boolean buildDatasets = false;
-    public static boolean buildClassifiers = false;
-    public static boolean takeInput = false;
+    public static boolean buildClassifiers = true;
+    public static boolean takeInput = true;
     public static boolean runCrossVal = false;
-    public static boolean doInterpretation = true;
+    public static boolean doInterpretation = false;
 
     public static void main(String[] args) {
 
@@ -74,14 +74,18 @@ public class MainController {
         if (buildClassifiers) {
 
             List<String> datasetPaths = new ArrayList<String>();
-            datasetPaths.add(NPE_PROCESSED_PATH);
-            datasetPaths.add(VPE_PROCESSED_PATH);
-            datasetPaths.add(NSU_PROCESSED_PATH);
+            //datasetPaths.add(NPE_PROCESSED_PATH);
+            //datasetPaths.add(VPE_PROCESSED_PATH);
+            //datasetPaths.add(NSU_PROCESSED_PATH);
+
+            datasetPaths.add(DEBUG_PROCESSED_PATH);
 
             List<String> datasetNames = new ArrayList<String>();
-            datasetNames.add("NPE");
-            datasetNames.add("VPE");
-            datasetNames.add("NSU");
+            //datasetNames.add("NPE");
+            //datasetNames.add("VPE");
+            //datasetNames.add("NSU");
+
+            datasetNames.add("DEBUG");
 
             classificationController.initialiseClassifiers(datasetPaths, datasetNames, featureNames);
             System.out.println("Initialised classifiers.");
@@ -116,7 +120,7 @@ public class MainController {
         }
 
         if (doInterpretation){
-            String sentence = "Glasser's vapours are different from Fraser's.";
+            String sentence = "This can be done by purchase unit, standard unit or a combination of the two.";
 
             System.out.println(sentence);
 
