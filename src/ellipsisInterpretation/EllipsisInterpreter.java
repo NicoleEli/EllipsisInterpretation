@@ -61,12 +61,13 @@ public class EllipsisInterpreter {
         System.out.println();
         System.out.println(candidates);
 
-        //heuristic: take first occuring candidate antecedent
+        //heuristic: take first occurring candidate antecedent
         if (candidates.size() > 0){
             return candidates.get(0);
         }
 
-        return null;        //TODO: default return statement.
+        System.err.println("No candidate antecedents identified");
+        return null;
     }
 
     /**
@@ -97,7 +98,8 @@ public class EllipsisInterpreter {
                 String finalTag = finalWord.tag();
                 boolean finalTagOfInterest = finalTag.equals("POS") || finalTag.equals("CD") || finalTag.startsWith("JJ");
                 if (finalTagOfInterest){
-
+                    //case of elided NP
+                    //TODO: use this identification to mark elliptical position in output
                 }
                 //and in all other cases, there might be an antecedent here (under this simple model)
                 else {
