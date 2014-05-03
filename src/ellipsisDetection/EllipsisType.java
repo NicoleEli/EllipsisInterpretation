@@ -9,6 +9,6 @@ package ellipsisDetection;
  */
 public enum EllipsisType {
 
-    NONE, VPE, GAPPING, BARENOUN, FRAGMENT
+    NONE, NPE, VPE, NSU, GAPPING
 
 }
