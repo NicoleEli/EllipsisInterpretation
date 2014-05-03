@@ -1,2 +1,1 @@
-Average precision over 10 rounds: 0.521563
-Average recall over 10 rounds: 1.000000
+
