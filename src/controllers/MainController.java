@@ -116,7 +116,7 @@ public class MainController {
         }
 
         if (doInterpretation){
-            String sentence = "Bill's dogs are brown and Bob's are black.";
+            String sentence = "Glasser's vapours are different from Fraser's.";
 
             System.out.println(sentence);
 
@@ -124,7 +124,9 @@ public class MainController {
             Collection typedDependencies = parser.getDependencies(parse);
 
             EllipsisInterpreter interpreter = new EllipsisInterpreter();
-            interpreter.interpretEllipsis(parse, typedDependencies, EllipsisType.NPE);
+            String antecedent = interpreter.interpretEllipsis(parse, typedDependencies, EllipsisType.NPE);
+
+            System.out.printf("Sentence: %s%nAntecedent: %s%n",sentence,antecedent);
         }
 
         /*

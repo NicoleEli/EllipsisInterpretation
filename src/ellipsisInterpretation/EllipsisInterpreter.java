@@ -1,13 +1,12 @@
 package ellipsisInterpretation;
 
 import edu.stanford.nlp.ling.Label;
+import edu.stanford.nlp.ling.TaggedWord;
 import edu.stanford.nlp.trees.Constituent;
 import edu.stanford.nlp.trees.Tree;
 import ellipsisDetection.EllipsisType;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -54,14 +53,70 @@ public class EllipsisInterpreter {
      */
     private String resolveNPE(Tree parse, Collection typedDependencies){
 
-        Iterator iterator = parse.iterator();
+        List<String> candidates = new ArrayList<String>();
 
-        while (iterator.hasNext()){
-            Tree next = (Tree) iterator.next();
-            System.out.println(next.label());       //TODO: acquire NP subtrees
+        //CURRENT MODEL: rightmost non-elided nouns. v. simple
+        rightmostNonelidedNouns(candidates, parse);
+
+        System.out.println();
+        System.out.println(candidates);
+
+        //heuristic: take first occuring candidate antecedent
+        if (candidates.size() > 0){
+            return candidates.get(0);
         }
 
         return null;        //TODO: default return statement.
+    }
+
+    /**
+     * Simple model for NPE resolution: candidate antecedents are the rightmost nouns in NPs within the sentence.
+     * (NPs which finish in cardinals, adjectives or possessives are not included as antecedent donors.)
+     * //TODO: adjectives are only in the above list because there is no ordinal tag!
+     *
+     * @param candidates
+     * @param parse
+     */
+    private void rightmostNonelidedNouns(List<String> candidates, Tree parse) {
+
+        Iterator iterator = parse.iterator();
+
+        //Find subtrees of type "NP"
+        while (iterator.hasNext()){
+
+            Tree subtree = (Tree) iterator.next();
+
+            if (subtree.label().value().equals("NP")){
+                List<TaggedWord> taggedYield = subtree.taggedYield();
+
+                System.out.println(taggedYield);
+
+
+                //if there is a possessive or cardinal (or ordinal??) tag attached to the final word in this NP, this NP is elided
+                TaggedWord finalWord = taggedYield.get(taggedYield.size()-1);
+                String finalTag = finalWord.tag();
+                boolean finalTagOfInterest = finalTag.equals("POS") || finalTag.equals("CD") || finalTag.startsWith("JJ");
+                if (finalTagOfInterest){
+
+                }
+                //and in all other cases, there might be an antecedent here (under this simple model)
+                else {
+                    System.out.println("else case "+taggedYield);
+
+                    String rightmostNoun = null;
+                    for(TaggedWord tw : taggedYield){
+                        //identify rightmost noun in the NP
+                        if (tw.tag().startsWith("NN")){
+                            rightmostNoun = tw.word();
+                        }
+                    }
+                    if (rightmostNoun != null){
+                        candidates.add(rightmostNoun);
+                    }
+                }
+            }
+
+        }
     }
 
     private String resolveVPE(Tree parse, Collection typedDependencies){
