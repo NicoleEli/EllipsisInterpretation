@@ -29,6 +29,9 @@ public class MainController {
     public static final String NSU_RAW_PATH = "C:\\Users\\Nikki\\IdeaProjects\\EllipsisInterpretation\\Data\\final\\binary-NSU.txt";
     public static final String NSU_PROCESSED_PATH = "C:\\Users\\Nikki\\IdeaProjects\\EllipsisInterpretation\\Data\\final\\vectors-NSU.csv";
 
+    public static final String DEBUG_PROCESSED_PATH = "C:\\Users\\Nikki\\IdeaProjects\\EllipsisInterpretation\\Data\\final\\vectors-debug.csv";
+    public static final String DEBUG_RAW_PATH = "C:\\Users\\Nikki\\IdeaProjects\\EllipsisInterpretation\\Data\\final\\binary-debug.txt";
+
     //Booleans for turning on and off bits of functionality - largely for development/debugging use.
     public static boolean buildDatasets = false;
     public static boolean buildClassifiers = false;
@@ -46,6 +49,7 @@ public class MainController {
 
         //Build datasets for each kind of ellipsis
         if (buildDatasets) {
+
             DatasetBuilder npeDatasetBuilder = new DatasetBuilder(featureGenerator, NPE_RAW_PATH, NPE_PROCESSED_PATH, parser);
             DatasetBuilder vpeDatasetBuilder = new DatasetBuilder(featureGenerator, VPE_RAW_PATH, VPE_PROCESSED_PATH, parser);
             DatasetBuilder nsuDatasetBuilder = new DatasetBuilder(featureGenerator, NSU_RAW_PATH, NSU_PROCESSED_PATH, parser);
@@ -59,6 +63,7 @@ public class MainController {
             System.out.println("Building NSU dataset.");
             nsuDatasetBuilder.buildDataset();
             System.out.println("Built NSU dataset.");
+
         }
 
         EllipsisClassificationController classificationController = new EllipsisClassificationController(featureGenerator);
@@ -98,9 +103,12 @@ public class MainController {
 
             CrossValidator crossValidator = new CrossValidator(10, featureGenerator, parser);
 
-            crossValidator.validateClassifier("NPE", NPE_PROCESSED_PATH, NPE_RAW_PATH);
-            crossValidator.validateClassifier("VPE", VPE_PROCESSED_PATH, VPE_RAW_PATH);
-            crossValidator.validateClassifier("NSU", NSU_PROCESSED_PATH, NSU_RAW_PATH);
+            crossValidator.validateClassifier("small", DEBUG_PROCESSED_PATH, DEBUG_RAW_PATH);
+
+
+            //crossValidator.validateClassifier("NPE", NPE_PROCESSED_PATH, NPE_RAW_PATH);
+            //crossValidator.validateClassifier("VPE", VPE_PROCESSED_PATH, VPE_RAW_PATH);
+            //crossValidator.validateClassifier("NSU", NSU_PROCESSED_PATH, NSU_RAW_PATH);
 
         }
 
