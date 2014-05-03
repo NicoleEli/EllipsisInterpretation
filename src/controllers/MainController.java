@@ -3,7 +3,7 @@ package controllers;
 import dataExtraction.DatasetBuilder;
 import edu.stanford.nlp.trees.Tree;
 import testing.CrossValidator;
-import typeClassification.FeatureGenerator;
+import ellipsisDetection.FeatureGenerator;
 
 import java.io.Console;
 import java.util.ArrayList;

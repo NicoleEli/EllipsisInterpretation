@@ -1,4 +1,4 @@
-package typeClassification;
+package ellipsisDetection;
 
 import edu.stanford.nlp.ling.TaggedWord;
 import edu.stanford.nlp.ling.Word;

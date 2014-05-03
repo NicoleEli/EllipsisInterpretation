@@ -1,9 +1,7 @@
 package dataExtraction;
 
-import edu.stanford.nlp.ling.HasWord;
-import edu.stanford.nlp.process.Tokenizer;
 import edu.stanford.nlp.trees.Tree;
-import typeClassification.*;
+import ellipsisDetection.*;
 
 import controllers.ParsingController;
 
@@ -15,7 +13,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 

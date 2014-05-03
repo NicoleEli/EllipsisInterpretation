@@ -1,4 +1,4 @@
-package typeClassification;
+package ellipsisDetection;
 
 /**
  * @author Nicole Williams

@@ -1,9 +1,8 @@
 package controllers;
 
 import edu.stanford.nlp.trees.*;
-import typeClassification.BinaryEllipsisClassifier;
-import typeClassification.EllipsisType;
-import typeClassification.FeatureGenerator;
+import ellipsisDetection.BinaryEllipsisClassifier;
+import ellipsisDetection.FeatureGenerator;
 import weka.core.Attribute;
 import weka.core.FastVector;
 

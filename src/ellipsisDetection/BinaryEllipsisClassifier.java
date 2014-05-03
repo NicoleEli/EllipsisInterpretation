@@ -1,4 +1,4 @@
-package typeClassification;
+package ellipsisDetection;
 
 import weka.classifiers.Classifier;
 import weka.classifiers.bayes.BayesianLogisticRegression;

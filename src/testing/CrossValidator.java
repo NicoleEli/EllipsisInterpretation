@@ -3,7 +3,7 @@ package testing;
 import controllers.EllipsisClassificationController;
 import controllers.ParsingController;
 import edu.stanford.nlp.trees.Tree;
-import typeClassification.FeatureGenerator;
+import ellipsisDetection.FeatureGenerator;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
