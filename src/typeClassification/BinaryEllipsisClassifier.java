@@ -74,7 +74,7 @@ public class BinaryEllipsisClassifier {
             double predicted = wekaClassifier.classifyInstance(testInstance);
             String classification = (String) classValues.elementAt((int) predicted);
 
-            System.out.println("Classified as: " + predicted + " " + classification);
+            //System.out.println("Classified as: " + predicted + " " + classification);
 
             if (classification == "true"){
                 return true;
