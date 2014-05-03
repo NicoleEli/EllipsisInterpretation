@@ -58,6 +58,9 @@ public class BinaryEllipsisClassifier {
 
     }
 
+    /**
+     * Return boolean classification.
+     */
     public boolean classify(FastVector featureVector) {
         try {
             if (dataset.numInstances() == 0) {
@@ -88,6 +91,9 @@ public class BinaryEllipsisClassifier {
         return false;
     }
 
+    /**
+     * Return distribution between classes in form [ chance of true, chance of false ]
+     */
     public double[] getDistribution(FastVector featureVector){
         try {
             if (dataset.numInstances() == 0) {
