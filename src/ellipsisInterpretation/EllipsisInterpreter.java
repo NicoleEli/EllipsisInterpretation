@@ -76,6 +76,14 @@ public class EllipsisInterpreter {
         //CURRENT MODEL: any verb phrase in the sentence
         List<String> candidates = allVerbPhrases(parse);
 
+        //optimisation: demote verb phrases with do/does
+        for (String s : candidates){
+            if (s.contains(" does ") || s.contains(" do ")){
+                String candidate = candidates.remove(candidates.indexOf(s));
+                candidates.add(candidates.size()-1, candidate);
+            }
+        }
+
         return candidates;
     }
 
@@ -155,7 +163,6 @@ public class EllipsisInterpreter {
         List<String> candidates = new ArrayList<String>();
 
         findSubtreesOfType(candidates, parse, "VP");
-
 
         return candidates;
     }
