@@ -154,25 +154,7 @@ public class EllipsisInterpreter {
 
         List<String> candidates = new ArrayList<String>();
 
-        Iterator iterator = parse.iterator();
-
-        //Find subtrees of type "NP"
-        while (iterator.hasNext()) {
-
-            Tree subtree = (Tree) iterator.next();
-
-            if (subtree.label().value().equals("VP")) {
-                List<TaggedWord> taggedYield = subtree.taggedYield();
-
-                System.out.println(taggedYield);
-
-                String candidate = "";
-                for (int i = 0; i < taggedYield.size(); i++) {
-                    candidate = candidate + " " + taggedYield.get(i).word();
-                }
-                candidates.add(candidate.trim());
-            }
-        }
+        findSubtreesOfType(candidates, parse, "VP");
 
 
         return candidates;
@@ -181,15 +163,34 @@ public class EllipsisInterpreter {
     private List<String> sentences(Tree parse) {
         List<String> candidates = new ArrayList<String>();
 
+        List<TaggedWord> taggedWords = parse.taggedYield();
+        int index = 0;
+        String candidate = "";
+        while (index < taggedWords.size()){
+            if (taggedWords.get(index).tag().equals(".")){
+                candidates.add(candidate);
+                candidate = "";
+            } else {
+                candidate = candidate + " " + taggedWords.get(index).word();
+            }
+            index++;
+        }
+
+        return candidates;
+    }
+
+
+    private void findSubtreesOfType(List<String> candidates, Tree parse, String subtreeType) {
         Iterator iterator = parse.iterator();
 
-        //Find subtrees of type "NP"
         while (iterator.hasNext()) {
 
             Tree subtree = (Tree) iterator.next();
 
-            if (subtree.label().value().equals("S")) {
+            if (subtree.label().value().equals(subtreeType)) {
                 List<TaggedWord> taggedYield = subtree.taggedYield();
+
+                System.out.println(taggedYield);
 
                 String candidate = "";
                 for (int i = 0; i < taggedYield.size(); i++) {
