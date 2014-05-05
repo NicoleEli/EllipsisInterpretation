@@ -22,14 +22,14 @@ import java.util.Collection;
  *         <p/>
  *         Prepares assessment sheets for manual evaluation of ellipsis interpreter.
  */
-public class InterpretationAsessment {
+public class InterpretationAssessment {
 
     Charset charset = Charset.forName("UTF-8");
 
     ParsingController parser;
     EllipsisInterpreter interpreter;
 
-    public InterpretationAsessment(ParsingController parser, EllipsisInterpreter interpreter) {
+    public InterpretationAssessment(ParsingController parser, EllipsisInterpreter interpreter) {
         this.parser = parser;
         this.interpreter = interpreter;
     }
