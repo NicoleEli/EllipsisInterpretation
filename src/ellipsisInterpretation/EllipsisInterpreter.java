@@ -1,8 +1,6 @@
 package ellipsisInterpretation;
 
-import edu.stanford.nlp.ling.Label;
 import edu.stanford.nlp.ling.TaggedWord;
-import edu.stanford.nlp.trees.Constituent;
 import edu.stanford.nlp.trees.Tree;
 import ellipsisDetection.EllipsisType;
 
@@ -56,7 +54,7 @@ public class EllipsisInterpreter {
         List<String> candidates = new ArrayList<String>();
 
         //CURRENT MODEL: rightmost non-elided nouns. v. simplistic.
-        candidates = rightmostNonelidedNouns(candidates, parse);
+        candidates = firstNounPhrase(candidates, parse);
 
         System.out.println();
         System.out.println(candidates);
@@ -78,7 +76,7 @@ public class EllipsisInterpreter {
      * @param candidates
      * @param parse
      */
-    private List<String> rightmostNonelidedNouns(List<String> candidates, Tree parse) {
+    private List<String> firstNounPhrase(List<String> candidates, Tree parse) {
 
         Iterator iterator = parse.iterator();
 
@@ -127,7 +125,7 @@ public class EllipsisInterpreter {
         List<String> candidates = new ArrayList<String>();
 
         //CURRENT MODEL:
-        candidates = renameThisModel(candidates, parse);
+        candidates = firstVerbPhrase(candidates, parse);
 
         System.out.println();
         System.out.println(candidates);
@@ -141,7 +139,33 @@ public class EllipsisInterpreter {
         return null;
     }
 
-    private List<String> renameThisModel(List<String> candidates, Tree parse){
+    /**
+     * Simple model for resolving verb phrase ellipsis - candidates are verb phrases occurring in the sentence.
+     * @param candidates
+     * @param parse
+     * @return
+     */
+    private List<String> firstVerbPhrase(List<String> candidates, Tree parse){
+
+        Iterator iterator = parse.iterator();
+
+        //Find subtrees of type "NP"
+        while (iterator.hasNext()){
+
+            Tree subtree = (Tree) iterator.next();
+
+            if (subtree.label().value().equals("VP")){
+                List<TaggedWord> taggedYield = subtree.taggedYield();
+
+                System.out.println(taggedYield);
+
+                String candidate = "";
+                for (int i = 0; i < taggedYield.size(); i++){
+                    candidate = candidate + " " +  taggedYield.get(i).word();
+                }
+                candidates.add(candidate.trim());
+            }
+        }
 
 
         return candidates;
