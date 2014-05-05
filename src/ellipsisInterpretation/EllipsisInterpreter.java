@@ -55,8 +55,8 @@ public class EllipsisInterpreter {
 
         List<String> candidates = new ArrayList<String>();
 
-        //CURRENT MODEL: rightmost non-elided nouns. v. simple
-        rightmostNonelidedNouns(candidates, parse);
+        //CURRENT MODEL: rightmost non-elided nouns. v. simplistic.
+        candidates = rightmostNonelidedNouns(candidates, parse);
 
         System.out.println();
         System.out.println(candidates);
@@ -78,7 +78,7 @@ public class EllipsisInterpreter {
      * @param candidates
      * @param parse
      */
-    private void rightmostNonelidedNouns(List<String> candidates, Tree parse) {
+    private List<String> rightmostNonelidedNouns(List<String> candidates, Tree parse) {
 
         Iterator iterator = parse.iterator();
 
@@ -119,10 +119,32 @@ public class EllipsisInterpreter {
             }
 
         }
+
+        return candidates;
     }
 
     private String resolveVPE(Tree parse, Collection typedDependencies){
-        return null;        //TODO: default return statement.
+        List<String> candidates = new ArrayList<String>();
+
+        //CURRENT MODEL:
+        candidates = renameThisModel(candidates, parse);
+
+        System.out.println();
+        System.out.println(candidates);
+
+        //heuristic: take first occurring candidate antecedent
+        if (candidates.size() > 0){
+            return candidates.get(0);
+        }
+
+        System.err.println("No candidate antecedents identified");
+        return null;
+    }
+
+    private List<String> renameThisModel(List<String> candidates, Tree parse){
+
+
+        return candidates;
     }
 
 
