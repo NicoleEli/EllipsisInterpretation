@@ -11,28 +11,30 @@ import java.util.*;
  *
  * @author Nicole Williams
  *         03/05/14
- *
- * Class to handle finding an antecedent for an instance of ellipsis in a given sentence.
+ *         <p/>
+ *         Class to handle finding an antecedent for an instance of ellipsis in a given sentence.
  */
 public class EllipsisInterpreter {
 
     /**
      * Given the parsed representation of a sentence and the type of ellipsis detected in it, provide an antecedent.
      *
-     * @param parse                     Parse of sentence containing ellipsis
-     * @param typedDependencies         Typed dependencies of same sentence
-     * @param ellipsisType              Type of ellipsis detected in that sentence
-     * @return                          An antecedent for the elliptical construction
+     * @param parse             Parse of sentence containing ellipsis
+     * @param typedDependencies Typed dependencies of same sentence
+     * @param ellipsisType      Type of ellipsis detected in that sentence
+     * @return An antecedent for the elliptical construction
      */
-    public String interpretEllipsis(Tree parse, Collection typedDependencies, EllipsisType ellipsisType){
+    public String interpretEllipsis(Tree parse, Collection typedDependencies, EllipsisType ellipsisType) {
 
-        switch (ellipsisType){
+        List<String> candidates = new ArrayList<String>();
+
+        switch (ellipsisType) {
             case NPE:
-                return resolveNPE(parse, typedDependencies);
+                candidates = resolveNPE(parse, typedDependencies);
             case VPE:
-                return resolveVPE(parse, typedDependencies);
+                candidates = resolveVPE(parse, typedDependencies);
             case NSU:
-                //TODO: content
+                candidates = resolveNSU(parse, typedDependencies);
                 break;
             case GAPPING:
                 //TODO: content
@@ -42,25 +44,12 @@ public class EllipsisInterpreter {
                 break;
         }
 
-
-        return null;        //TODO: default return statement.
-    }
-
-    /**
-     * Return an antecedent for a sentence known to contain noun phrase ellipsis
-     */
-    private String resolveNPE(Tree parse, Collection typedDependencies){
-
-        List<String> candidates = new ArrayList<String>();
-
-        //CURRENT MODEL: rightmost non-elided nouns. v. simplistic.
-        candidates = firstNounPhrase(candidates, parse);
-
         System.out.println();
         System.out.println(candidates);
 
-        //heuristic: take first occurring candidate antecedent
-        if (candidates.size() > 0){
+        //assume candidates presented in order of preference
+        //TODO: this is currently a heuristic "take the first one"
+        if (candidates.size() > 0) {
             return candidates.get(0);
         }
 
@@ -69,48 +58,82 @@ public class EllipsisInterpreter {
     }
 
     /**
+     * Return candidate antecedents for a sentence known to contain noun phrase ellipsis, in order of preference.
+     */
+    private List<String> resolveNPE(Tree parse, Collection typedDependencies) {
+
+        //CURRENT MODEL: rightmost non-elided nouns. v. simplistic.
+        List<String> candidates = rightmostInNounPhrase(parse);
+
+        return candidates;
+    }
+
+    /**
+     * Return candidate antecedents for a sentence known to contain verb phrase ellipsis, in order of preference.
+     */
+    private List<String> resolveVPE(Tree parse, Collection typedDependencies) {
+
+        //CURRENT MODEL: any verb phrase in the sentence
+        List<String> candidates = allVerbPhrases(parse);
+
+        return candidates;
+    }
+
+    /**
+     * Return candidate antecedents for a non-sentential utterance, in order of preference.
+     */
+    private List<String> resolveNSU(Tree parse, Collection typedDependencies) {
+
+        //CURRENT MODEL: the antecedent is a full sentence
+        List<String> candidates = sentences(parse);
+
+        return candidates;
+    }
+
+    /**
      * Simple model for NPE resolution: candidate antecedents are the rightmost nouns in NPs within the sentence.
      * (NPs which finish in cardinals, adjectives or possessives are not included as antecedent donors.)
      * //TODO: adjectives are only in the above list because there is no ordinal tag!
      *
-     * @param candidates
      * @param parse
      */
-    private List<String> firstNounPhrase(List<String> candidates, Tree parse) {
+    private List<String> rightmostInNounPhrase(Tree parse) {
+
+        List<String> candidates = new ArrayList<String>();
 
         Iterator iterator = parse.iterator();
 
         //Find subtrees of type "NP"
-        while (iterator.hasNext()){
+        while (iterator.hasNext()) {
 
             Tree subtree = (Tree) iterator.next();
 
-            if (subtree.label().value().equals("NP")){
+            if (subtree.label().value().equals("NP")) {
                 List<TaggedWord> taggedYield = subtree.taggedYield();
 
                 System.out.println(taggedYield);
 
 
                 //if there is a possessive or cardinal (or ordinal??) tag attached to the final word in this NP, this NP is elided
-                TaggedWord finalWord = taggedYield.get(taggedYield.size()-1);
+                TaggedWord finalWord = taggedYield.get(taggedYield.size() - 1);
                 String finalTag = finalWord.tag();
                 boolean finalTagOfInterest = finalTag.equals("POS") || finalTag.equals("CD") || finalTag.startsWith("JJ");
-                if (finalTagOfInterest){
+                if (finalTagOfInterest) {
                     //case of elided NP
                     //TODO: use this identification to mark elliptical position in output
                 }
                 //and in all other cases, there might be an antecedent here (under this simple model)
                 else {
-                    System.out.println("else case "+taggedYield);
+                    System.out.println("else case " + taggedYield);
 
                     String rightmostNoun = null;
-                    for(TaggedWord tw : taggedYield){
+                    for (TaggedWord tw : taggedYield) {
                         //identify rightmost noun in the NP
-                        if (tw.tag().startsWith("NN")){
+                        if (tw.tag().startsWith("NN")) {
                             rightmostNoun = tw.word();
                         }
                     }
-                    if (rightmostNoun != null){
+                    if (rightmostNoun != null) {
                         candidates.add(rightmostNoun);
                     }
                 }
@@ -121,47 +144,31 @@ public class EllipsisInterpreter {
         return candidates;
     }
 
-    private String resolveVPE(Tree parse, Collection typedDependencies){
-        List<String> candidates = new ArrayList<String>();
-
-        //CURRENT MODEL:
-        candidates = firstVerbPhrase(candidates, parse);
-
-        System.out.println();
-        System.out.println(candidates);
-
-        //heuristic: take first occurring candidate antecedent
-        if (candidates.size() > 0){
-            return candidates.get(0);
-        }
-
-        System.err.println("No candidate antecedents identified");
-        return null;
-    }
-
     /**
      * Simple model for resolving verb phrase ellipsis - candidates are verb phrases occurring in the sentence.
-     * @param candidates
+     *
      * @param parse
      * @return
      */
-    private List<String> firstVerbPhrase(List<String> candidates, Tree parse){
+    private List<String> allVerbPhrases(Tree parse) {
+
+        List<String> candidates = new ArrayList<String>();
 
         Iterator iterator = parse.iterator();
 
         //Find subtrees of type "NP"
-        while (iterator.hasNext()){
+        while (iterator.hasNext()) {
 
             Tree subtree = (Tree) iterator.next();
 
-            if (subtree.label().value().equals("VP")){
+            if (subtree.label().value().equals("VP")) {
                 List<TaggedWord> taggedYield = subtree.taggedYield();
 
                 System.out.println(taggedYield);
 
                 String candidate = "";
-                for (int i = 0; i < taggedYield.size(); i++){
-                    candidate = candidate + " " +  taggedYield.get(i).word();
+                for (int i = 0; i < taggedYield.size(); i++) {
+                    candidate = candidate + " " + taggedYield.get(i).word();
                 }
                 candidates.add(candidate.trim());
             }
@@ -171,5 +178,27 @@ public class EllipsisInterpreter {
         return candidates;
     }
 
+    private List<String> sentences(Tree parse) {
+        List<String> candidates = new ArrayList<String>();
+
+        Iterator iterator = parse.iterator();
+
+        //Find subtrees of type "NP"
+        while (iterator.hasNext()) {
+
+            Tree subtree = (Tree) iterator.next();
+
+            if (subtree.label().value().equals("S")) {
+                List<TaggedWord> taggedYield = subtree.taggedYield();
+
+                String candidate = "";
+                for (int i = 0; i < taggedYield.size(); i++) {
+                    candidate = candidate + " " + taggedYield.get(i).word();
+                }
+                candidates.add(candidate.trim());
+            }
+
+        }
+    }
 
 }
