@@ -36,10 +36,10 @@ public class MainController {
 
     //Booleans for turning on and off bits of functionality - largely for development/debugging use.
     public static boolean buildDatasets = false;
-    public static boolean buildClassifiers = true;
-    public static boolean takeInput = true;
+    public static boolean buildClassifiers = false;
+    public static boolean takeInput = false;
     public static boolean runCrossVal = false;
-    public static boolean doInterpretation = false;
+    public static boolean doInterpretation = true;
 
     public static void main(String[] args) {
 
@@ -120,7 +120,7 @@ public class MainController {
         }
 
         if (doInterpretation){
-            String sentence = "This can be done by purchase unit, standard unit or a combination of the two.";
+            String sentence = "But we haven't introduced each other have we? No.";
 
             System.out.println(sentence);
 
@@ -128,32 +128,11 @@ public class MainController {
             Collection typedDependencies = parser.getDependencies(parse);
 
             EllipsisInterpreter interpreter = new EllipsisInterpreter();
-            String antecedent = interpreter.interpretEllipsis(parse, typedDependencies, EllipsisType.NPE);
+            String antecedent = interpreter.interpretEllipsis(parse, typedDependencies, EllipsisType.NSU);
 
             System.out.printf("Sentence: %s%nAntecedent: %s%n",sentence,antecedent);
         }
 
-        /*
-        if (args.length > 0){
-            String filename = args[0];
-
-            ParsingController parser = new ParsingController();
-            FeatureGenerator fGen = new FeatureGenerator();
-
-            for (List<HasWord> sentence : new DocumentPreprocessor(filename)) {
-                Tree parse = parser.getParse(sentence);
-                Collection typedDependencies = parser.getDependencies(parse);
-
-                System.out.println(sentence + " " + sentence.size());
-
-                fGen.genFeatures(parse,typedDependencies);
-
-                System.out.println("## Features: ##");
-                fGen.printFeatures();
-                fGen.reset();
-            }
-        }
-        */
     }
 
 }
