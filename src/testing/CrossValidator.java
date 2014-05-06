@@ -103,13 +103,16 @@ public class CrossValidator {
         avgPrecision = avgPrecision / n;
         avgRecall = avgRecall / n;
 
+        float avgFmeasure = 2 * (avgPrecision * avgRecall) / (avgPrecision + avgRecall);
+
         System.out.printf("Average precision over %d rounds: %f%n", n, avgPrecision);
         System.out.printf("Average recall over %d rounds: %f%n",n,avgRecall);
+        System.out.printf("Average F measure over %d rounds: %f%n",n,avgFmeasure);
 
         //Save results to file - useful when running multiple cross-validation sessions in sequence
         try{
             BufferedWriter resultWriter = new BufferedWriter(new FileWriter(RESULTS_PATH, true));
-            resultWriter.append(String.format("Average precision over %d rounds: %f%nAverage recall over %d rounds: %f%n", n, avgPrecision,n,avgRecall));
+            resultWriter.append(String.format("Average precision over %d rounds: %f%nAverage recall over %d rounds: %f%nAverage F measure over %d rounds: %f%n", n, avgPrecision,n,avgRecall,n,avgFmeasure));
             resultWriter.close();
         } catch (IOException e){
             System.err.format("IOException: %s%n", e);
