@@ -56,7 +56,7 @@ public class InterpretationAssessment {
 
                 String antecedent = interpreter.interpretEllipsis(parse, typedDependencies, type);
 
-                String writeLine = String.format("Sentence: %s%nAntecedent: %s%%nnGood\t\tBad%n%n", sentence, antecedent);
+                String writeLine = String.format("Sentence: %s%nAntecedent: %s%n%nGood\t\tBad%n%n", sentence, antecedent);
 
                 sheetWriter.append(writeLine);
 
