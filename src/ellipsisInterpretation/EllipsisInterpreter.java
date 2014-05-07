@@ -69,6 +69,8 @@ public class EllipsisInterpreter {
         List<String> candidates = followingPOSorCRD(parse);
         candidates.addAll(rightmostInNounPhrase(parse));
 
+        promoteDuplicates(candidates);
+
         return candidates;
     }
 
@@ -86,27 +88,6 @@ public class EllipsisInterpreter {
         }
 
         return candidates;
-    }
-
-    /**
-     * Demote candidates containing phrases "does/do so/too" - optimisation for VPE
-     *
-     * @param candidates
-     */
-    private void demoteDoesPhrases(List<String> candidates) {
-        List<String> demotedCandidates = new ArrayList<String>();
-        for (String s : candidates) {
-            boolean containsDoesPhrase = s.contains("does so") || s.contains("does too") || s.contains("do too") || s.contains("do so");
-            if (containsDoesPhrase) {
-                String candidate = candidates.get(candidates.indexOf(s));
-                demotedCandidates.add(candidate);
-            }
-        }
-
-        for (String ds : demotedCandidates) {
-            candidates.remove(candidates.indexOf(ds));
-            candidates.add(candidates.size() - 1, ds);
-        }
     }
 
     /**
@@ -271,5 +252,68 @@ public class EllipsisInterpreter {
 
         return candidates;
     }
+
+    /**
+     * Demote candidates containing phrases "does/do so/too" - optimisation for VPE
+     *
+     * @param candidates
+     */
+    private void demoteDoesPhrases(List<String> candidates) {
+        List<String> demotedCandidates = new ArrayList<String>();
+        for (String s : candidates) {
+            boolean containsDoesPhrase = s.contains("does so") || s.contains("does too") || s.contains("do too") || s.contains("do so");
+            if (containsDoesPhrase) {
+                String candidate = candidates.get(candidates.indexOf(s));
+                demotedCandidates.add(candidate);
+            }
+        }
+
+        for (String ds : demotedCandidates) {
+            candidates.remove(candidates.indexOf(ds));
+            candidates.add(candidates.size() - 1, ds);
+        }
+    }
+
+    /**
+     * Remove duplicates AND give precedence to words which occur multiple times.
+     */
+    private void promoteDuplicates(List<String> candidates){
+        Map<String, Integer> promotedCandidates = new HashMap<String,Integer>();
+        for(int i = 0; i < candidates.size(); i++){
+            String cand = candidates.get(i);
+            int count = 0;
+            for (String s : candidates){
+                if (s.equals(cand)){
+                    count++;
+                }
+            }
+            if (count > 1){
+                promotedCandidates.put(cand, count);
+            }
+        }
+
+        candidates.removeAll(promotedCandidates.keySet());
+
+        List<String> sortedPromotions = new ArrayList<String>();
+        for (String k : promotedCandidates.keySet()){
+            if(sortedPromotions.size() == 0){
+                sortedPromotions.add(k);
+            } else {
+                int index = 0;
+                int lastSmallerIndex = 0;
+                while (index < sortedPromotions.size() && (promotedCandidates.get(k) > promotedCandidates.get(sortedPromotions.get(index)))){
+                    index++;
+                    lastSmallerIndex++;
+                }
+                sortedPromotions.add(lastSmallerIndex, k);
+            }
+        }
+
+        for (String cand : sortedPromotions){
+            candidates.add(0, cand);
+        }
+
+    }
+
 
 }
