@@ -6,6 +6,7 @@ import ellipsisDetection.EllipsisType;
 import ellipsisInterpretation.EllipsisInterpreter;
 import testing.CrossValidator;
 import ellipsisDetection.FeatureGenerator;
+import testing.InterpretationAssessment;
 
 import java.io.Console;
 import java.util.ArrayList;
@@ -34,12 +35,16 @@ public class MainController {
     public static final String DEBUG_PROCESSED_PATH = "C:\\Users\\Nikki\\IdeaProjects\\EllipsisInterpretation\\Data\\final\\vectors-debug.csv";
     public static final String DEBUG_RAW_PATH = "C:\\Users\\Nikki\\IdeaProjects\\EllipsisInterpretation\\Data\\final\\binary-debug.txt";
 
+    public static final String INTERPRETATION_SAMPLE_PATH = "C:\\Users\\Nikki\\IdeaProjects\\EllipsisInterpretation\\Data\\testing\\interpretationSample.txt";
+    public static final String INTERPRETATION_OUTPUT_PATH = "C:\\Users\\Nikki\\IdeaProjects\\EllipsisInterpretation\\Data\\testing\\interpretationOutput.txt";
+
     //Booleans for turning on and off bits of functionality - largely for development/debugging use.
     public static boolean buildDatasets = false;
     public static boolean buildClassifiers = false;
     public static boolean takeInput = false;
     public static boolean runCrossVal = false;
-    public static boolean doInterpretation = true;
+    public static boolean doInterpretation = false;
+    public static boolean assessInterpretation = true;
 
     public static void main(String[] args) {
 
@@ -120,7 +125,7 @@ public class MainController {
         }
 
         if (doInterpretation){
-            String sentence = "But we haven't introduced each other have we? No.";
+            String sentence = "Bill's dogs are brown and Bob's are black.";
 
             System.out.println(sentence);
 
@@ -128,9 +133,18 @@ public class MainController {
             Collection typedDependencies = parser.getDependencies(parse);
 
             EllipsisInterpreter interpreter = new EllipsisInterpreter();
-            String antecedent = interpreter.interpretEllipsis(parse, typedDependencies, EllipsisType.NSU);
+            String antecedent = interpreter.interpretEllipsis(parse, typedDependencies, EllipsisType.NPE);
 
             System.out.printf("Sentence: %s%nAntecedent: %s%n",sentence,antecedent);
+        }
+
+        if (assessInterpretation){
+
+            EllipsisInterpreter interpreter = new EllipsisInterpreter();
+            InterpretationAssessment assessmentBuilder = new InterpretationAssessment(parser, interpreter);
+
+            assessmentBuilder.prepareAssessmentSheet(INTERPRETATION_SAMPLE_PATH, INTERPRETATION_OUTPUT_PATH);
+
         }
 
     }
