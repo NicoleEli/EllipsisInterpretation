@@ -66,10 +66,12 @@ public class EllipsisInterpreter {
     private List<String> resolveNPE(Tree parse, Collection typedDependencies) {
 
         //CURRENT MODEL: rightmost non-elided nouns. v. simplistic.
-        List<String> candidates = followingPOSorCRD(parse);
+        List<String> candidates = followingPOSorCD(parse);
         candidates.addAll(rightmostInNounPhrase(parse));
 
         promoteDuplicates(candidates);
+
+        provideDefault(candidates, "thing");
 
         return candidates;
     }
@@ -83,11 +85,11 @@ public class EllipsisInterpreter {
         List<String> candidates = allVerbPhrases(parse);
 
         //optimisation: demote verb phrases with does phrases
-        if (candidates.size() > 1) {
-            demoteDoesPhrases(candidates);
-        }
+        //if (candidates.size() > 1) {
+        //    demoteDoesPhrases(candidates);
+        //}
 
-        promoteDuplicates(candidates);
+        //promoteDuplicates(candidates);
 
         return candidates;
     }
@@ -108,7 +110,7 @@ public class EllipsisInterpreter {
      */
     private List<String> nounPhrases(Tree parse) {
         List<String> candidates = new ArrayList<String>();
-        findSubtreesOfType(candidates, parse, "NP");
+        candidates = findSubtreesOfType(parse, "NP");
         return candidates;
     }
 
@@ -167,6 +169,36 @@ public class EllipsisInterpreter {
     }
 
     /**
+     * NPE model: candidates are nouns which follow POS or CRD
+     */
+    private List<String> followingPOSorCD(Tree parse) {
+
+        List<String> candidates = new ArrayList<String>();
+
+        for (Tree t : parse.preOrderNodeList()) {
+            if (t.label().value().startsWith("NN")) {
+                Tree parent = t.parent(parse);
+                int tIndex = parent.objectIndexOf(t);
+                if (tIndex > 0) {
+                    List<TaggedWord> siblingLeaves = parent.getChild(tIndex - 1).taggedYield();   //tagged yield of preceding sibling tree
+                    TaggedWord preceding = siblingLeaves.get(siblingLeaves.size() - 1);
+                    if (preceding.tag().equals("POS") || preceding.tag().equals("PRP$") || preceding.tag().equals("CD")) { //if t (the NN*) followed a POS or CRD, we care about it
+                        List<Word> yield = t.yieldWords();
+                        String candidate = "";
+                        for (Word w : yield) {
+                            candidate = candidate + " " + w.word();
+                        }
+                        candidates.add(candidate.trim());
+                    }
+                }
+
+            }
+        }
+
+        return candidates;
+    }
+
+    /**
      * Simple model for resolving verb phrase ellipsis - candidates are verb phrases occurring in the sentence.
      *
      * @param parse
@@ -176,7 +208,7 @@ public class EllipsisInterpreter {
 
         List<String> candidates = new ArrayList<String>();
 
-        findSubtreesOfType(candidates, parse, "VP");
+        candidates = findSubtreesOfType(parse, "VP");
 
         return candidates;
     }
@@ -200,9 +232,11 @@ public class EllipsisInterpreter {
         return candidates;
     }
 
-
-    private void findSubtreesOfType(List<String> candidates, Tree parse, String subtreeType) {
-        parse.pennPrint();
+    /**
+     * Given a parse tree, identify subtrees with a particular label.
+     */
+    private List<String> findSubtreesOfType(Tree parse, String subtreeType) {
+        List<String> candidates = new ArrayList<String>();
 
         Iterator iterator = parse.iterator();
 
@@ -223,37 +257,9 @@ public class EllipsisInterpreter {
             }
 
         }
-    }
-
-    /**
-     * NPE model: candidates are nouns which follow POS or CRD
-     */
-    private List<String> followingPOSorCRD(Tree parse) {
-
-        List<String> candidates = new ArrayList<String>();
-
-        for (Tree t : parse.preOrderNodeList()) {
-            if (t.label().value().startsWith("NN")) {
-                Tree parent = t.parent(parse);
-                int tIndex = parent.objectIndexOf(t);
-                if (tIndex > 0) {
-                    List<TaggedWord> siblingLeaves = parent.getChild(tIndex - 1).taggedYield();   //tagged yield of preceding sibling tree
-                    TaggedWord preceding = siblingLeaves.get(siblingLeaves.size() - 1);
-                    if (preceding.tag().equals("POS") || preceding.tag().equals("CRD")) { //if t (the NN*) followed a POS or CRD, we care about it
-                        List<Word> yield = t.yieldWords();
-                        String candidate = "";
-                        for (Word w : yield) {
-                            candidate = candidate + " " + w.word();
-                        }
-                        candidates.add(candidate.trim());
-                    }
-                }
-
-            }
-        }
-
         return candidates;
     }
+
 
     /**
      * Demote candidates containing phrases "does/do so/too" - optimisation for VPE
@@ -280,19 +286,7 @@ public class EllipsisInterpreter {
      * Remove duplicates AND give precedence to words which occur multiple times.
      */
     private void promoteDuplicates(List<String> candidates){
-        Map<String, Integer> promotedCandidates = new HashMap<String,Integer>();
-        for(int i = 0; i < candidates.size(); i++){
-            String cand = candidates.get(i);
-            int count = 0;
-            for (String s : candidates){
-                if (s.equals(cand)){
-                    count++;
-                }
-            }
-            if (count > 1){
-                promotedCandidates.put(cand, count);
-            }
-        }
+        Map<String, Integer> promotedCandidates = findDuplicates(candidates);
 
         candidates.removeAll(promotedCandidates.keySet());
 
@@ -315,6 +309,43 @@ public class EllipsisInterpreter {
             candidates.add(0, cand);
         }
 
+    }
+
+    /**
+     * Remove duplicate candidates.
+     */
+    private void removeDuplicates(List<String> candidates){
+        Map<String, Integer> promotedCandidates = findDuplicates(candidates);
+        candidates.removeAll(promotedCandidates.keySet());
+    }
+
+    /**
+     * Find candidates which occur multiple times in a list, and produce a count of occurrences for each.
+     */
+    private Map<String, Integer> findDuplicates(List<String> candidates) {
+        Map<String, Integer> promotedCandidates = new HashMap<String,Integer>();
+        for(int i = 0; i < candidates.size(); i++){
+            String cand = candidates.get(i);
+            int count = 0;
+            for (String s : candidates){
+                if (s.equals(cand)){
+                    count++;
+                }
+            }
+            if (count > 1){
+                promotedCandidates.put(cand, count);
+            }
+        }
+        return promotedCandidates;
+    }
+
+    /**
+     * Handling for the case where no antecedent has been identified - replace with a default.
+     */
+    private void provideDefault(List<String> candidates, String defaultValue){
+        if(candidates.size() == 0){
+            candidates.add(defaultValue);
+        }
     }
 
 
