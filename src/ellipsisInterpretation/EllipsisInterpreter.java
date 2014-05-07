@@ -31,8 +31,10 @@ public class EllipsisInterpreter {
         switch (ellipsisType) {
             case NPE:
                 candidates = resolveNPE(parse, typedDependencies);
+                break;
             case VPE:
                 candidates = resolveVPE(parse, typedDependencies);
+                break;
             case NSU:
                 candidates = resolveNSU(parse, typedDependencies);
                 break;
@@ -76,9 +78,10 @@ public class EllipsisInterpreter {
         //CURRENT MODEL: any verb phrase in the sentence
         List<String> candidates = allVerbPhrases(parse);
 
-        //optimisation: demote verb phrases with do/does
+        //optimisation: demote verb phrases with does phrases
         for (String s : candidates){
-            if (s.contains(" does ") || s.contains(" do ")){
+            boolean containsDoesPhrase = s.contains("does so") || s.contains("does too") || s.contains("do too") ||  s.contains("do so");
+            if (containsDoesPhrase){
                 String candidate = candidates.remove(candidates.indexOf(s));
                 candidates.add(candidates.size()-1, candidate);
             }
@@ -95,6 +98,15 @@ public class EllipsisInterpreter {
         //CURRENT MODEL: the antecedent is a full sentence
         List<String> candidates = sentences(parse);
 
+        return candidates;
+    }
+
+    /**
+     * Simplest model for NPE resolution: candidate antecedents are noun phrases.
+     */
+    private List<String> nounPhrases(Tree parse){
+        List<String> candidates = new ArrayList<String>();
+        findSubtreesOfType(candidates, parse, "NP");
         return candidates;
     }
 
@@ -188,6 +200,8 @@ public class EllipsisInterpreter {
 
 
     private void findSubtreesOfType(List<String> candidates, Tree parse, String subtreeType) {
+        parse.pennPrint();
+
         Iterator iterator = parse.iterator();
 
         while (iterator.hasNext()) {
