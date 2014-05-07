@@ -1,6 +1,7 @@
 package ellipsisInterpretation;
 
 import edu.stanford.nlp.ling.TaggedWord;
+import edu.stanford.nlp.ling.Word;
 import edu.stanford.nlp.trees.Tree;
 import ellipsisDetection.EllipsisType;
 
@@ -65,7 +66,8 @@ public class EllipsisInterpreter {
     private List<String> resolveNPE(Tree parse, Collection typedDependencies) {
 
         //CURRENT MODEL: rightmost non-elided nouns. v. simplistic.
-        List<String> candidates = rightmostInNounPhrase(parse);
+        List<String> candidates = followingPOSorCRD(parse);
+        candidates.addAll(rightmostInNounPhrase(parse));
 
         return candidates;
     }
@@ -79,7 +81,7 @@ public class EllipsisInterpreter {
         List<String> candidates = allVerbPhrases(parse);
 
         //optimisation: demote verb phrases with does phrases
-        if (candidates.size() > 1){
+        if (candidates.size() > 1) {
             demoteDoesPhrases(candidates);
         }
 
@@ -88,21 +90,22 @@ public class EllipsisInterpreter {
 
     /**
      * Demote candidates containing phrases "does/do so/too" - optimisation for VPE
+     *
      * @param candidates
      */
     private void demoteDoesPhrases(List<String> candidates) {
         List<String> demotedCandidates = new ArrayList<String>();
-        for (String s : candidates){
-            boolean containsDoesPhrase = s.contains("does so") || s.contains("does too") || s.contains("do too") ||  s.contains("do so");
-            if (containsDoesPhrase){
+        for (String s : candidates) {
+            boolean containsDoesPhrase = s.contains("does so") || s.contains("does too") || s.contains("do too") || s.contains("do so");
+            if (containsDoesPhrase) {
                 String candidate = candidates.get(candidates.indexOf(s));
                 demotedCandidates.add(candidate);
             }
         }
 
-        for (String ds : demotedCandidates){
+        for (String ds : demotedCandidates) {
             candidates.remove(candidates.indexOf(ds));
-            candidates.add(candidates.size()-1, ds);
+            candidates.add(candidates.size() - 1, ds);
         }
     }
 
@@ -120,7 +123,7 @@ public class EllipsisInterpreter {
     /**
      * Simplest model for NPE resolution: candidate antecedents are noun phrases.
      */
-    private List<String> nounPhrases(Tree parse){
+    private List<String> nounPhrases(Tree parse) {
         List<String> candidates = new ArrayList<String>();
         findSubtreesOfType(candidates, parse, "NP");
         return candidates;
@@ -201,8 +204,8 @@ public class EllipsisInterpreter {
         List<TaggedWord> taggedWords = parse.taggedYield();
         int index = 0;
         String candidate = "";
-        while (index < taggedWords.size()){
-            if (taggedWords.get(index).tag().equals(".")){
+        while (index < taggedWords.size()) {
+            if (taggedWords.get(index).tag().equals(".")) {
                 candidates.add(candidate);
                 candidate = "";
             } else {
@@ -237,6 +240,36 @@ public class EllipsisInterpreter {
             }
 
         }
+    }
+
+    /**
+     * NPE model: candidates are nouns which follow POS or CRD
+     */
+    private List<String> followingPOSorCRD(Tree parse) {
+
+        List<String> candidates = new ArrayList<String>();
+
+        for (Tree t : parse.preOrderNodeList()) {
+            if (t.label().value().startsWith("NN")) {
+                Tree parent = t.parent(parse);
+                int tIndex = parent.objectIndexOf(t);
+                if (tIndex > 0) {
+                    List<TaggedWord> siblingLeaves = parent.getChild(tIndex - 1).taggedYield();   //tagged yield of preceding sibling tree
+                    TaggedWord preceding = siblingLeaves.get(siblingLeaves.size() - 1);
+                    if (preceding.tag().equals("POS") || preceding.tag().equals("CRD")) { //if t (the NN*) followed a POS or CRD, we care about it
+                        List<Word> yield = t.yieldWords();
+                        String candidate = "";
+                        for (Word w : yield) {
+                            candidate = candidate + " " + w.word();
+                        }
+                        candidates.add(candidate.trim());
+                    }
+                }
+
+            }
+        }
+
+        return candidates;
     }
 
 }
