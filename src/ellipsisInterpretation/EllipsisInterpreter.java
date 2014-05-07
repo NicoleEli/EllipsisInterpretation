@@ -79,15 +79,31 @@ public class EllipsisInterpreter {
         List<String> candidates = allVerbPhrases(parse);
 
         //optimisation: demote verb phrases with does phrases
-        for (String s : candidates){
-            boolean containsDoesPhrase = s.contains("does so") || s.contains("does too") || s.contains("do too") ||  s.contains("do so");
-            if (containsDoesPhrase){
-                String candidate = candidates.remove(candidates.indexOf(s));
-                candidates.add(candidates.size()-1, candidate);
-            }
+        if (candidates.size() > 1){
+            demoteDoesPhrases(candidates);
         }
 
         return candidates;
+    }
+
+    /**
+     * Demote candidates containing phrases "does/do so/too" - optimisation for VPE
+     * @param candidates
+     */
+    private void demoteDoesPhrases(List<String> candidates) {
+        List<String> demotedCandidates = new ArrayList<String>();
+        for (String s : candidates){
+            boolean containsDoesPhrase = s.contains("does so") || s.contains("does too") || s.contains("do too") ||  s.contains("do so");
+            if (containsDoesPhrase){
+                String candidate = candidates.get(candidates.indexOf(s));
+                demotedCandidates.add(candidate);
+            }
+        }
+
+        for (String ds : demotedCandidates){
+            candidates.remove(candidates.indexOf(ds));
+            candidates.add(candidates.size()-1, ds);
+        }
     }
 
     /**
