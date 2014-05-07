@@ -87,6 +87,8 @@ public class EllipsisInterpreter {
             demoteDoesPhrases(candidates);
         }
 
+        promoteDuplicates(candidates);
+
         return candidates;
     }
 
