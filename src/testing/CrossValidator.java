@@ -27,10 +27,10 @@ public class CrossValidator {
     int n;          //n-fold crossval
     EllipsisClassificationController classificationController;
 
-    final String TRAIN_PATH = "C:\\Users\\Nikki\\IdeaProjects\\EllipsisInterpretation\\Data\\crossval\\training.csv";
-    final String TEST_PATH = "C:\\Users\\Nikki\\IdeaProjects\\EllipsisInterpretation\\Data\\crossval\\testing.txt";
+    final String TRAIN_PATH = "C:\\Users\\Nikki\\IdeaProjects\\EllipsisInterpretation\\Data\\testing\\training.csv";
+    final String TEST_PATH = "C:\\Users\\Nikki\\IdeaProjects\\EllipsisInterpretation\\Data\\testing\\testing.txt";
 
-    final String RESULTS_PATH = "C:\\Users\\Nikki\\IdeaProjects\\EllipsisInterpretation\\Data\\crossval\\results.txt";
+    final String RESULTS_PATH = "C:\\Users\\Nikki\\IdeaProjects\\EllipsisInterpretation\\Data\\testing\\results.txt";
 
     List<String> datasetPaths;
     List<String> datasetNames;
@@ -83,12 +83,10 @@ public class CrossValidator {
             //Customise dataset name for this round
             datasetNames.set(0,String.format(baseName,round+1));
 
+            classificationController = new EllipsisClassificationController(featureGenerator);
             classificationController.initialiseClassifiers(datasetPaths, datasetNames, featureNames);
 
             classifyTestData(datasetNames.get(0));
-
-            //Reset classification controller for re-use in next round
-            classificationController.reset();
 
             System.out.printf("Cross-validation round %d complete.%n", round+1);
         }
@@ -96,9 +94,13 @@ public class CrossValidator {
         //Work out average precision/recall across n rounds
         float avgPrecision = 0;
         float avgRecall = 0;
+        String precisions = "";
+        String recalls = "";
         for (int i = 0; i < n; i++){
             avgPrecision += precision.get(i);
             avgRecall += recall.get(i);
+            precisions = precisions + precision.get(i);
+            recalls = recalls + recall.get(i);
         }
         avgPrecision = avgPrecision / n;
         avgRecall = avgRecall / n;
@@ -112,6 +114,8 @@ public class CrossValidator {
         //Save results to file - useful when running multiple cross-validation sessions in sequence
         try{
             BufferedWriter resultWriter = new BufferedWriter(new FileWriter(RESULTS_PATH, true));
+            resultWriter.append(String.format("precision: %s%n",precisions));
+            resultWriter.append(String.format("recall: %s%n", recalls));
             resultWriter.append(String.format("Average precision over %d rounds: %f%nAverage recall over %d rounds: %f%nAverage F measure over %d rounds: %f%n", n, avgPrecision,n,avgRecall,n,avgFmeasure));
             resultWriter.close();
         } catch (IOException e){
@@ -203,6 +207,8 @@ public class CrossValidator {
 
                 if (assignedClass.equals(datasetName)){
                     testPos++;
+                } else {
+                    System.out.printf("Assigned: %s / Dataset Name: %s%n",assignedClass,datasetName);
                 }
 
                 if (assignedClass.equals(trueClass)){
@@ -219,11 +225,7 @@ public class CrossValidator {
 
             float prec;
             if (testPos == 0){            //if we didn't notice any 'true's
-                if (conditionPos == 0){     //if there were no 'true's to notice anyway
-                    prec = 1;
-                } else {
-                    prec = 0;
-                }
+                prec = 1;                   //then the percent of 'true's noticed that were correct is 100
             } else {
                 prec = ((float) truePos) / testPos;
             }

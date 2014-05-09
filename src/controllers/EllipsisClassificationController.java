@@ -113,7 +113,7 @@ public class EllipsisClassificationController {
 
             //Read dataset file and add training data to classifier
             String line;
-            while ((line = reader.readLine()) != null){
+            while ((line = reader.readLine()) != null && line.trim() != ""){
                 FastVector dataItem = convert(line);
                 classifier.updateTrainingData(dataItem);
             }
