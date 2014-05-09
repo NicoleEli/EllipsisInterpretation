@@ -83,13 +83,16 @@ public class EllipsisInterpreter {
 
         //CURRENT MODEL: any verb phrase in the sentence
         List<String> candidates = allVerbPhrases(parse);
+        //List<String> candidates = verbPhrasesWithoutDanglingMDs(parse);
 
-        //optimisation: demote verb phrases with does phrases
-        //if (candidates.size() > 1) {
-        //    demoteDoesPhrases(candidates);
-        //}
+        int ellipsisIndex = locateVPE(parse);
 
-        //promoteDuplicates(candidates);
+        System.out.println("VPE at " + ellipsisIndex + " / ");
+
+        //promoteClosest(candidates, ellipsisIndex, parse);
+        if (candidates.size() > 0) {
+            //demoteDoesPhrases(candidates);
+        }
 
         return candidates;
     }
@@ -213,6 +216,44 @@ public class EllipsisInterpreter {
         return candidates;
     }
 
+    private List<String> verbPhrasesWithoutSBAR(Tree parse) {
+        return null;
+    }
+
+    private List<String> verbPhrasesWithoutDanglingMDs(Tree parse) {
+
+        List<String> candidates = new ArrayList<String>();
+
+        Iterator iterator = parse.iterator();
+
+        while (iterator.hasNext()) {
+
+            Tree subtree = (Tree) iterator.next();
+
+            if (subtree.label().value().equals("VP")) {
+                List<TaggedWord> taggedYield = subtree.taggedYield();
+
+
+                Tree[] children = subtree.children();
+                subtree.pennPrint();
+                System.out.println(children[0].label() + " // " + children[1].label());
+                boolean danglingMD = (children.length == 1 && children[0].label().value().equals("MD"))
+                        || (children.length == 2 && children[0].label().value().equals("MD") && children[0].label().value().equals("RB"));
+                if (!danglingMD) {
+                    System.out.println(taggedYield);
+
+                    String candidate = "";
+                    for (int i = 0; i < taggedYield.size(); i++) {
+                        candidate = candidate + " " + taggedYield.get(i).word();
+                    }
+                    candidates.add(candidate.trim());
+                }
+            }
+
+        }
+        return candidates;
+    }
+
     private List<String> sentences(Tree parse) {
         List<String> candidates = new ArrayList<String>();
 
@@ -278,43 +319,160 @@ public class EllipsisInterpreter {
 
         for (String ds : demotedCandidates) {
             candidates.remove(candidates.indexOf(ds));
-            candidates.add(candidates.size() - 1, ds);
+            candidates.add(ds);
         }
     }
 
     /**
+     * Identify location of verb phrase ellipsis within sentence.
+     */
+    private int locateVPE(Tree parse) {
+        int vpeIndex = 0;
+        List<Integer> potentialVPEIndices = new ArrayList<Integer>();
+
+        List<TaggedWord> taggedYield = parse.taggedYield();
+
+        String prevTag = "";
+        String prevWord = "";
+        boolean foundVPE = false;
+        boolean foundPotentialVPE = false;
+        int index = 0;
+        int characterIndex = 0;
+        while (index < taggedYield.size() && !foundVPE) {
+            String curTag = taggedYield.get(index).tag();
+            String curWord = taggedYield.get(index).word();
+            if (prevTag.equals("MD") && !curTag.startsWith("VB")) {                                  //following a modal aux
+                if (curWord.equals("n't") || curWord.equals("not")) {
+                    if (checkNextWord(taggedYield, index)) {
+                        foundVPE = true;
+                        vpeIndex = characterIndex + curWord.length() + 1;
+                    }
+                } else {
+                    foundVPE = true;
+                    vpeIndex = characterIndex;
+                }
+            } else if ((prevWord.equals("do") || prevWord.equals("does")) && !curTag.startsWith("VB")) {
+                if (curWord.equals("n't") || curWord.equals("not")) {
+                    if (checkNextWord(taggedYield, index)) {
+                        foundPotentialVPE = true;
+                        potentialVPEIndices.add(characterIndex + curWord.length() + 1);
+                    }
+                } else {
+                    foundPotentialVPE = true;
+                    potentialVPEIndices.add(characterIndex);
+                }
+            }
+            index++;
+            characterIndex += curWord.length() + 1;
+            prevWord = curWord;
+            prevTag = curTag;
+        }
+
+        if (foundVPE) {
+            return vpeIndex;
+        } else if (foundPotentialVPE) {
+            return potentialVPEIndices.get(0);
+        } else {
+            return -1;
+        }
+
+    }
+
+    /**
+     * Promote candidates occurring closer in the sentence to the ellipsis.
+     */
+    private void promoteClosest(List<String> candidates, int ellipsisIndex, Tree parse) {
+
+        List<TaggedWord> taggedYield = parse.taggedYield();
+
+        String fullInput = "";
+        for (TaggedWord tw : taggedYield) {
+            fullInput = fullInput + " " + tw.word();
+        }
+
+        Map<String, Integer> distances = new HashMap<String, Integer>();
+        for (String s : candidates) {
+            int dist = Math.abs(ellipsisIndex - fullInput.indexOf(s));
+            System.out.printf("Candidate %s occurring at distance %d from ellipsis.%n", s, dist);
+            if (dist != -1) {
+                distances.put(s, dist);
+            }
+        }
+
+        //sort with largest distance first
+        List<String> sortedPromotions = sortPromotions(distances, false);
+
+        candidates.removeAll(sortedPromotions);
+
+        for (String s : sortedPromotions) {
+            candidates.add(0, s);
+        }
+
+
+    }
+
+    private boolean checkNextWord(List<TaggedWord> taggedYield, int currentIndex) {
+        int nextIndex = currentIndex + 1;
+        boolean isNextWordVerb = false;
+        if (taggedYield.get(nextIndex).tag().startsWith("VB")) {
+            isNextWordVerb = true;
+        }
+        return isNextWordVerb;
+    }
+
+
+    /**
      * Remove duplicates AND give precedence to words which occur multiple times.
      */
-    private void promoteDuplicates(List<String> candidates){
+    private void promoteDuplicates(List<String> candidates) {
         Map<String, Integer> promotedCandidates = findDuplicates(candidates);
 
         candidates.removeAll(promotedCandidates.keySet());
 
-        List<String> sortedPromotions = new ArrayList<String>();
-        for (String k : promotedCandidates.keySet()){
-            if(sortedPromotions.size() == 0){
-                sortedPromotions.add(k);
-            } else {
-                int index = 0;
-                int lastSmallerIndex = 0;
-                while (index < sortedPromotions.size() && (promotedCandidates.get(k) > promotedCandidates.get(sortedPromotions.get(index)))){
-                    index++;
-                    lastSmallerIndex++;
-                }
-                sortedPromotions.add(lastSmallerIndex, k);
-            }
-        }
+        List<String> sortedPromotions = sortPromotions(promotedCandidates, true);
 
-        for (String cand : sortedPromotions){
+        for (String cand : sortedPromotions) {
             candidates.add(0, cand);
         }
 
     }
 
     /**
+     * Sort candidates to be promoted by some associated value,
+     *
+     * @param promotedCandidates
+     * @return
+     */
+    private List<String> sortPromotions(Map<String, Integer> promotedCandidates, boolean smallToLarge) {
+        List<String> sortedPromotions = new ArrayList<String>();
+        for (String k : promotedCandidates.keySet()) {
+            if (sortedPromotions.size() == 0) {
+                sortedPromotions.add(k);
+            } else {
+                int index = 0;
+                int lastSmallerIndex = 0;
+                if (smallToLarge) {
+                    while (index < sortedPromotions.size() && (promotedCandidates.get(k) > promotedCandidates.get(sortedPromotions.get(index)))) {
+                        index++;
+                        lastSmallerIndex++;
+                    }
+                    sortedPromotions.add(lastSmallerIndex, k);
+                } else {
+                    while (index < sortedPromotions.size() && (promotedCandidates.get(k) < promotedCandidates.get(sortedPromotions.get(index)))) {
+                        index++;
+                        lastSmallerIndex++;
+                    }
+                    sortedPromotions.add(lastSmallerIndex, k);
+                }
+            }
+        }
+        return sortedPromotions;
+    }
+
+    /**
      * Remove duplicate candidates.
      */
-    private void removeDuplicates(List<String> candidates){
+    private void removeDuplicates(List<String> candidates) {
         Map<String, Integer> promotedCandidates = findDuplicates(candidates);
         candidates.removeAll(promotedCandidates.keySet());
     }
@@ -323,16 +481,16 @@ public class EllipsisInterpreter {
      * Find candidates which occur multiple times in a list, and produce a count of occurrences for each.
      */
     private Map<String, Integer> findDuplicates(List<String> candidates) {
-        Map<String, Integer> promotedCandidates = new HashMap<String,Integer>();
-        for(int i = 0; i < candidates.size(); i++){
+        Map<String, Integer> promotedCandidates = new HashMap<String, Integer>();
+        for (int i = 0; i < candidates.size(); i++) {
             String cand = candidates.get(i);
             int count = 0;
-            for (String s : candidates){
-                if (s.equals(cand)){
+            for (String s : candidates) {
+                if (s.equals(cand)) {
                     count++;
                 }
             }
-            if (count > 1){
+            if (count > 1) {
                 promotedCandidates.put(cand, count);
             }
         }
@@ -342,8 +500,8 @@ public class EllipsisInterpreter {
     /**
      * Handling for the case where no antecedent has been identified - replace with a default.
      */
-    private void provideDefault(List<String> candidates, String defaultValue){
-        if(candidates.size() == 0){
+    private void provideDefault(List<String> candidates, String defaultValue) {
+        if (candidates.size() == 0) {
             candidates.add(defaultValue);
         }
     }
