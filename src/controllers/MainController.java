@@ -99,7 +99,7 @@ public class MainController {
 
         if (takeInput){
 
-            String sentence = "Bill's dogs are brown and Bob's dogs are black.";
+            String sentence = "My laptop is blue and Jenny's is yellow.";
 
             System.out.println(sentence);
 
@@ -125,15 +125,17 @@ public class MainController {
         }
 
         if (doInterpretation){
-            String sentence = "Bill's dogs are brown and Bob's are black.";
+            String sentence = "I can do it, but John can't.";
 
             System.out.println(sentence);
 
             Tree parse = parser.getParse(sentence);
             Collection typedDependencies = parser.getDependencies(parse);
 
+            parse.pennPrint();
+
             EllipsisInterpreter interpreter = new EllipsisInterpreter();
-            String antecedent = interpreter.interpretEllipsis(parse, typedDependencies, EllipsisType.NPE);
+            String antecedent = interpreter.interpretEllipsis(parse, typedDependencies, EllipsisType.VPE);
 
             System.out.printf("Sentence: %s%nAntecedent: %s%n",sentence,antecedent);
         }
