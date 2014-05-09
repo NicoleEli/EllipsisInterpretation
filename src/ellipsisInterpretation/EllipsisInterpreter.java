@@ -138,8 +138,6 @@ public class EllipsisInterpreter {
             if (subtree.label().value().equals("NP")) {
                 List<TaggedWord> taggedYield = subtree.taggedYield();
 
-                System.out.println(taggedYield);
-
 
                 //if there is a possessive or cardinal (or ordinal??) tag attached to the final word in this NP, this NP is elided
                 TaggedWord finalWord = taggedYield.get(taggedYield.size() - 1);
@@ -151,7 +149,7 @@ public class EllipsisInterpreter {
                 }
                 //and in all other cases, there might be an antecedent here (under this simple model)
                 else {
-                    System.out.println("else case " + taggedYield);
+                    System.out.println(taggedYield);
 
                     String rightmostNoun = null;
                     for (TaggedWord tw : taggedYield) {
