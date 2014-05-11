@@ -93,6 +93,11 @@ public class EllipsisClassificationController {
                 mostRecentTrueResult = binaryClassifiers.get(i);
             }
         }
+
+        if (trueResults == 0){
+            return "NONE";
+        }
+
         if (trueResults == 1){
             return mostRecentTrueResult.name;
         } else {
