@@ -1,0 +1,500 @@
+Sentence: Bellow supported Roth's early work, and Roth's work was to bear a resemblance to Bellow's.
+Antecedent: work
+
+xGood		Bad
+
+Sentence: She's glad Jeff's are brown.
+Antecedent: thing
+
+Good		xBad
+
+Sentence: The customs officer checks our passports, notes the absence of a visa in both the Mexicans'.
+Antecedent: Mexicans
+
+Good		xBad
+
+Sentence: Edward Aveling's interests in the signs of class were not the same as Eleanor's.
+Antecedent: class
+
+Good		xBad
+
+Sentence: Whereas Adam and Prokofiev's leitmotifs heighten the emotional content of the love theme, Tchaikovsky's are there to create the right atmosphere and to emphasise the conflict.
+Antecedent: leitmotifs
+
+xGood		Bad
+
+Sentence: And see his shipwrack and his commonweal's.
+Antecedent: shipwrack
+
+xGood		Bad
+
+Sentence: He followed this with Jack Absolute in The Rivals at the National Theatre and David Mamet's A Life in the Theatre with Freddie Jones at the Open Space.
+Antecedent: Theatre
+
+Good		xBad
+
+Sentence: In any case one person's typecasting isn't always another's.
+Antecedent: typecasting
+
+xGood		Bad
+
+Sentence: I believe the ratio of men's jobs to women's is 8 to 1.
+Antecedent: jobs
+
+xGood		Bad
+
+Sentence: Metty is a misfit, as Golding's Matty is in Darkness Visible , a novel which appeared at the same time as Naipaul's.
+Antecedent: Matty
+
+Good		xBad
+
+Sentence: In the tenth she was beginning to receive visitors of standing, and a golden crown and jewels were added to her coat.
+Antecedent: jewels
+
+Good		xBad
+
+Sentence: But there can be little doubt that he had two causes in mind, and great probability that he had also a third.
+Antecedent: mind
+
+Good		xBad
+
+Sentence: He unloosed the third and fourth and was struggling with the reins of the fifth when he heard voices on the path.
+Antecedent: fifth
+
+Good		xBad
+
+Sentence: Two had lost a stirrup and the saddle of a third had slipped under its belly.
+Antecedent: belly
+
+Good		xBad
+
+Sentence: By the third we should have them surrounded.�
+Antecedent: thing
+
+Good		xBad
+
+Sentence: Several were in groups of four, three standing slabs of stone over which a fourth lay as a roof, others lay tumbled in meaningless heaps, but still others seemed to be set in distinguishable lines and circles.
+Antecedent: roof
+
+Good		xBad
+
+Sentence: I caught him watching me in the third.
+Antecedent: thing
+
+Good		xBad
+
+Sentence: In the 1890s the Central Station was constructed, and in 1905 two more branch lines extended among the factories and workshops of the Lower City, and a third snaked its way out over a drawbridge and a railway ferry to the island of Ostr�w.
+Antecedent: w.
+
+Good		xBad
+
+Sentence: Now the old-fashioned, strong hessian is wonderful for keeping you warm and dry and John always sported three sacks � one round his waist, another over his shoulders, and the third with the corner pushed in for a hood over his head.
+Antecedent: head
+
+Good		xBad
+
+Sentence: Philip Simmons, their only World Cup century-maker, added two more the only times he batted, smashing five sixes and 12 fours in 122 off 113 balls in the first match and two sixes and 10 fours in 104 off 139 balls in the third.
+Antecedent: sixes
+
+Good		xBad
+
+Sentence: A beer cask can come in several sizes: a pin (4.5 gallons), a firkin (9), a kilderkin (18), a barrel (36) and a hogshead (54).
+Antecedent: hogshead
+
+Good		xBad
+
+Sentence: Membership grew at an astonishing pace, reaching close to 30,000 in the late 1970s.
+Antecedent: Membership
+
+Good		xBad
+
+Sentence: Even then, we would trail behind other European Community members, such as Germany, France and Italy, each with 11 public holidays a year, Spain and Portugal with 13 each, and Denmark with 10.
+Antecedent: Portugal
+
+Good		xBad
+
+Sentence: IGS, for example, quotes �60 per person per day, with a minimum of four to a group.
+Antecedent: day
+
+Good		xBad
+
+Sentence: This can be done by purchase unit, standard unit or a combination of the two.
+Antecedent: unit
+
+xGood		Bad
+
+Sentence: There is the obvious price dodge of skimping on the thickness of silver, measured by cutlers in microns � which can be anything from one to 50.
+Antecedent: dodge
+
+Good		xBad
+
+Sentence: During his stay he cooked a five-course gala dinner for 150 at the Mansion on Turtle Creek with executive chef Dean Fearing.
+Antecedent: Fearing
+
+Good		xBad
+
+Sentence: They may contain any of the basic seed varieties or a combination of all three.
+Antecedent: varieties
+
+xGood		Bad
+
+Sentence: One woman was handier with a knife, another was better organised, two had marvellous raw materials, another was feeling the pressure of competing.
+Antecedent: pressure
+
+Good		xBad
+
+Sentence: Alan Davidson's previous books include two on fish � North Atlantic Seafood and Mediterranean Seafood � which are classics of their kind.
+Antecedent: kind
+
+Good		xBad
+
+Sentence: It seems to me that such measurements are a vital part of any intellectually honest evaluation of the threat posed by CFCs. While recognizing that professional environmentalists may feel threatened, I intend to urge that UV-B be monitored whenever I can.
+Antecedent: seems to me that such measurements are a vital part of any intellectually honest evaluation of the threat posed by CFCs . While recognizing that professional environmentalists may feel threatened , I intend to urge that UV-B be monitored whenever I can
+
+Good		xBad
+
+Sentence: By concentrating all their resources on the pay raise, Wright and Tower, the networks actually overlooked some major stories that showed the flaws and shortcomings of the institution.... An imaginative producer could easily have created a fast-moving and interesting piece about how Congress really works -- and why voters in, say, West Virginia got a federally funded university project and building while voters in Arkansas did not. But nobody did such a piece, reflecting a contemporary axiom : the more a scandal has to do with a congressman's duties as a congressman, the less likely it is to catch the fancy of a network.
+Antecedent: null
+
+Good		xBad
+
+Sentence: What Ms. Pfeiffer had going for her besides determination -- Ms. Stevens recalled that the actress was up one night until 3 a.m. practicing "My Funny Valentine " -- was an airy alto, a nice breathy quality and intelligence. " we first started working it was a matter of finding a language we both understood," Ms. Stevens said. "I couldn't talk with her as I would with someone who had a lot of vocal training."
+Antecedent: had going for her besides determination -- Ms. Stevens recalled that the actress was up one night until 3 a.m. practicing `` My Funny Valentine '' --
+
+Good		xBad
+
+Sentence: So what Ms. Stevens talked about was the importance of saying the words at the front of the mouth with the lips and the teeth. She urged Ms. Pfeiffer to get the feeling of a smile in her throat and to put a smile on her face to give the pitch and the sound a lift. She kept harping on the importance of overdoing the consonants and percussive endings like "T " and "K." She talked about using language as a tool, about flirting with the lyrics. And please, Michelle, when you sing the line in "Makin' Whoopee," about another sunny, funny honeymoon, don't say "funn-ih," the way Dylan would. Say "funn-eeee." Put the clean vowel ending on it. And Michelle, must you continue to smoke two packs of cigarettes a day ?
+Antecedent: null
+
+Good		xBad
+
+Sentence: All 50 states require that small children be strapped into safety seats in cars. On planes, FAA rules dictate that children two years old and over have their own tickets and be strapped into regular seats, just as adults are. Babies under two may sit on laps and fly for free. But it is almost impossible to keep hold of a baby during an air crash, or even in severe turbulence.
+Antecedent: require that small children be strapped into safety seats in cars .
+
+Good		xBad
+
+Sentence: First, addressing the Oct. 13 market break, this was certainly more of a technical gyration and a local jungle exercise, than an investor reaction to the day's political events in Washington. Look not to the managers of taxable investment funds as the source of selling late that afternoon, but rather to several of the usual suspects ( " " banks and institutions ) geared up with imperfect trading programs that accelerate market deterioration, once begun. The catalyst for this decline was, indeed, the breakdown of the United Airlines transaction and its resultant pre-margin call liquidation of various holdings by arbitragers and other traders. I can assure Mr. Wanniski that the market is not as politically motivated as he is.
+Antecedent: null
+
+Good		xBad
+
+Sentence: Some analysts have said Courtaulds' moves could boost the company's value by 5 % to 10 %, because the two entities separately will carry a higher price earnings multiple than they did combined. In addition, Courtaulds said the moves are logical because they will allow both the chemicals and textile businesses to focus more closely on core activities.
+Antecedent: have said Courtaulds ' moves could boost the company 's value by 5 % to 10 % , because the two entities separately will carry a higher price earnings multiple than they did combined . In addition
+
+Good		xBad
+
+Sentence: But raising stock-index futures margins could make the stock market even more volatile, futures traders contend. Higher margins would price many professional speculators -- whose trades help futures markets function smoothly -- out of business. If these speculators can't afford to trade as actively as before, stock-index futures prices, and therefore stock prices, may have to fall further than they might otherwise to attract buyers.
+Antecedent: raising stock-index futures margins could make the stock market even more volatile , futures traders contend
+
+Good		xBad
+
+Sentence: Warner and Mr. Azoff declined comment, as did MCA, where Mr. Azoff had also been discussing such a venture. But record industry executives familiar with the talks said Mr. Azoff and Warner came to an agreement yesterday to form a 50-50 joint-venture company funded by Warner and run by Mr. Azoff. Among other things, they said, Mr. Azoff would develop musical acts for a new record label.
+Antecedent: declined comment
+
+xGood		Bad
+
+Sentence: The agreement is said to be similar to Warner's 50-50 partnership with record and movie producer David Geffen, whose films and records are distributed by the Warner Bros. studio and the Warner records unit. Although Mr. Azoff won't produce films at first, it is possible that he could do so later, the sources said.
+Antecedent: is said to be similar to Warner 's 50-50 partnership with record and movie producer David Geffen , whose films and records are distributed by the Warner Bros. studio and the Warner records unit . Although Mr. Azoff wo n't produce films at first , it is possible that he could do so later
+
+Good		xBad
+
+Sentence: -- Saturday morning, a resident was given 15 minutes to scurry into a sagging building and reclaim what she could of her life's possessions. Saturday night she dined in an emergency shelter on salmon steaks prepared by chefs from one of the city's four-star restaurants.
+Antecedent: was given 15 minutes to scurry into a sagging building and reclaim what she could of her life 's possessions . Saturday night she dined in an emergency shelter on salmon steaks prepared by chefs from one of the city 's four-star restaurants
+
+Good		xBad
+
+Sentence: Out on the streets, some residents of badly damaged buildings were allowed a 15-minute scavenger hunt through their possessions. "It's so weird to have to decide what's really important to you," said Barbara May. She went first for personal mementos. In post-earthquake parlance, her building is a "red." After being inspected, buildings with substantial damage were color-coded. Green allowed residents to re-enter ; yellow allowed limited access ; red allowed residents one last entry to gather everything they could within 15 minutes.
+Antecedent: null
+
+Good		xBad
+
+Sentence: Three International Cash Portfolios funds, which invest almost exclusively in bonds and money-market instruments overseas, were among the four top-performing funds in the latest week. Because the funds' investments are denominated in foreign currencies, their value expressed in dollars goes up when those currencies rise against the dollar. But when the dollar rises against major foreign currencies, as it did for much of this year, the dollar value of these funds declines. All three funds posted negative returns for the year to date.
+Antecedent: null
+
+Good		xBad
+
+Sentence: Comsat Video is headed by Robert Wussler, who resigned his No. 2 executive post with Turner Broadcasting System Inc. just two weeks ago to take the Comsat position. Comsat Video, which distributes pay-per-view programs to hotel rooms, plans to add Nuggets games to their offerings, as Mr. Turner did successfully with his Atlanta Hawks and Braves sports teams. Messrs. Lee and Bynoe will manage the Nuggets' day-today affairs.
+Antecedent: is headed by Robert Wussler , who resigned his No. 2 executive post with Turner Broadcasting System Inc. just two weeks ago to take the Comsat position . Comsat Video , which distributes pay-per-view programs to hotel rooms , plans to add Nuggets games to their offerings , as Mr. Turner did successfully with his Atlanta Hawks and Braves sports teams
+
+Good		xBad
+
+Sentence: The new technologies are intended to retire the cathode-ray tube, which accounts for most of the bulk of the conventional TV set. Replacing the cathode-ray tube with a large, thin screen is the key to the creation of a high-definition television, or HDTV, which is expected to become a $ 30 billion business world-wide within a decade. Large U.S. companies are interested in other segments of the HDTV business, such as signal-processing and broadcast equipment. But except for Zenith Electronics Corp. and International Business Machines Corp., which is collaborating with Toshiba on computer displays, they are poorly positioned to exploit advances in large panels. General Electric Co. recently sold off its interests in liquid-crystal displays to Thompson-CSF of France. "We found the market not developing as we thought it would," a GE spokesman says.
+Antecedent: null
+
+Good		xBad
+
+Sentence: Thus far, almost all of the basic technology relating to high-definition television has come from U.S. laboratories. But Peter Brody, Magnascreen's president, says Japanese companies are poised to snatch the technology and put it to commercial use, just as they did with earlier U.S. innovations in color television and video recording.
+Antecedent: relating to high-definition television
+
+Good		xBad
+
+Sentence: And they will again, say money-manager proponents of the growth-stock theme. Cabanne Smith, president of a money management company bearing his name, predicts that investment companies using computers to identify companies with earnings "momentum " will climb on the growth-stock bandwagon as the overall corporate earnings outlook deteriorates further. He also thinks foreign investors, who are showing signs of more discriminate investing, will join the pursuit and pump up prices.
+Antecedent: will again , say money-manager proponents of the growth-stock theme
+
+Good		xBad
+
+Sentence: Big cyclical companies are using "all the tricks they can to stabilize earnings," says Mr. Sloan. He cites IBM, which reported a 30 % earnings decline in the third quarter, and which last week announced a $ 1 billion buy-back of its shares.
+Antecedent: are using `` all the tricks they can to stabilize earnings
+
+xGood		Bad
+
+Sentence: The arbs may recoup some of their paper losses if the UAL deal gets patched up again, as they did in 1982 when Occidental Petroleum Co. rescued them with a $ 4 billion takeover of Cities Service.
+Antecedent: may recoup some of their paper losses if the UAL deal gets patched up again , as they did in 1982 when Occidental Petroleum Co. rescued them with a $ 4 billion takeover of Cities Service
+
+Good		xBad
+
+Sentence: So anyone buying the stock now is betting on some special transaction such as a recapitalization or takeover, and must do so using some guesswork about the likelihood of such an event.
+Antecedent: buying the stock
+
+Good		xBad
+
+Sentence: Which country is er the biggest single supplier of coffee to this country. <pause> Brazil.
+Antecedent:  Which country is er the biggest single supplier of coffee to this country
+
+Good		xBad
+
+Sentence: It's Uganda. Uganda.
+Antecedent:  It 's Uganda
+
+xGood		Bad
+
+Sentence: And another sixteen percent is the other <trunc> Ne </trunc> Nestle coffee <pause> erm Blend Thirty Seven which I used to drink a long time ago and others <vocal desc=laugh> and twenty two percent is er <pause> Maxwell.
+Antecedent:  And another sixteen percent is the other <trunc> Ne </trunc> Nestle coffee <pause> erm Blend Thirty Seven which I used to drink a long time ago and others < vocal desc = laugh > and twenty two percent is er <pause> Maxwell
+
+Good		xBad
+
+Sentence: And you want to know whether it would be more expensive. Mhm.
+Antecedent:  And you want to know whether it would be more expensive
+
+xGood		Bad
+
+Sentence: I mean, Nestle had to abandon that. Mhm.
+Antecedent:  I mean , Nestle had to abandon that
+
+xGood		Bad
+
+Sentence: I mean, Nestle had to abandon that. Yes.
+Antecedent:  I mean , Nestle had to abandon that
+
+xGood		Bad
+
+Sentence: Well, yes, I suppose one of the questions you could ask is, is there a boycott against the company? Right.
+Antecedent:  Well , yes , I suppose one of the questions you could ask is , is there a boycott against the company
+
+xGood		Bad
+
+Sentence: They moved the Hoover factory from France to Yes.
+Antecedent:  They moved the Hoover factory from France to Yes
+
+Good		xBad
+
+Sentence: It's really a question of finding out where the material is coming from and knowing what the conditions are like there. Mm.
+Antecedent:  It 's really a question of finding out where the material is coming from and knowing what the conditions are like there
+
+xGood		Bad
+
+Sentence: Some things they're obliged to tell you where those come from aren't they? Yes.
+Antecedent:  Some things they 're obliged to tell you where those come from are n't they
+
+xGood		Bad
+
+Sentence: I want to see that you're coming along alright. Right.
+Antecedent:  I want to see that you 're coming along alright
+
+xGood		Bad
+
+Sentence: Peace and quiet after that. Aye.
+Antecedent:  Peace and quiet after that
+
+xGood		Bad
+
+Sentence: Peace and quiet after that. For a for a wee while.
+Antecedent:  Peace and quiet after that
+
+xGood		Bad
+
+Sentence: For a for a wee while. For a wee while, yes.
+Antecedent:  For a for a wee while
+
+xGood		Bad
+
+Sentence: Er, it's a wee problem I've had for a <pause> say about a year now. Mhm.
+Antecedent:  Er , it 's a wee problem I 've had for a <pause> say about a year now
+
+xGood		Bad
+
+Sentence: I seem to get an awful lot of, it's like Aha.
+Antecedent:  I seem to get an awful lot of , it 's like Aha
+
+Good		xBad
+
+Sentence: dry flaky skin. Yeah.
+Antecedent:  dry flaky skin
+
+xGood		Bad
+
+Sentence: and under my chin. Mhm.
+Antecedent:  and under my chin
+
+xGood		Bad
+
+Sentence: all different stuff, it's no good. No.
+Antecedent:  all different stuff , it 's no good
+
+xGood		Bad
+
+Sentence: Right, let's get it cleared for you. Good.
+Antecedent:  Right , let 's get it cleared for you
+
+xGood		Bad
+
+Sentence: What was it German and French? No French and standard Dutch.
+Antecedent:  What was it German and French
+
+xGood		Bad
+
+Sentence: Sorry what were the erm things that related to personality? Intelligence and suitability and particular occupations.
+Antecedent:  Sorry what were the erm things that related to personality
+
+xGood		Bad
+
+Sentence: And second one is a book by <sic resp=LONGMAN> Beardsmoor </sic> and he <unclear> sheep says about <shift new=laughing> the Canadian <trunc> soc </trunc> social <shift> psychologist
+Antecedent: null
+
+Good		xBad
+
+Sentence: Erm that's <trunc> a b bit </trunc> too But it's it's about <pause> Appalachian English? <unclear> Appalachian.
+Antecedent:  Erm that 's <trunc> a b bit </trunc> too But it 's it 's about <pause> Appalachian English
+
+xGood		Bad
+
+Sentence: Appalachian. Okay. <vocal desc=laugh>
+Antecedent:  Appalachian
+
+xGood		Bad
+
+Sentence: Who's this book by? Luhmann L U H M A double N.
+Antecedent:  Who 's this book by
+
+xGood		Bad
+
+Sentence: In such social social settings linguistic differences become important boundary markers that require careful cultivation. Good.
+Antecedent:  In such social social settings linguistic differences become important boundary markers that require careful cultivation
+
+xGood		Bad
+
+Sentence: Erm <pause> it's talking about glide reduction. What what reduction?
+Antecedent:  Erm <pause> it 's talking about glide reduction
+
+xGood		Bad
+
+Sentence: What what reduction? Glide.
+Antecedent:  What what reduction
+
+xGood		Bad
+
+Sentence: Glide. Glide?
+Antecedent:  Glide
+
+xGood		Bad
+
+Sentence: The Fed allowed the key federal funds interest rate to dip to about 8 5\ % from its levels of just below 9 % last week. That was a sign to financial markets that, at least for now, the Fed was easing its grip on credit. Because the markets remained relatively calm, however, the Fed didn't have to inject massive amounts of money into the banking system, as it did in October 1987.
+Antecedent: allowed the key federal funds interest rate to dip to about 8 5 \ % from its levels of just below 9 % last week . That was a sign to financial markets that , at least for now , the Fed was easing its grip on credit . Because the markets remained relatively calm
+
+Good		xBad
+
+Sentence: "I do not regard the amount of the decline on Friday as unexpected or unlikely," he said in a telephone interview. " the market being up to2,700 or2,800 and the existence of derivative products... one can expect volatility of the magnitude we had."
+Antecedent: do not regard the amount of the decline on Friday as unexpected or unlikely
+
+Good		xBad
+
+Sentence: Those sound like innocuous changes, but they're not. Both the Treasury and Congress traditionally have pushed for easy money, the Treasury to reduce its debt management problems and Congress to satisfy powerful producer constituencies who want a weak dollar for short-term competitive gains in world markets. Congressional pressures on the Fed similar to those that produced the savings and loan mess are an awful thought.
+Antecedent: changes
+
+Good		xBad
+
+Sentence: Easy money advocates, however, are adept at spreading economic myths. There is the constant insistence that the Fed could lower interest rates were it not so obstinate. The Fed indeed can lower short-term interest rates by pumping reserves into the banks, but it can't do much about them from there on. If the reserves generate inflation, which is what the Fed fears most right now, interest rates will go up as lenders demand a premium. Enough inflation can ultimately even wipe out the bond market, as it did in Britain in the 1970s, thereby crippling the economy.
+Antecedent: null
+
+Good		xBad
+
+Sentence: These two myths have caused the republic untold damage. The U.S. economy took on an inflationary bias when the Fed was forced to finance an incredible spending spree by Lyndon Johnson. Richard Nixon exacerbated the problem when, in response to pressures from Congress, he applied price and wage controls in August 1971, thereby discouraging production. Jimmy Carter ultimately hired Mr. Volcker to kill inflation, which was reaching dangerous levels. He did, too late to save Mr. Carter from forced retirement.
+Antecedent: null
+
+Good		xBad
+
+Sentence: The claim that inflation generates economic growth is seductive. In fact it does the opposite. As the charts show, the 1975-80 inflation destroyed both productivity and economic growth ( see accompanying charts -- WSJ Oct. 17, 1989 ). It was only after Mr. Volcker killed inflation, at the cost of a sharp but brief recession, that growth and productivity started rising once more. Producers were forced by the discipline of sound money to slash away organizational fat and acquire more efficient equipment. After having performed that admirable feat, however, they were back in 1985 demanding a dollar devaluation that would make it still easier for them to compete in international markets. They got the devaluation and, as is usually the case, began picking up fat again. So now they want another one.
+Antecedent: null
+
+Good		xBad
+
+Sentence: Authorities, including the Bank of England and the Securities Association, are gearing up in case a crisis wallops the London market. The bank was in touch with other major central banks over the weekend and was preparing to make capital available to dealers if needed, as it did in the 1987 crash, according to people familiar with the bank's strategy.
+Antecedent: are gearing up in case a crisis wallops the London market . The bank was in touch with other major central banks over the weekend and was preparing to make capital available to dealers if needed , as it did in the 1987 crash , according to people familiar with the bank 's strategy
+
+Good		xBad
+
+Sentence: Many are quick to emphasize that just because the market can fall as fast as it did Friday doesn't mean it will tank again, despite some disquieting similarities between now and October 1987. As in 1987, this latest market slide was preceded by sparring between nations and government officials over the dollar.
+Antecedent: are quick to emphasize that just because the market can fall as fast as it did Friday does n't mean it will tank again , despite some disquieting similarities between now and October 1987 . As in 1987 , this latest market slide was preceded by sparring between nations and government officials over the dollar
+
+Good		xBad
+
+Sentence: If foreigners dump U.S. stocks and return to the safety of their home markets -- as they did in October 1987 -- they must simultaneously also sell dollars for their own currencies. Those transactions, in turn, could weaken the dollar. Even if foreigners just withhold from buying additional U.S. securities, they reduce the demand for dollars.
+Antecedent: dump U.S. stocks and return to the safety of their home markets -- as they did in October 1987 -- they must simultaneously also sell dollars for their own currencies . Those transactions , in turn , could weaken the dollar . Even if foreigners just withhold from buying additional U.S. securities
+
+Good		xBad
+
+Sentence: America West, though, is a smaller airline and therefore more affected by the delayed delivery of a single plane than many of its competitors would be. "I figure that American and United probably have such a hard time counting all the planes in their fleets, they might not miss one at all," Mr. Otradovec said.
+Antecedent: is a smaller airline
+
+Good		xBad
+
+Sentence: He put one arm around Jack's waist and the other, after a barely discernible pause, around Maurice's.
+Antecedent: waist
+
+xGood		Bad
+
+Sentence: �Then it's all mine now, mine and Nora's.�
+Antecedent: mine
+
+Good		xBad
+
+Sentence: The truculent harsh voice was Pertwee's.
+Antecedent: Pertwee
+
+Good		xBad
+
+Sentence: HUNGARY'S ruling Socialist Workers Party took a big step yesterday towards the complete abandonment of Communism when its president, Rezso Nyers, sketched out the contours of a new socialist movement capable of contesting next year's free elections, the first in Eastern Europe for 40 years.
+Antecedent: years
+
+Good		xBad
+
+Sentence: The first accused Washington of backing the failed coup; the second, complaining of the Bush �wimp factor�, said the United States had not done enough.
+Antecedent: coup
+
+Good		xBad
+
+Sentence: The first laugh of the evening came with the phrase �non-aligned countries like Nato�; the second with the observation that killing for the first time is �like sex�: Darke's audience of true believers was easily pleased.
+Antecedent: time
+
+Good		xBad
+
+Sentence: The man said his group held 64 documents relating to IRA suspects in the Irish Republic and claimed the group had members in every police sub-division, of which the RUC has 38.
+Antecedent: group
+
+Good		xBad
+
+Sentence: She said: �Seven of the eight have competed for Great Britain and we certainly would not have submitted any we thought would go just for the trip.�
+Antecedent: trip
+
+Good		xBad
+
+Sentence: Davies, who has not renewed his contract as ITV's sports presenter, is one of 17 whose names appeared on ITV Sport's credits who have jumped ship this year alone.
+Antecedent: year
+
+Good		xBad
+
+Sentence: ITV, the �athletics channel�, covered two.
+Antecedent: channel
+
+Good		xBad
+
