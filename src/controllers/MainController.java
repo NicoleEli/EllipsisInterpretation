@@ -42,9 +42,9 @@ public class MainController {
     public static boolean buildDatasets = false;
     public static boolean buildClassifiers = false;
     public static boolean takeInput = false;
-    public static boolean runCrossVal = false;
+    public static boolean runCrossVal = true;
     public static boolean doInterpretation = false;
-    public static boolean assessInterpretation = true;
+    public static boolean assessInterpretation = false;
 
     public static void main(String[] args) {
 
@@ -119,8 +119,8 @@ public class MainController {
 
 
             crossValidator.validateClassifier("NPE", NPE_PROCESSED_PATH, NPE_RAW_PATH);
-            crossValidator.validateClassifier("VPE", VPE_PROCESSED_PATH, VPE_RAW_PATH);
-            crossValidator.validateClassifier("NSU", NSU_PROCESSED_PATH, NSU_RAW_PATH);
+            //crossValidator.validateClassifier("VPE", VPE_PROCESSED_PATH, VPE_RAW_PATH);
+            //crossValidator.validateClassifier("NSU", NSU_PROCESSED_PATH, NSU_RAW_PATH);
 
         }
 
