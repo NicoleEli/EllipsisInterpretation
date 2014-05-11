@@ -75,9 +75,7 @@ public class EllipsisClassificationController {
             distributions.add(distribution);
         }
 
-        //TODO: decide how to interpret results
-
-        //temporary result interpretation below:   TODO: this is temporary, to fit with CrossValidator!
+        //temporary result interpretation below:   TODO: take this out once we're done with binary cross-validation
         if(binaryClassifiers.size() == 1){
             if (results.get(0) == true){
                 return binaryClassifiers.get(0).name;
@@ -85,8 +83,8 @@ public class EllipsisClassificationController {
                 return "none";
             }
         }
+        //end temporary result interpretation
 
-        //TODO: below code in progress
         int trueResults = 0;
         BinaryEllipsisClassifier mostRecentTrueResult = binaryClassifiers.get(0);
         for (int i = 0; i < results.size(); i++){
@@ -98,10 +96,19 @@ public class EllipsisClassificationController {
         if (trueResults == 1){
             return mostRecentTrueResult.name;
         } else {
-            //TODO: stuff with distribution
+            double biggestTrueValue = 0;
+            BinaryEllipsisClassifier bestGuess = binaryClassifiers.get(0);
+            for (int i = 0; i < distributions.size(); i++){
+                double trueValue = distributions.get(i)[0];
+                if (trueValue > biggestTrueValue){
+                    biggestTrueValue = trueValue;
+                    bestGuess = binaryClassifiers.get(i);
+                }
+            }
+
+            return bestGuess.name;
         }
 
-        return null;
     }
 
     protected void makeNewClassifier(String datasetPath, String datasetName){
