@@ -76,7 +76,7 @@ public class CrossValidator {
         recall = new ArrayList<Float>();
 
         //Perform n rounds of cross-validation
-        for (int round = 0; round < n; round++) {
+        /*for (int round = 0; round < n; round++) {
             baseName = "crossval-%d-"+name;
             buildDataSets(round, processedDataPath, rawDataPath);
 
@@ -89,10 +89,27 @@ public class CrossValidator {
             classifyTestData(datasetNames.get(0));
 
             System.out.printf("Cross-validation round %d complete.%n", round+1);
-        }
+        } */
+
+        //#### TODO: this extracted from for loop because of failure to debug fully automatic version.
+        int round = 2;
+
+        baseName = "crossval-%d-"+name;
+        buildDataSets(round, processedDataPath, rawDataPath);
+
+        //Customise dataset name for this round
+        datasetNames.set(0,String.format(baseName,round+1));
+
+        classificationController = new EllipsisClassificationController(featureGenerator);
+        classificationController.initialiseClassifiers(datasetPaths, datasetNames, featureNames);
+
+        classifyTestData(datasetNames.get(0));
+
+        System.out.printf("Cross-validation round %d complete.%n", round+1);
+        //####
 
         //Work out average precision/recall across n rounds
-        float avgPrecision = 0;
+        /*float avgPrecision = 0;
         float avgRecall = 0;
         String precisions = "";
         String recalls = "";
@@ -120,7 +137,7 @@ public class CrossValidator {
             resultWriter.close();
         } catch (IOException e){
             System.err.format("IOException: %s%n", e);
-        }
+        }  */
 
     }
 
@@ -208,7 +225,7 @@ public class CrossValidator {
                 if (assignedClass.equals(datasetName)){
                     testPos++;
                 } else {
-                    System.out.printf("Assigned: %s / Dataset Name: %s%n",assignedClass,datasetName);
+                    //System.out.printf("Assigned: %s / Dataset Name: %s%n",assignedClass,datasetName);
                 }
 
                 if (assignedClass.equals(trueClass)){
