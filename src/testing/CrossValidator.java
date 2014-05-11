@@ -92,7 +92,7 @@ public class CrossValidator {
         } */
 
         //#### TODO: this extracted from for loop because of failure to debug fully automatic version.
-        int round = 2;
+        int round = 0;
 
         baseName = "crossval-%d-"+name;
         buildDataSets(round, processedDataPath, rawDataPath);
