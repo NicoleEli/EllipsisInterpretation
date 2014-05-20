@@ -2,7 +2,6 @@ package controllers;
 
 import edu.stanford.nlp.trees.*;
 import ellipsisDetection.BinaryEllipsisClassifier;
-import ellipsisDetection.EllipsisType;
 import ellipsisDetection.FeatureGenerator;
 import weka.core.Attribute;
 import weka.core.FastVector;
@@ -24,6 +23,7 @@ public class EllipsisClassificationController {
 
     Charset charset = Charset.forName("UTF-8");
 
+    protected BinaryEllipsisClassifier ellipsisPresence;
     protected List<BinaryEllipsisClassifier> binaryClassifiers;
     protected FeatureGenerator featureGenerator;
 
@@ -36,6 +36,14 @@ public class EllipsisClassificationController {
     }
 
 
+    public void initialisePresenceDetector(String datasetPath, Set<String> featureNames){
+        generateAttributes(featureNames);
+        System.out.printf("Initialising ellipsis presence detector...%n");
+        makeNewClassifier(datasetPath, "presenceDetector", false);
+        System.out.printf("Initialised ellipsis presence detector.%n");
+
+    }
+
     /**
      * Initialise some number of binary classifiers, given paths to the .csv files containing training data
      */
@@ -46,10 +54,18 @@ public class EllipsisClassificationController {
         for (int i = 0; i < datasetPaths.size(); i++){
             String name = datasetNames.get(i);
             System.out.printf("Initialising classifier %s...%n", name);
-            makeNewClassifier(datasetPaths.get(i), name);
+            makeNewClassifier(datasetPaths.get(i), name, true);
             System.out.printf("Initialised %s.%n", name);
         }
 
+    }
+
+    public boolean isEllipsisPresent(Tree parse, Collection typedDependencies){
+        Map<String, Integer> featureValues = featureGenerator.genFeatures(parse, typedDependencies);
+
+        FastVector convertedFeatures = convert(featureValues);
+
+        return ellipsisPresence.classify(convertedFeatures);
     }
 
     public String findEllipsisType(Tree parse, Collection typedDependencies){
@@ -116,7 +132,7 @@ public class EllipsisClassificationController {
 
     }
 
-    protected void makeNewClassifier(String datasetPath, String datasetName){
+    protected void makeNewClassifier(String datasetPath, String datasetName, boolean addToList){
 
         BinaryEllipsisClassifier classifier = new BinaryEllipsisClassifier(attributes, datasetName);
 
@@ -135,7 +151,9 @@ public class EllipsisClassificationController {
             System.err.format("IOException: %s%n", e);
         }
 
-        binaryClassifiers.add(classifier);
+        if(addToList){
+            binaryClassifiers.add(classifier);
+        }
     }
 
     protected void generateAttributes(Set<String> featureNames){
