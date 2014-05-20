@@ -146,4 +146,51 @@ public class NSUExtractor {
         }
 
     }
+
+    public void customRemovePOSTags(String inputPath, String outputPath){
+
+        try {
+            BufferedReader reader = Files.newBufferedReader(Paths.get(inputPath), charset);
+            BufferedWriter writer = Files.newBufferedWriter(Paths.get(outputPath), charset);
+
+            String line;
+
+            //tags - carry POS and structure info in BNC, unnecessary for input to my program
+            Pattern sTag = Pattern.compile("<s n=\"[0-9]+\">");
+            Pattern wTag = Pattern.compile("<w [A-Z0-9\\-]+>");
+            Pattern cTag = Pattern.compile("<c PUN>");
+            Pattern pTag = Pattern.compile("<ptr target=[A-Z0-9]+>");
+            Pattern uTag = Pattern.compile("</u>");
+            Pattern otherTags = Pattern.compile("[(<\\/?head\\>)(\\</?item\\>)(\\</?list\\>)(\\</?p\\>)]");
+
+            while ((line = reader.readLine()) != null){
+
+                // Remove all occurrences of tags
+                Matcher matcherS = sTag.matcher(line);
+                String noSline = matcherS.replaceAll("");
+
+                Matcher matcherW = wTag.matcher(noSline);
+                String noSWline = matcherW.replaceAll("");
+
+                Matcher matcherC = cTag.matcher(noSWline);
+                String noSWCline = matcherC.replaceAll("");
+
+                Matcher matcherP = pTag.matcher(noSWCline);
+                String noSWCPline = matcherP.replaceAll("");
+
+                Matcher matcherU = uTag.matcher(noSWCPline);
+                String finalLine = matcherU.replaceAll("");
+
+                writer.append(finalLine);
+                writer.newLine();
+            }
+
+            reader.close();
+            writer.close();
+
+        } catch (IOException x){
+            System.err.format("IOException: %s%n", x);
+        }
+
+    }
 }
